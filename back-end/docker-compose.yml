@@ -1,21 +1,18 @@
-version: '3.9'
-services:
+version: "3.9"
+services: 
+  node:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:8080
+    volumes: 
+      - .:/app
+      - '/app/node_modules'
+    depends_on: 
+      - mysql
+  
   mysql:
     image: mysql:5.7
-    container_name: mysql
-    volumes:
-      - ./dbfiles:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: CMPT371-Team1
-  node:
-    build: .
-    container_name: nodejs
-    ports:
-      - "8080:8080"
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      mysql:
-        condition: service_started
-    stdin_open: true
-    tty: true
+    environment: 
+      MYSQL_ROOT_PASSWORD: CMPT371-team1

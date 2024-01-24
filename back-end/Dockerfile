@@ -1,7 +1,15 @@
 FROM node:latest
 
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
 EXPOSE 8080
 
-WORKDIR /usr/src/app/
+VOLUME [ "/app/node_modules" ]
 
-CMD [ "node", "server.js" ]
+CMD ["npm", "run", "dev"]
