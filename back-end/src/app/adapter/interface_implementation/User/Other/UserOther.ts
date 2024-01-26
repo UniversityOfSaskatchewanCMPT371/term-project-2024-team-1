@@ -1,4 +1,4 @@
-import { IUser } from "../domain/IUser";
+import { IUser } from "../../../../domain/interfaces/repositories/IUserRepository";
 
 export class UserOther implements IUser {
     getAll() {

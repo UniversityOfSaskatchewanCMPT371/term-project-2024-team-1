@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IUser } from "../domain/IUser";
+import { IUser } from "../domain/interfaces/repositories/IUserRepository";
 
 @injectable()
 export class TestService {

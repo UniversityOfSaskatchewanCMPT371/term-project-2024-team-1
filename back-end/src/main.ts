@@ -1,17 +1,16 @@
 import "reflect-metadata";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { TestService } from "./adapter/TestService";
-import { UserSQL } from "./adapter/UserSQL";
-import { UserOther } from "./adapter/UserOther";
 
 //logging 
 import log4js from 'log4js';
 import {getLogger, configure} from 'log4js';
+import { TestService } from "@app/application/TestService";
+import { UserOther } from "@app/adapter/interface_implementation/User/Other/UserOther";
 
-configure('src/log4js-config.json')
+configure('src/resources/log4js-config.json')
 
-const config =  require('./config.ts');
+const config =  require('./resources/config.ts');
 const express =  require('express');
 const app =  express();
 const info_logger = getLogger('info'); // logger for info
