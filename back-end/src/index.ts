@@ -20,10 +20,14 @@ const debug_logger = getLogger('debug'); // logger for debug
 
 console.log(`NODE_ENV=${config.NODE_ENV}`);
 
+
+export const sum = (a: number, b: number) => a+b;
+
+
 app.get('/', (req: Request, res: Response) => {
     info_logger.info('GET request received');
     const t = container.resolve(TestService);
-    t.call();
+    t.call();    
     res.send('Hello World !!');
 });
 
@@ -31,6 +35,7 @@ app.listen(config.PORT, config.HOST, () => {
     err_logger.error("Testing ERROR logs")
     debug_logger.debug("Testing DEBUG logs")
     console.log(`APP LISTENING ON http://${config.HOST}:${config.PORT}`);
+    
 })
 
 container.register("User", {useClass: UserOther});

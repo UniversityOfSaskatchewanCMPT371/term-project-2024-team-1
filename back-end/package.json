@@ -1,7 +1,9 @@
 {
   "scripts": {
     "dev": "set NODE_ENV=development&& ts-node src/index.ts",
-    "prod": "set NODE_ENV=production&& ts-node src/index.ts"
+    "prod": "set NODE_ENV=production&& ts-node src/index.ts",
+    "test": "jest",
+    "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "dotenv": "^16.4.0",
@@ -12,8 +14,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20.11.5",
+    "jest": "^29.7.0",
     "log4js": "^6.9.1",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
   }
 }
