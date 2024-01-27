@@ -4,5 +4,4 @@ describe("Class/component name test", () => {
       expect(true).toBeTruthy();
     });
   });
-
 });

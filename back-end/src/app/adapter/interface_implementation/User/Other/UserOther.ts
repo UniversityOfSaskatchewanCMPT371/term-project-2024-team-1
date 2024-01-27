@@ -1,7 +1,7 @@
-import { IUser } from "../../../../domain/interfaces/repositories/IUserRepository";
+import { IUser } from "@app/domain/interfaces/repositories/IUserRepository";
 
 export class UserOther implements IUser {
-    getAll() {
-        console.log("Other implementation of IUser");
-    }
+  getAll(): void {
+    console.log("Other implementation of IUser");
+  }
 }

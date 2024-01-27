@@ -1,3 +1,3 @@
 export interface IUser {
-    getAll(): void;
+  getAll: () => void;
 }

@@ -1,40 +1,33 @@
+import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { Request, Response } from "express";
 import { container } from "tsyringe";
-
-//logging 
-import log4js from 'log4js';
-import {getLogger, configure} from 'log4js';
-import { TestService } from "@app/application/TestService";
 import { UserOther } from "@app/adapter/interface_implementation/User/Other/UserOther";
-
-configure('src/resources/log4js-config.json')
-
-const config =  require('./resources/config.ts');
-const express =  require('express');
-const app =  express();
-const info_logger = getLogger('info'); // logger for info
-const err_logger = getLogger('error'); // logger for error
-const debug_logger = getLogger('debug'); // logger for debug
-
-console.log(`NODE_ENV=${config.NODE_ENV}`);
+import { TestService } from "@app/application/TestService";
+import { configure, getLogger } from "log4js";
+import { NODE_ENV, HOST, PORT } from "@resources/config";
+configure("src/resources/log4js-config.json");
 
 
-export const sum = (a: number, b: number) => a+b;
+const app = express();
+const infoLogger = getLogger("info"); // logger for info
+const errLogger = getLogger("error"); // logger for error
+const debugLogger = getLogger("debug"); // logger for debug
 
+console.log(`NODE_ENV=${NODE_ENV}`);
 
-app.get('/', (req: Request, res: Response) => {
-    info_logger.info('GET request received');
-    const t = container.resolve(TestService);
-    t.call();    
-    res.send('Hello World !!');
+export const sum = (a: number, b: number): number => a + b;
+
+app.get("/", (req: Request, res: Response) => {
+  infoLogger.info("GET request received");
+  const t = container.resolve(TestService);
+  t.call();
+  res.send("Hello World !!");
 });
 
-app.listen(config.PORT, config.HOST, () => {
-    err_logger.error("Testing ERROR logs")
-    debug_logger.debug("Testing DEBUG logs")
-    console.log(`APP LISTENING ON http://${config.HOST}:${config.PORT}`);
-    
-})
+app.listen(PORT, HOST, () => {
+  errLogger.error("Testing ERROR logs");
+  debugLogger.debug("Testing DEBUG logs");
+  console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
+});
 
-container.register("User", {useClass: UserOther});
+container.register("User", { useClass: UserOther });
