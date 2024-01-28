@@ -65,7 +65,16 @@ This solution is slightly different from the usual, as all the libraries/depende
 2. Install the Expo Go app on your phone from [Expo Client](https://expo.dev/client).
 3. Obtain your ip address.
 	**Note:** *Do not use a browser to search for your IP address, as it might give you an incorrect result.*
-- Open Terminal and enter the following command: 
+- Open Terminal and enter the following command:\
+	Windows:
+	```Bash
+	$ ipconfig
+	```
+	Linux:
+	```Bash
+	$ ifconfig
+	```
+	MacOS:
 	```Bash
 	$ ipconfig getifaddr en0
 	```
@@ -76,5 +85,6 @@ This solution is slightly different from the usual, as all the libraries/depende
 $ docker-compose up --build
 ```
 ### Opening the Front-End
+**Your Phone and computer should be connected to the same Network (LAN).**
 1. Open a web browser and enter the following URL: `exp://10.237.206.64:8081`. _(Replace `10.237.206.64` with the IP address you obtained earlier.)_
 2. This should automatically open the Expo Go app and start loading the front-end.
