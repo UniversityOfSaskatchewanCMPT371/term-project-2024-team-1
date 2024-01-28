@@ -3,8 +3,7 @@
 
 # Expo
 .expo/
-dist/
-web-build/
+
 
 # Native
 *.orig.*
