@@ -86,5 +86,5 @@ $ docker-compose up --build
 ```
 ### Opening the Front-End
 **Your Phone and computer should be connected to the same Network (LAN).**
-1. Open a web browser and enter the following URL: `exp://10.237.206.64:8081`. _(Replace `10.237.206.64` with the IP address you obtained earlier.)_
+1. Open a web browser on your mobile and enter the following URL: `exp://10.237.206.64:8081`. _(Replace `10.237.206.64` with the IP address you obtained earlier.)_
 2. This should automatically open the Expo Go app and start loading the front-end.
