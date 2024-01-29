@@ -1,10 +1,10 @@
-import express, { Request, Response } from "express";
 import "reflect-metadata";
+import express, { Request, Response } from "express";
 import { container } from "tsyringe";
-import { UserOther } from "@app/adapter/interface_implementation/User/Other/UserOther";
 import { TestService } from "@app/application/TestService";
 import { configure, getLogger } from "log4js";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
+import { UserSQL } from "@app/adapter/interface_implementation/User/SQL/UserSQL";
 configure("src/resources/log4js-config.json");
 
 
@@ -30,4 +30,4 @@ app.listen(PORT, HOST, () => {
   console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
 });
 
-container.register("User", { useClass: UserOther });
+container.register("User", { useClass: UserSQL });

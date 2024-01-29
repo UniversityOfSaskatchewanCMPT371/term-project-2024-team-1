@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 # Semantic Versioning
+=======
+# Backend scripts
+
+`npm run dev`: Run the backend server in development mode. This should only be used locally for development.
+
+`npm run prod`: Run the backend server in production mode. This should be used by the remote server that is hosting our backend.
+
+`npm run test`: Run all tests for the backend.
+
+`npm run lint`: Run linting which enforces code style and conventions.
+
+# Semantic Versioning
+
+>>>>>>> 016c9017 (dev-infra: Minor fix to dev and prod startup scripts)
 A basic automated semantic version release that helps to release a new version with its release notes when code is pushed on main branch.
 
 ### Given a version number MAJOR.MINOR.PATCH, increment the:
