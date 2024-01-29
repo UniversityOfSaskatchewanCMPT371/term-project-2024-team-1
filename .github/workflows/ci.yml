@@ -33,6 +33,6 @@ jobs:
         name: Build and test frontend
         uses: docker/build-push-action@v5
         with:
-            context: ./frontend
+            context: ./front-end
             target: test
         #   load: true
