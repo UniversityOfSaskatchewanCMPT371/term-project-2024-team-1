@@ -1,15 +1,14 @@
-FROM node:latest
+# Dockerfile for back-end
+FROM baseImage
 
-WORKDIR /app
 
-COPY package.json .
-
-RUN npm install
-
+FROM base as test
+ENV NODE_ENV test
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+USER node
 COPY . .
-
-EXPOSE 8080
-
-VOLUME [ "/app/node_modules" ]
-
-CMD ["npm", "run", "dev"]
+RUN npm run lint
+RUN npm run test
