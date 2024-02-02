@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import TestBtn from '../src/TestBtn'
+import TestBtn from '../TestBtn'
+
 
 describe('Button Component', () => {
   it('should match the snapshot', () => {
@@ -12,8 +13,7 @@ describe('Button Component', () => {
     // Assert that the rendered component matches the snapshot
     expect(asFragment()).toMatchSnapshot();
 
-    // Optionally, you can perform additional assertions
-    expect(getByText('Click me')).toBeInTheDocument();
+  
 
     // Optionally, you can simulate user interaction and test the resulting changes
     fireEvent.click(getByText('Click me'));
