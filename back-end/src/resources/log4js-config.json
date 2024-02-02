@@ -1,0 +1,15 @@
+{
+    "appenders": {
+      "console": { "type": "console" },
+      "info_file": { "type": "file", "filename": "logs/app-info.log" },
+      "error_file":{"type": "file", "filename": "logs/app-error.log"},
+      "debug_file":{"type": "file", "filename": "logs/app-debug.log"}
+    },
+    "categories": {
+        "default": { "appenders": ["console", "info_file", "error_file"], "level": "info" },
+        "info": { "appenders": ["console", "info_file"], "level": "info" },
+        "debug": {"appenders": ["console", "debug_file"], "level": "debug" },
+        "error": { "appenders": ["console", "error_file"], "level": "error" }
+    }
+  }
+  

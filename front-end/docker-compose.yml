@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  my-expo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+      - "8081:8081"
+    volumes: 
+      - ./ReactFE:/app/ReactFE
+    stdin_open: true
+    tty: true
