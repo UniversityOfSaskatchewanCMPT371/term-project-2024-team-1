@@ -21,7 +21,41 @@
       "@typescript-eslint/consistent-type-exports": "off",
       "@typescript-eslint/space-before-function-paren": "off",
       "@typescript-eslint/space-infix-ops": "warn",
-      "@typescript-eslint/member-delimiter-style": "off"
-
+      "@typescript-eslint/member-delimiter-style": "off",
+      "@typescript-eslint/explicit-function-return-type": "error",
+      "@typescript-eslint/no-inferrable-types": 0,
+      "@typescript-eslint/typedef": [
+          "warn",
+          {
+              "variableDeclaration": true
+          }
+      ],
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          "selector": ["variable", "memberLike"],
+          "format": ["camelCase", "UPPER_CASE"]
+        },
+        {
+          "selector": "variable",
+          "types": ["boolean"],
+          "format": ["camelCase", "UPPER_CASE"],
+          "prefix": ["is", "should", "has", "can", "did", "will"]
+        },
+        {
+          "selector": ["memberLike"],
+          "modifiers": ["private"],
+          "format": ["camelCase"],
+          "leadingUnderscore": "require"
+        },
+        {
+          "selector": ["function", "classMethod"],
+          "format": ["camelCase"]
+        },
+        {
+          "selector": ["class", "interface", "enum"],
+          "format": ["PascalCase"]
+        }
+      ]
     }
 }
