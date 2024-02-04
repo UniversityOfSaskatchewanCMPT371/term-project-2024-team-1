@@ -3,6 +3,8 @@
     "dev": "set NODE_ENV=development && eslint ./src --ext .ts && ts-node -r tsconfig-paths/register src/main.ts",
     "prod": "set NODE_ENV=production && eslint ./src --ext .ts && ts-node -r tsconfig-paths/register src/main.ts",
     "test": "jest",
+    "unit-tests": "jest ./src/tests/unit_tests",
+    "integration-tests": "jest ./src/tests/integration_tests",
     "lint": "eslint ./src --ext .ts",
     "build": "tsc -p tsconfig.build.json"
   },
