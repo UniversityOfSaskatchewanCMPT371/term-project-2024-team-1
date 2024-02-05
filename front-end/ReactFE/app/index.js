@@ -5,7 +5,7 @@ import TestButton from './testButton';
 const Index = () => {
     return (
         <View>
-            <Text>HOme</Text>
+            <Text id="Welcome">HOme</Text>
             <TestButton />
         </View>
     )
