@@ -1,9 +1,26 @@
 
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, getByLabelText } from '@testing-library/react';
 import TestBtn from '../src/TestBtn'
 
 
+
+describe("BUtton mock",() =>{
+
+    it("Calling OnPress",()=>{
+        const mockOnPress = jest.fn();
+
+        const { getByText } = render(<TestBtn label="mockTest" onClick={mockOnPress} />);
+        const pressButton = getByText(/mockTest/i);
+    
+        fireEvent.click(pressButton)
+
+        expect(mockOnPress).toHaveBeenCalled();
+
+    })
+
+
+})
 describe('Button Component', () => {
   it('should match the snapshot', () => {
     const { asFragment, getByText } = render(
