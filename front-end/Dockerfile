@@ -12,6 +12,6 @@ WORKDIR /app
 WORKDIR /app/ReactFE
 
 RUN chmod -R +x ./
-
+# CMD ["bash"]
 # Start the Expo development server
 CMD ["npm", "start"]
