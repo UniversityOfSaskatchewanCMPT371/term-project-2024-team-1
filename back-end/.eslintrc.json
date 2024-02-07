@@ -39,8 +39,7 @@
         {
           "selector": "variable",
           "types": ["boolean"],
-          "format": ["camelCase", "UPPER_CASE"],
-          "prefix": ["is", "should", "has", "can", "did", "will"]
+          "format": ["camelCase", "UPPER_CASE"]
         },
         {
           "selector": ["memberLike"],
