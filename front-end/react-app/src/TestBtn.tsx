@@ -6,7 +6,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ label, onClick }) => (
-  <button onClick={onClick}>{label}</button>
+  <button id="mockButton" onClick={onClick}>{label}</button>
 );
 
 export default Button;
