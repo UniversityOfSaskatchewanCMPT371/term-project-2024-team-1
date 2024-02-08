@@ -41,6 +41,7 @@
           "types": ["boolean"],
           "format": ["camelCase", "UPPER_CASE"],
           "prefix": ["is", "should", "has", "can", "did", "will"]
+
         },
         {
           "selector": ["memberLike"],

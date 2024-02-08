@@ -2,7 +2,9 @@
 
 exports[`Button Component should match the snapshot 1`] = `
 <DocumentFragment>
-  <button>
+  <button
+    id="mockButton"
+  >
     Click me
   </button>
 </DocumentFragment>
@@ -10,7 +12,9 @@ exports[`Button Component should match the snapshot 1`] = `
 
 exports[`Button Component should match the snapshot 2`] = `
 <DocumentFragment>
-  <button>
+  <button
+    id="mockButton"
+  >
     Click me
   </button>
 </DocumentFragment>
