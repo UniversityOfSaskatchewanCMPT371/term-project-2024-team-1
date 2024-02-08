@@ -17,5 +17,4 @@ RCT_EXTERN NSString *RCTCurrentOverrideAppearancePreference();
 RCT_EXTERN NSString *RCTColorSchemePreference(UITraitCollection *traitCollection);
 
 @interface RCTAppearance : RCTEventEmitter <RCTBridgeModule>
-- (instancetype)init;
 @end

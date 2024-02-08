@@ -9,7 +9,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 add_compile_options(
         -fexceptions
         -frtti
-        -std=c++20
+        -std=c++17
         -Wall
         -Wpedantic
         -Wno-gnu-zero-variadic-macro-arguments
@@ -24,4 +24,5 @@ target_include_directories(react_render_graphics
           ${CMAKE_CURRENT_SOURCE_DIR}/platform/android/
         )
 
-target_link_libraries(react_render_graphics glog fb fbjni folly_runtime react_debug react_utils)
+target_link_libraries(react_render_graphics glog fb fbjni folly_runtime react_debug)
+

@@ -15,7 +15,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.WindowManager.BadTokenException;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -32,7 +31,7 @@ import java.util.Locale;
  */
 public class DefaultDevLoadingViewImplementation implements DevLoadingViewManager {
   private static boolean sEnabled = true;
-  private final ReactInstanceDevHelper mReactInstanceDevHelper;
+  private final ReactInstanceDevHelper mReactInstanceManagerHelper;
   private @Nullable TextView mDevLoadingView;
   private @Nullable PopupWindow mDevLoadingPopup;
 
@@ -41,7 +40,7 @@ public class DefaultDevLoadingViewImplementation implements DevLoadingViewManage
   }
 
   public DefaultDevLoadingViewImplementation(ReactInstanceDevHelper reactInstanceManagerHelper) {
-    mReactInstanceDevHelper = reactInstanceManagerHelper;
+    mReactInstanceManagerHelper = reactInstanceManagerHelper;
   }
 
   @Override
@@ -105,7 +104,7 @@ public class DefaultDevLoadingViewImplementation implements DevLoadingViewManage
       return;
     }
 
-    Activity currentActivity = mReactInstanceDevHelper.getCurrentActivity();
+    Activity currentActivity = mReactInstanceManagerHelper.getCurrentActivity();
     if (currentActivity == null) {
       FLog.e(
           ReactConstants.TAG,
@@ -116,30 +115,21 @@ public class DefaultDevLoadingViewImplementation implements DevLoadingViewManage
     // PopupWindow#showAtLocation uses absolute screen position. In order for
     // loading view to be placed below status bar (if the status bar is present) we need to pass
     // an appropriate Y offset.
-    try {
-      Rect rectangle = new Rect();
-      currentActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
-      int topOffset = rectangle.top;
+    Rect rectangle = new Rect();
+    currentActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+    int topOffset = rectangle.top;
 
-      LayoutInflater inflater =
-          (LayoutInflater) currentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater =
+        (LayoutInflater) currentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-      mDevLoadingView = (TextView) inflater.inflate(R.layout.dev_loading_view, null);
-      mDevLoadingView.setText(message);
+    mDevLoadingView = (TextView) inflater.inflate(R.layout.dev_loading_view, null);
+    mDevLoadingView.setText(message);
 
-      mDevLoadingPopup = new PopupWindow(mDevLoadingView, MATCH_PARENT, WRAP_CONTENT);
-      mDevLoadingPopup.setTouchable(false);
+    mDevLoadingPopup = new PopupWindow(mDevLoadingView, MATCH_PARENT, WRAP_CONTENT);
+    mDevLoadingPopup.setTouchable(false);
 
-      mDevLoadingPopup.showAtLocation(
-          currentActivity.getWindow().getDecorView(), Gravity.NO_GRAVITY, 0, topOffset);
-      // TODO T164786028: Find out the root cause of the BadTokenException exception here
-    } catch (BadTokenException e) {
-      FLog.e(
-          ReactConstants.TAG,
-          "Unable to display loading message because react "
-              + "activity isn't active, message: "
-              + message);
-    }
+    mDevLoadingPopup.showAtLocation(
+        currentActivity.getWindow().getDecorView(), Gravity.NO_GRAVITY, 0, topOffset);
   }
 
   private void hideInternal() {
@@ -151,6 +141,6 @@ public class DefaultDevLoadingViewImplementation implements DevLoadingViewManage
   }
 
   private @Nullable Context getContext() {
-    return mReactInstanceDevHelper.getCurrentActivity();
+    return mReactInstanceManagerHelper.getCurrentActivity();
   }
 }

@@ -2,7 +2,7 @@
 // import { StyleSheet, Text, View } from 'react-native';
 import React from "react";
 import LoginScreen from "./src/components/TestLoginScreen";
-
+import Index from "./app/index";
 /*
 export default function App() {
   return (
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 */
 const App = () => {
-  return <LoginScreen />;
+  return <Index/>;
 };
 
 export default App;

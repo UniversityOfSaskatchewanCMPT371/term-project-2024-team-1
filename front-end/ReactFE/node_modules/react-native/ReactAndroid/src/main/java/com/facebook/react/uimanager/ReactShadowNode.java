@@ -123,9 +123,9 @@ public interface ReactShadowNode<T extends ReactShadowNode> {
    */
   void onCollectExtraUpdates(UIViewOperationQueue uiViewOperationQueue);
 
-  /* package */ boolean dispatchUpdatesWillChangeLayout(float absoluteX, float absoluteY);
+  /** @return true if layout (position or dimensions) changed, false otherwise. */
 
-  /* package */ void dispatchUpdates(
+  /* package */ boolean dispatchUpdates(
       float absoluteX,
       float absoluteY,
       UIViewOperationQueue uiViewOperationQueue,

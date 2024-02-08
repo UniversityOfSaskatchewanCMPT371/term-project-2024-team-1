@@ -337,32 +337,9 @@ public class ReactShadowNodeImpl implements ReactShadowNode<ReactShadowNodeImpl>
   @Override
   public void onCollectExtraUpdates(UIViewOperationQueue uiViewOperationQueue) {}
 
+  /** @return true if layout (position or dimensions) changed, false otherwise. */
   @Override
-  public boolean dispatchUpdatesWillChangeLayout(float absoluteX, float absoluteY) {
-    if (!hasNewLayout()) {
-      return false;
-    }
-
-    float layoutX = getLayoutX();
-    float layoutY = getLayoutY();
-    int newAbsoluteLeft = Math.round(absoluteX + layoutX);
-    int newAbsoluteTop = Math.round(absoluteY + layoutY);
-    int newAbsoluteRight = Math.round(absoluteX + layoutX + getLayoutWidth());
-    int newAbsoluteBottom = Math.round(absoluteY + layoutY + getLayoutHeight());
-
-    int newScreenX = Math.round(layoutX);
-    int newScreenY = Math.round(layoutY);
-    int newScreenWidth = newAbsoluteRight - newAbsoluteLeft;
-    int newScreenHeight = newAbsoluteBottom - newAbsoluteTop;
-
-    return newScreenX != mScreenX
-        || newScreenY != mScreenY
-        || newScreenWidth != mScreenWidth
-        || newScreenHeight != mScreenHeight;
-  }
-
-  @Override
-  public void dispatchUpdates(
+  public boolean dispatchUpdates(
       float absoluteX,
       float absoluteY,
       UIViewOperationQueue uiViewOperationQueue,
@@ -409,6 +386,10 @@ public class ReactShadowNodeImpl implements ReactShadowNode<ReactShadowNodeImpl>
               getScreenHeight());
         }
       }
+
+      return layoutHasChanged;
+    } else {
+      return false;
     }
   }
 
