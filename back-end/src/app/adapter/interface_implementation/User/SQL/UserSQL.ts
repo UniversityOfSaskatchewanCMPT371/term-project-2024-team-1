@@ -6,4 +6,6 @@ export class UserSQL implements IUser {
     console.log("SQL Implementation of IUser");
   }
 
+  // methods with actual SQL commands/queries
+
 }
