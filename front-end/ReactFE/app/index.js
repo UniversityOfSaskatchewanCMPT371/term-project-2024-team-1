@@ -52,6 +52,19 @@ export default function Index() {
           cardStyle: {
             backgroundColor: '#7f92f0',
          },
+        headerStyle:{
+          backgroundColor:"#5d6ebe",
+        },
+         headerTintColor:"#fff",
+         headerTitleStyle:{
+          fontWeight:"bold"
+         },
+        drawerActiveTintColor:"#26177d",
+        drawerLabelStyle:{
+          color:"#111"
+        }
+      
+
         }
           
         }

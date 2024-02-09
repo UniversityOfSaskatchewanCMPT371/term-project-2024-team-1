@@ -8,7 +8,7 @@ const Screen = () => {
 
     //const router = userRouter();
     return (
-        <View style={[styles.CasiBlue,styles.container]}>
+        <View style={[ScreenStyles.CasiBlue,ScreenStyles.container]}>
         <SafeAreaView style={{flex: 1}} className={"CasiBlue"}>
         <TouchableOpacity 
         onPress={this.props.navigation.openDrawer}
@@ -17,13 +17,13 @@ const Screen = () => {
             <FontAwesome name="bars" size={24} color="#18192" />
         </TouchableOpacity>
            <View style={{flex:1, alignItems:"center",justifyContent:"center"}}>
-                <Text style={styles.text}>{this.props.screenName} Screen</Text>
+                <Text style={ScreenStyles.text}>{this.props.screenName} Screen</Text>
            </View>
         </SafeAreaView>
         </View>
     )
 }
-const styles = StyleSheet.create({
+export const ScreenStyles = StyleSheet.create({
     /* Colors */
 
 container: {
@@ -45,7 +45,15 @@ CasiDarkBlue: {
 },
 
 CasiPurple: {
-    backgroundColor: "#26177d",
-}
+    backgroundColor: "#25177B",
+},
+button: {
+    fontSize:30,
+    color:"#ffffff",
+    padding:15,
+    borderRadius:30,
+},
+ScreenStyle:{
+    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"}
 });
 export default Screen;
