@@ -14,4 +14,5 @@ WORKDIR /app/ReactFE
 RUN chmod -R +x ./
 # CMD ["bash"]
 # Start the Expo development server
-CMD ["npm", "start"]
+CMD ["detox","build","-c","android.emu.debug"]
+CMD ["detox","test","-c","android.emu.debug"]
