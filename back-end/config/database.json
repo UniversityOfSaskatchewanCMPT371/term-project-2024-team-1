@@ -1,0 +1,10 @@
+{
+    "dev": {
+      "driver": "mysql",
+      "host": "mysql",
+      "user": "root",
+      "password": "CMPT371-team1",
+      "database": "test",
+      "multipleStatements": true
+    }
+  }

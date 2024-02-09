@@ -12,7 +12,7 @@ COPY . /usr/project/back-end
 FROM build AS dev
 RUN npm ci --include=dev
 ENV NODE_ENV=development
-CMD npm run dev
+CMD ["sh", "-c", "npx db-migrate up --config config/database.json && npm run dev"]
 
 FROM build AS prod
 RUN npm run build
