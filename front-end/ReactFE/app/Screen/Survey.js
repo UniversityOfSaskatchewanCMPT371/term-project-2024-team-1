@@ -6,7 +6,7 @@ export default function Survey() {
 
     return (
         <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-            <Text>SURVEY</Text> 
+            <Text>SURVEY TEST</Text> 
         </View>
     )
 }

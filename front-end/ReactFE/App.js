@@ -3,6 +3,7 @@
 import React from "react";
 import LoginScreen from "./src/components/TestLoginScreen";
 import Index from "./app/index";
+import { View,Text } from "react-native";
 /*
 export default function App() {
   return (
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
 });
 */
 const App = () => {
-  return <Index/>;
+  return <Index id={'welcome'}/>;
 };
 
 export default App;
