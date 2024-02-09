@@ -1,7 +1,7 @@
 
 /* trims whitespace and removes special characters except for basic punctuation */
 export const sanitizeNameAndProvince = (input) => {
-  return input.trim().replace(/[^a-zA-Z0-9\s,.'-]/g, '');
+  return input.trim().replace(/[^a-zA-Z0-9\s,.'-]/g, '').replace(/\s{2,}/g, ' ');
 };
   
 /* standardizes postal codes by uppercase and removing unnecessary spaces/dashes */
@@ -16,4 +16,3 @@ export const sanitizeEmail = (email) => {
 export const sanitizePhoneNumber = (phone) => {
   return phone.replace(/[^\d+]/g, '');
 };
-  
