@@ -1,4 +1,4 @@
-import { IUser } from "../../../../domain/interfaces/repositories/IUserRepository";
+import { IUser } from "../../../domain/interfaces/repositories/IUserRepository";
 
 export class UserSQL implements IUser {
 
