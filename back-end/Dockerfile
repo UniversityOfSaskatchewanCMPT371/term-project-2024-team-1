@@ -24,35 +24,3 @@ FROM build AS test
 RUN npm ci --include=dev
 RUN npm run lint
 RUN npm run test
-
-# FROM base as test
-# ENV NODE_ENV test
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=package-lock.json,target=package-lock.json \
-#     --mount=type=cache,target=/root/.npm \
-#     --mount=type=bind,source=./,target=/usr/project/back-end \
-#     npm ci --include=dev
-# COPY . /usr/project/back-end
-# RUN npm run lint
-# RUN npm run test
-
-# FROM base as dev
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=package-lock.json,target=package-lock.json \
-#     --mount=type=cache,target=/root/.npm \
-#     npm ci --include=dev
-# COPY . /usr/project/back-end
-# # Setting env variable seems to not through package.json in docker containers, so have to do it here
-# ENV NODE_ENV=development 
-# CMD ["npm", "run", "dev"]
-
-
-# FROM base as prod
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=package-lock.json,target=package-lock.json \
-#     --mount=type=cache,target=/root/.npm \
-#     npm ci --omit=dev
-# COPY . /usr/project/back-end
-# # Setting env variable seems to not through package.json in docker containers, so have to do it here
-# ENV NODE_ENV=production 
-# CMD ["npm", "run", "prod"]
