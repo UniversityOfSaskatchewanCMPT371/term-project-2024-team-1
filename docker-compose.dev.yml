@@ -21,6 +21,8 @@ services:
       context: ./back-end
       dockerfile: Dockerfile
       target: dev
+    env_file:
+      - ./back-end/src/resources/development.env
     ports: 
       - 3000:3000
     volumes: 
@@ -29,4 +31,5 @@ services:
     depends_on: 
       mysql:
         condition: service_healthy
+  
   
