@@ -1,11 +1,11 @@
-import "reflect-metadata";
-import express, { Request, Response, Express } from "express";
-import { container } from "tsyringe";
-import { TestService } from "@app/application/TestService";
-import { Logger, configure, getLogger } from "log4js";
-import { NODE_ENV, HOST, PORT } from "@resources/config";
-import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
+import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
+import { TestService } from "@app/application/TestService";
+import { HOST, NODE_ENV, PORT } from "@resources/config";
+import express, { Express, Request, Response } from "express";
+import { Logger, configure, getLogger } from "log4js";
+import "reflect-metadata";
+import { container } from "tsyringe";
 configure("src/resources/log4js-config.json");
 
 
@@ -34,6 +34,22 @@ app.get("/dbHit", (req: Request, res: Response) => {
   });
 
 });
+
+app.get("/users", (req: Request, res: Response) => {
+
+  const userSQL: UserSQL = new UserSQL();
+  
+  userSQL.getAll()
+    .then(users => {
+      console.log(users);
+      res.json(users);
+    })
+    .catch(error => {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
 
 app.listen(PORT, HOST, () => {
   errLogger.error("Testing ERROR logs");
