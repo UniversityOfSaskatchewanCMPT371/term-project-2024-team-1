@@ -1,13 +1,11 @@
-name: Docker Image CI
+name: CI
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - development
+    branches: [development]
   pull_request:
-    branches:
-      - developement
+    branches: [developement]
+  workflow_dispatch:
 
 jobs:
   build:
