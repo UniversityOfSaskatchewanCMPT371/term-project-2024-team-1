@@ -1,14 +1,18 @@
-# Dockerfile for front-end
-FROM baseImage
+FROM node:latest
 
+# Expose the necessary ports for Expo
+EXPOSE 19000
+EXPOSE 19001
+EXPOSE 19002
+EXPOSE 8081
 
-FROM base as test
-ENV NODE_ENV test
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --include=dev
-USER node
-COPY . .
-RUN npm run lint
-RUN npm run test
+WORKDIR /app
+
+# Create and change to the app directory
+WORKDIR /app/ReactFE
+
+RUN chmod -R +x ./
+# CMD ["bash"]
+# Start the Expo development server
+CMD ["detox","build","-c","android.emu.debug"]
+CMD ["detox","test","-c","android.emu.debug"]

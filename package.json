@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "semantic-release": "^23.0.0"
+  },
+  "dependencies": {
+    "expo": "^50.0.6",
+    "jest": "^29.7.0"
   }
 }

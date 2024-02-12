@@ -4,7 +4,8 @@ import { container } from "tsyringe";
 import { TestService } from "@app/application/TestService";
 import { Logger, configure, getLogger } from "log4js";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
-import { UserSQL } from "@app/adapter/interface_implementation/User/SQL/UserSQL";
+import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
+import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 configure("src/resources/log4js-config.json");
 
 
@@ -20,6 +21,18 @@ app.get("/", (req: Request, res: Response) => {
   const t: TestService = container.resolve(TestService);
   t.call();
   res.send("Hello World !!");
+});
+
+app.get("/dbHit", (req: Request, res: Response) => {
+  const result: Promise<string> = query("SELECT * FROM VetClinics");
+  
+  result.then(result => {
+    console.log(result);
+    res.send(result[0]);
+  }).catch(error => {
+    console.log(error);
+  });
+
 });
 
 app.listen(PORT, HOST, () => {
