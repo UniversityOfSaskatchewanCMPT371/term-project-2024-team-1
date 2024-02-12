@@ -32,9 +32,8 @@ jobs:
           context: ./front-end
           target: test
         #   load: true
-
       #name:  Run Smoke Tests
       #run: npm run smoke-test # command to run smoke tests at merge to master
-
+     
       #name: Run System tests
       #run: npm run system-test command to run system tests at merge to master
