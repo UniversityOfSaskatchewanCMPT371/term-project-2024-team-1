@@ -1,7 +1,10 @@
 name: Release
 on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [developement]
   workflow_dispatch:
-  
   # comment out lies 6-8 to trigger workflow automatically on push to master branch
   # push:
   #   branches:
@@ -27,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
+          node-version: "latest"
       - name: Install dependencies
         run: npm clean-install
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
