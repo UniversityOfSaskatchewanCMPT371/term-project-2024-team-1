@@ -1,12 +1,10 @@
 
 import { User } from "@app/domain/User";
 
-
-console.log("User type:", User);
 export interface IUserRepository {
   getAll: () => Promise<User[]>;
-  getById: (id: number) => Promise<User | undefined>;
-  create: (user: User) => void;
-  update: (user: User) => void;
-  delete: (id: number) => void;
+  getById: (id: number) => Promise<User>;
+  create: (user: User) => Promise<boolean>;
+  update: (user: User) => Promise<boolean>;
+  delete: (id: number) => Promise<boolean>;
 }

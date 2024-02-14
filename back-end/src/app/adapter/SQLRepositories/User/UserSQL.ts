@@ -1,58 +1,69 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { User } from "@app/domain/User";
 import "reflect-metadata";
-import { IUserRepository } from "../../../domain/interfaces/repositories/IUserRepository";
-
+import { getLogger } from "log4js";
+import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 
 
 export class UserSQL implements IUserRepository {
 
+  private readonly _logger = getLogger(UserSQL.name);
+
+  private readonly _getAllQuery: string = "SELECT * FROM user";
+  private readonly _getByIdQuery: string = "SELECT * FROM user where id = ?";
+  private readonly _createQuery: string = "INSERT INTO user (userID, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)";
+  private readonly _updateQuery: string = "UPDATE user SET userID = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?";
+  private readonly _deleteQuery: string = "DELETE FROM user WHERE id = ?";
+
   async getAll(): Promise<User[]> {
     try {
-      const users: Promise<User[]> = query("SELECT * FROM user");
+      const users: Promise<User[]> = query(this._getAllQuery);
       return users;
     } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
-  async getById(id: number): Promise<User | undefined> {
+  async getById(id: number): Promise<User> {
     try {
-      const user: User | undefined = await query("SELECT * FROM user where id = ?", [String(id)]);
+      const user: Promise<User> = query(this._getByIdQuery, [id.toString()]);
       return user;
     } catch (error) {
-      console.error("Error fetching user by id:", error);
-      throw error;
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
-  async create(user: any): Promise<void> {
+  async create(user: User): Promise<boolean> {
     try {
-      await query("INSERT INTO user (userID, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)", 
-        [user.userID, user.password, user.email, user.isAdmin, user.clinic_id]);
+      const isUserCreated: Promise<boolean> = query(this._createQuery,
+        [user.userID, user.password, user.email, user.isAdmin.toString(), user.clinicID.toString()]);
+      return isUserCreated;
     } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
-  async update(user: any): Promise<void> {
+  async update(user: User): Promise<boolean> {
     try {
-      await query("UPDATE user SET userID = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?", 
-        [user.userID, user.password, user.email, user.isAdmin, user.clinic_id, user.id]);
+      const updateUser: Promise<boolean> = query(this._updateQuery,
+        [user.userID, user.password, user.email, user.isAdmin.toString(), user.clinicID.toString(), user.id.toString()]);
+      return updateUser;
     } catch (error) {
-      console.error("Error updating user:", error);
-      throw error;
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<boolean> {
     try {
-      await query("DELETE FROM user WHERE id = ?", [String(id)]);
+      const isDeleted: Promise <boolean> = query(this._deleteQuery, [id.toString()]);
+      return isDeleted;
     } catch (error) {
-      console.error("Error deleting user:", error);
-      throw error;
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
