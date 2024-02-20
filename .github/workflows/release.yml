@@ -1,11 +1,8 @@
 name: Release
 on:
+  push:
+    branches: [ master ]
   workflow_dispatch:
-  
-  # comment out lies 6-8 to trigger workflow automatically on push to master branch
-  # push:
-  #   branches:
-  #     - master
 
 permissions:
   contents: read # for checkout
