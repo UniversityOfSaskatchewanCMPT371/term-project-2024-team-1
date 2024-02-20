@@ -1,44 +1,23 @@
 name: ci
 
 on:
-    workflow_dispatch:
-#   push:
-#     branches:
-#       - development
+  pull_request:
+    branches: [ development, master ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Build and test backend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./back-end
-          target: test
-        #   load: true
-      -
-        name: Build and test frontend
-        uses: docker/build-push-action@v5
-        with:
-            context: ./front-end
-            target: test
-        #   load: true
-      - 
-      #name:  Run Smoke Tests
-      #run: npm run smoke-test # command to run smoke tests at merge to master
-      -
-      #name: Run System tests
-      #run: npm run system-test command to run system tests at merge to master
+    - name: Enforce merge into master from dev only
+      if: github.base_ref == 'master' && github.head_ref != 'development'
+      run: |
+        echo "ERROR: You can only merge to master from development"
+        exit 1
+        
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Build Test Container and Run Tests
+      run: docker compose -f docker-compose.test.yml up --exit-code-from tests_container --attach tests_container
