@@ -1,26 +1,38 @@
-# Dockerfile for back-end
 FROM node:18.0.0-alpine AS base
 WORKDIR /usr/project/back-end
 EXPOSE 3000:3000
+
+###########################################################################################################################################################################################
 
 FROM base AS build
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm
 COPY . /usr/project/back-end
+RUN npm ci --include=dev && \
+    npm run lint && \
+    npm run unit-tests && \
+    npm run build
+
+############################################################################################################################################################################################
 
 FROM build AS dev
-RUN npm ci --include=dev
 ENV NODE_ENV=development
 CMD ["sh", "-c", "npm run dev && npx db-migrate up --config src/resources/database/database.json -m src/resources/database"]
 
-FROM build AS prod
-RUN npm run build
+############################################################################################################################################################################################
+
+FROM base AS prod
+WORKDIR /usr/project/back-end
+COPY --from=build /usr/project/back-end/build ./build
+COPY package.json .
+COPY package-lock.json .
 RUN npm ci --omit=dev
 ENV NODE_ENV=production
 CMD npm run prod
 
-FROM build AS test
-RUN npm ci --include=dev
-RUN npm run lint
-RUN npm run test
+############################################################################################################################################################################################
+
+# FROM build AS test
+# RUN npm run lint
+# RUN npm run test
