@@ -6,7 +6,9 @@ import { Logger, configure, getLogger } from "log4js";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
 import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
-configure("src/resources/log4js-config.json");
+import log4jsConfig from "@resources/log4js-config.json";
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+configure(log4jsConfig);
 
 
 const app: Express = express();
