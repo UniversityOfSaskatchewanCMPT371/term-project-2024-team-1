@@ -21,6 +21,7 @@ export async function query(sql: string, fields?: string[]): Promise<any> {
     const result: any = await connection.query(preparedSQL);
 
     await connection.commit();
+    sqlPool.releaseConnection(connection);
     return result;
   } catch (err) {
     await connection.rollback();
