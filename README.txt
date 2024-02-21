@@ -1,6 +1,7 @@
 README for semantic versioning
 
 A basic automated semantic version release that helps to release a new version with its release notes when code is pushed on main branch.
+ABC123
 
 ### Given a version number MAJOR.MINOR.PATCH, increment the:
   **PATCH -> fix:** version when you make backward compatible bug fixes.\
