@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import TestLoginScreen from "../../components/TestLoginScreen";
+import TestLoginScreen from "../components/TestLoginScreen";
 describe("Login Screen", () => {
   test("renders login page with input fields and buttons", () => {
     const { getByTestId } = render(<TestLoginScreen />);
