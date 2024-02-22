@@ -1,15 +1,16 @@
 import "reflect-metadata";
 import express, { Request, Response, Express } from "express";
 import { container } from "tsyringe";
-import { TestService } from "@app/application/TestService";
 import { Logger, configure, getLogger } from "log4js";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
-import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import log4jsConfig from "@resources/log4js-config.json";
+import { TestService } from "@app/application/TestService";
+import { registerAllDependencies } from "@app/adapter/DependencyInjections";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 configure(log4jsConfig);
 
+registerAllDependencies();
 
 const app: Express = express();
 const infoLogger: Logger = getLogger("info"); // logger for info
@@ -17,6 +18,8 @@ const errLogger: Logger = getLogger("error"); // logger for error
 const debugLogger: Logger = getLogger("debug"); // logger for debug
 
 console.log(`NODE_ENV=${NODE_ENV}`);
+
+
 
 app.get("/", (req: Request, res: Response) => {
   infoLogger.info("GET request received");
@@ -43,4 +46,3 @@ app.listen(PORT, HOST, () => {
   console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
 });
 
-container.register("User", { useClass: UserSQL });
