@@ -18,7 +18,7 @@ RUN npm ci --include=dev && \
 
 FROM build AS dev
 ENV NODE_ENV=development
-CMD ["sh", "-c", "npm run dev && npx db-migrate up --config src/resources/database/database.json -m src/resources/database"]
+CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.json -m src/resources/database/migrations && npm run dev"]
 
 ############################################################################################################################################################################################
 
