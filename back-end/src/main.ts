@@ -11,6 +11,7 @@ import { container } from "tsyringe";
 configure("src/resources/log4js-config.json");
 
 
+
 const app: Express = express();
 const infoLogger: Logger = getLogger("info"); // logger for info
 const errLogger: Logger = getLogger("error"); // logger for error

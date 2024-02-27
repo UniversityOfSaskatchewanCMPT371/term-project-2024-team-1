@@ -5,10 +5,13 @@
     "test": "jest",
     "unit-tests": "jest ./src/tests/unit_tests",
     "integration-tests": "jest ./src/tests/integration_tests",
+    "system-tests": "jest ./src/tests/system_tests",
     "lint": "eslint ./src --ext .ts",
-    "build": "tsc -p tsconfig.build.json && tsc-alias"
+    "build": "tsc -p tsconfig.build.json && tsc-alias && cp ./src/resources/log4js-config.json ./build/resources"
   },
   "dependencies": {
+    "db-migrate": "^0.11.14",
+    "db-migrate-mysql": "^2.3.2",
     "dotenv": "^16.4.0",
     "express": "^4.18.2",
     "log4js": "^6.9.1",
