@@ -33,3 +33,14 @@ services:
         condition: service_healthy
   
   
+  mysql:
+    container_name: db
+    image: mysql:5.7
+    ports:
+      - 3307:3306
+    environment: 
+      MYSQL_ROOT_PASSWORD: CMPT371-team1
+    volumes:
+    - ./mysql-volume:/var/lib/mysql
+    - ./back-end/src/resources:/docker-entrypoint-initdb.d
+

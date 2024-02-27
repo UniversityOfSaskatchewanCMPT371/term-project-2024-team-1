@@ -7,7 +7,7 @@ export const sqlPool: mysql.Pool = mysql.createPool({
   user: DB_USER,
   password: DB_PASSWORD,
   port: DB_PORT,
-  database: "test"
+  database: "CASI_DB"
 });
 
 export async function query(sql: string, fields?: string[]): Promise<any> {
