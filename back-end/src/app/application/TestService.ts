@@ -9,6 +9,5 @@ export class TestService {
   public call(): void {
     void this._user.getAll();
   }
-
   
 }

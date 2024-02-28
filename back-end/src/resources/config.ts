@@ -16,6 +16,6 @@ const DB_HOST: string = process.env.DB_HOST ?? "localhost";
 const DB_USER: string = process.env.DB_USER ?? "root";
 const DB_PASSWORD: string = process.env.DB_PASSWORD ?? "";
 const DB_CONNECTION_LIMIT: number = process.env.DB_CONNECTION_LIMIT != null ? parseInt(process.env.DB_CONNECTION_LIMIT) : 10;
+const DB_DATABASE: string = process.env.DB_DATABASE ?? "test";
 
-
-export { NODE_ENV, HOST, PORT, DB_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_CONNECTION_LIMIT };
+export { NODE_ENV, HOST, PORT, DB_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_CONNECTION_LIMIT, DB_DATABASE };

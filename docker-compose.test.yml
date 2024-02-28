@@ -9,26 +9,23 @@ services:
       MYSQL_ROOT_PASSWORD: CMPT371-team1
     volumes:
     - ./mysql-volume:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pCMPT371-team1"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
 
-  node:
-    container_name: backend
+  tests_container:
+    container_name: tests_container
     build: 
       context: ./back-end
       dockerfile: Dockerfile
       target: dev
-    env_file:
-      - ./back-end/src/resources/development.env
     ports: 
       - 3000:3000
     volumes: 
       - ./back-end:/usr/project/back-end
       - /usr/project/back-end/node_modules
     depends_on: 
-      mysql:
-        condition: service_healthy
-        
+      - mysql
+    command: >
+      sh -c "
+        npm run integration-tests &&
+        npm run system-tests
+      "
+
