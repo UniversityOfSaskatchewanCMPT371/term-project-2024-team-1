@@ -1,28 +1,24 @@
 import "reflect-metadata";
 import express, { Request, Response, Express } from "express";
 import { container } from "tsyringe";
-import { Logger, configure, getLogger } from "log4js";
+import { TestService } from "@app/application/TestService";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
+import { UserSQL } from "@app/adapter/SQLRepositories/User/UserSQL";
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import log4jsConfig from "@resources/log4js-config.json";
-import { TestService } from "@app/application/TestService";
-import { registerAllDependencies } from "@app/adapter/DependencyInjections";
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-configure(log4jsConfig);
-
-registerAllDependencies();
-
-const app: Express = express();
-const infoLogger: Logger = getLogger("info"); // logger for info
-const errLogger: Logger = getLogger("error"); // logger for error
-const debugLogger: Logger = getLogger("debug"); // logger for debug
+import log4js from "log4js";
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
+const app: Express = express();
 
+log4js.configure(log4jsConfig);
+const infoLogger: log4js.Logger = log4js.getLogger("info");
+const debugLogger: log4js.Logger = log4js.getLogger("debug");
+const errorLogger: log4js.Logger = log4js.getLogger("error");
+const warnLogger: log4js.Logger = log4js.getLogger("warn");
 
 app.get("/", (req: Request, res: Response) => {
-  infoLogger.info("GET request received");
   const t: TestService = container.resolve(TestService);
   t.call();
   res.send("Hello World !!");
@@ -32,17 +28,20 @@ app.get("/dbHit", (req: Request, res: Response) => {
   const result: Promise<string> = query("SELECT * FROM VetClinics");
   
   result.then(result => {
-    console.log(result);
     res.send(result[0]);
   }).catch(error => {
     console.log(error);
+    errorLogger.error("Database query failed", error);
   });
-
 });
 
 app.listen(PORT, HOST, () => {
-  errLogger.error("Testing ERROR logs");
+  infoLogger.info("Testing INFO logs");
+  errorLogger.error("Testing ERROR logs");
   debugLogger.debug("Testing DEBUG logs");
-  console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
+  warnLogger.warn("Testing WARN logs");
+  console.log(`APP LISTENING ON http://${HOST}:${PORT}`);
 });
+
+container.register("User", { useClass: UserSQL });
 
