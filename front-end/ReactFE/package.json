@@ -8,7 +8,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "buildReleaseAndroid":"cd android && gradlew.bat assembleRelease assembleAndroidTest -DtestBuildType=release",
+    "buildReleaseAndroid": "cd android && gradlew.bat assembleRelease assembleAndroidTest -DtestBuildType=release",
     "smoke-test": "jest ./src/tests/smoke_tests"
   },
   "jest": {
@@ -22,7 +22,7 @@
     "@react-navigation/drawer": "^6.6.7",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
-    "@react-navigation/stack": "^6.3.21",
+    "@react-navigation/stack": "^6.3.25",
     "@testing-library/react-native": "^12.4.3",
     "expo": "^50.0.6",
     "expo-status-bar": "~1.11.1",

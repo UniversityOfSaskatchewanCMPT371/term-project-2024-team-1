@@ -2,22 +2,31 @@ import React from "react"
 import { createDrawerNavigator } from "@react-navigation/drawer"
 import Survey from "../Screen/Survey"
 import Profile from "../Screen/Profile"
-
+import {createStackNavigator} from "@react-navigation/stack"
 import TestLoginScreen from "../../src/components/TestLoginScreen"
 
-import { Dimensions } from "react-native";
-
-import {Feather} from "@expo/vector-icons"
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { AppStyles } from "../Styles/AppStyles";
+import TestScreen from "../Screen/TEST"
 import CustomDrawer from "./CustomDrawer"
 const Drawer = createDrawerNavigator();
 
 
-export default function Navigator() {
+const SurveyStack = () => {
     return (
-        <Drawer.Navigator testID={"drawer"} tabBarTestID={"drawer"} id={"drawer"}
+      <AppStack.Navigator screenOptions={{
+        headerShown: false
+      }} initialRouteName="Survey">
+      <AppStack.Screen name="SurveyScreen" component={Survey}/>
+      <AppStack.Screen name="TestScreen" component={TestScreen} />
+    </AppStack.Navigator>
+       
+    );
+  }
+
+  const AppStack = createStackNavigator();
+
+const Navigator = () => {
+  return(
+    <Drawer.Navigator testID={"drawer"} tabBarTestID={"drawer"} id={"drawer"}
         screenOptions={{
           drawerStyle:{
             backgroundColor: "#7f92f0"
@@ -47,14 +56,15 @@ export default function Navigator() {
 
         
         initialRouteName="Home">
-        <Drawer.Screen name ="Surveys" component={Survey} />
-        <Drawer.Screen name ="Profile" component={Profile} />
+        <Drawer.Screen name ="Survey" testID={"survID"} component={SurveyStack} />
+        <Drawer.Screen name ="Profile" testID={"profileID"} component={Profile} />
         <Drawer.Screen name ="Login" component={TestLoginScreen} />
         
         </Drawer.Navigator>
-    );
-  }
+  );
+}
 
+export default Navigator
 
 
   /*headerStyle:{
