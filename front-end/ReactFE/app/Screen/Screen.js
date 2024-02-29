@@ -56,10 +56,16 @@ export const ScreenStyles = StyleSheet.create({
     backgroundColor: "#1EC4B0",
   },
   button: {
-    fontSize: 30,
     color: "#ffffff",
-    padding: 15,
-    borderRadius: 30,
+    borderRadius: 100,
+    margin: 20,
+    width: 200,
+  },
+  buttonText: {
+    fontSize: 20,
+    padding: 5,
+    color: "#ffffff",
+    textAlign: "center",
   },
   ScreenStyle: {
     flex: 1,

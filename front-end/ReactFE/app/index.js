@@ -9,7 +9,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import Survey from "./Screen/Survey";
 import Profile from "./Screen/Profile";
-import AdminDashboard from "./Screen/AdminDashboard";
+import IDRequests from "./Screen/IDRequests";
+import Users from "./Screen/Users";
 
 const Drawer = createDrawerNavigator();
 import { StatusBar } from "expo-status-bar";
@@ -66,11 +67,10 @@ export default function Index() {
         initialRouteName="Home"
       >
         <Drawer.Screen name="Survey" component={Survey} />
+        <Drawer.Screen name="ID Requests" component={IDRequests} />
+        <Drawer.Screen name="Users" component={Users} />
         <Drawer.Screen name="Profile" component={Profile} />
-        <Drawer.Screen name="ID Requests" component={AdminDashboard} />
-        <Drawer.Screen name="Users" component={AdminDashboard} />
-        <Drawer.Screen name="Logout" component={AdminDashboard} />
-        <Drawer.Screen name="Admin" component={AdminDashboard} />
+        {/* <Drawer.Screen name="Logout" component={Logout} /> */}
       </Drawer.Navigator>
     </NavigationContainer>
   );
