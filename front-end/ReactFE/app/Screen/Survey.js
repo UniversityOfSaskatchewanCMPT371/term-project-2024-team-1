@@ -16,14 +16,15 @@ export default function Survey( {navigation}) {
         
             <DrawerButton/>
       
-       
+       <View style={{flex:0.3}}>
         <Text style={{color:"#fff", fontSize:50, fontWeight:"bold"}}>CASI</Text>
-        <View style={{marginTop:"50%"}} >
+        </View>
+        <View style={{flex:0.7}} >
 
             <Text style={{color:"#fff", fontWeight:"bold", fontSize:30, marginBottom:30,textAlign:"center"}}>SURVEY TEST</Text> 
           
             
-            <TouchableOpacity onPress={()=>{navigation.navigate("TestScreen")}}  style={[ScreenStyles.CasiPurple,ScreenStyles.button]}>
+            <TouchableOpacity onPress={()=>{navigation.navigate("SurveyBoard")}}  style={[ScreenStyles.CasiPurple,ScreenStyles.button]}>
               <Text style={ScreenStyles.buttonText}> Take Survey </Text> 
               
               </TouchableOpacity>

@@ -5,7 +5,7 @@ import Profile from "../Screen/Profile"
 import {createStackNavigator} from "@react-navigation/stack"
 import TestLoginScreen from "../../src/components/TestLoginScreen"
 
-import TestScreen from "../Screen/TEST"
+import SurveyBoard from "../Screen/SurveyBoard"
 import CustomDrawer from "./CustomDrawer"
 const Drawer = createDrawerNavigator();
 
@@ -16,7 +16,7 @@ const SurveyStack = () => {
         headerShown: false
       }} initialRouteName="Survey">
       <AppStack.Screen name="SurveyScreen" component={Survey}/>
-      <AppStack.Screen name="TestScreen" component={TestScreen} />
+      <AppStack.Screen name="SurveyBoard" component={SurveyBoard} />
     </AppStack.Navigator>
        
     );
@@ -27,9 +27,11 @@ const SurveyStack = () => {
 const Navigator = () => {
   return(
     <Drawer.Navigator testID={"drawer"} tabBarTestID={"drawer"} id={"drawer"}
+    
         screenOptions={{
+          overlayColor:"transparent",
           drawerStyle:{
-            backgroundColor: "#7f92f0"
+            backgroundColor: "#5f6fc0"
           },
           screenOptions:{
             backgroundColor: "black" ,
@@ -43,7 +45,9 @@ const Navigator = () => {
         headerShown:false,
         drawerActiveTintColor:"#26177d",
         drawerLabelStyle:{
-          color:"#111"
+          color:"#fff",
+          fontSize:20,
+          paddingLeft:10
         }
         
         
