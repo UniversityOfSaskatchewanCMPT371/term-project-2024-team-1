@@ -6,7 +6,7 @@ import Paginator from '../navigation/Paginator'
 import { StyleSheet } from 'react-native'
 
 
-export default function SurveyModal( {navigation,item,scrollx,data}) {
+export default function SurveyModal( {navigation,item,scrollx}) {
 
 
    
@@ -15,7 +15,7 @@ export default function SurveyModal( {navigation,item,scrollx,data}) {
 
     return (
 
-        <View style={[styles.container,{ width:width-20}]}>
+        <View  testID={item.id} style={[styles.container,{ width:width-20}]}>
         
             <View style={[{flex:1}]}>
             <Text style={{color:"#000", fontWeight:"bold", fontSize:30, marginBottom:30,textAlign:"center"}}>{item.title}</Text> 

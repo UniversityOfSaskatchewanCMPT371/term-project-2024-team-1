@@ -22,13 +22,21 @@ const DATA = [
 export default function SurveyBoard() {
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [surveyData, setSurveyData] = useState(DATA);
+
     const scrollx  = useRef(new Animated.Value(0)).current;
     const slideRef = useRef(null);
     const {width} = useWindowDimensions();
     const viewableItemsChanged = useRef(({viewableItems}) =>{
+        if(viewableItems[0] !== undefined)
         setCurrentIndex(viewableItems[0].index);
     }).current;
 
+
+
+    const handleNext = () =>{
+      slideRef.current.scrollToIndex({index: currentIndex+1,Animated:true})
+    }
     const viewConfig = useRef({viewAreaCoveragePercentThreshold:50}).current;
     return  (
         <View style={[ScreenStyles.ScreenStyle,{flex:1}]}>
@@ -38,9 +46,9 @@ export default function SurveyBoard() {
             <Text style={{color:"#fff", fontSize:50, fontWeight:"bold"}}>Survey</Text>
         </View>
         <View style={[{flex:0.8, marginHorizontal:10,marginBottom:10}, ScreenStyles.modal]}>
-        <View style={[{flex:3}]}>
+        <View style={[{flex:3}]} testID='surveyModalCard'>
         <FlatList 
-    data={DATA} renderItem={({item}) => <SurveyModal data={DATA} scrollX={scrollx} item={item}
+    data={surveyData} renderItem={({item}) => <SurveyModal data={surveyData} scrollX={scrollx} item={item}
     
     />}
     
@@ -58,7 +66,7 @@ export default function SurveyBoard() {
     
     />
       <View style={[{flex:0.2,paddingTop:10, justifyContent:"center", alignItems:"center"}]}>
-      <Paginator data={DATA} scrollX={scrollx}/>
+      <Paginator data={surveyData} scrollX={scrollx}/>
       <View style ={{flex:1, justifyContent:"flex-end", alignItems:"flex-end", width:width-20, paddingRight:20, paddingBottom:20}}>
         <TouchableOpacity style={{backgroundColor:"darkblue",borderRadius:10,height:50, width:100}}><Text style={{ textAlign:"center", color:"white", fontSize:20, padding:10}}>Next</Text></TouchableOpacity>
       </View>
