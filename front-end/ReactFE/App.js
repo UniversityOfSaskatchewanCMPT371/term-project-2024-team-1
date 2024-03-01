@@ -1,8 +1,8 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { StyleSheet, Text, View } from 'react-native';
+
 import React from "react";
 import LoginScreen from "./src/components/TestLoginScreen";
 import Index from "./app/index";
+import SignUp from "./app/Screen/SignUp";
 import { View,Text } from "react-native";
 /*
 export default function App() {
@@ -17,7 +17,7 @@ export default function App() {
 
 */
 const App = () => {
-  return <Index id={'welcome'}/>;
+  return <SignUp id={'welcome'}/>;
 };
 
 export default App;
