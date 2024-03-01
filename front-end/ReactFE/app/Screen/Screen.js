@@ -63,6 +63,13 @@ buttonText:{
 },
 
 ScreenStyle:{
-    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"}
+    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"},
+
+    modal: {
+        borderRadius:10,
+        backgroundColor:"#ffffff",
+        
+        
+    }
 });
 export default Screen;

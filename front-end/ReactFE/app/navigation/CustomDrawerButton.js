@@ -14,9 +14,9 @@ const DrawerButton = ( ) => {
 
   return (
     <View testID='menuButton' style={ {
-      position: 'absolute', // Absolute positioning relative to the parent container
-      top: 0, // Align the TouchableOpacity to the top of the parent container
-      left: 0, // Align the TouchableOpacity to the left of the parent container
+      position: 'absolute', 
+      top: 0, 
+      left: 0, 
       padding: 10,
       zIndex:1000}}>
         
