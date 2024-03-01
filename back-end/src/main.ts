@@ -43,4 +43,3 @@ app.listen(PORT, HOST, () => {
   debugLogger.debug("Testing DEBUG logs");
   console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
 });
-
