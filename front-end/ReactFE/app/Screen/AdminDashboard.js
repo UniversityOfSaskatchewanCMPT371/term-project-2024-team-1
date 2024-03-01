@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { ScreenStyles } from "./Screen";
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
   return (
     <View
       style={[
@@ -41,6 +41,4 @@ const AdminDashboard = () => {
       </View>
     </View>
   );
-};
-
-export default AdminDashboard;
+}

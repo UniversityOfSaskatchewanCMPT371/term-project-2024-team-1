@@ -1,30 +1,44 @@
-// AdminDashboard.test.js
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import AdminDashboard from "../app/Screen/AdminDashboard";
 
-// Mock the console.log function
-global.console = {
-  log: jest.fn(),
-};
-
 describe("AdminDashboard", () => {
-  it("renders correctly", () => {
-    // Render the AdminDashboard component
-    const { getByText } = render(<AdminDashboard />);
+  // Spy on console.log before the tests run
+  const logSpy = jest.spyOn(console, "log");
 
-    // Check if the main text is rendered
+  afterEach(() => {
+    // Clear mock (spy) calls after each test
+    logSpy.mockClear();
+  });
+
+  afterAll(() => {
+    // Restore original console.log behavior after all tests
+    logSpy.mockRestore();
+  });
+
+  it("renders correctly", () => {
+    const { getByText } = render(<AdminDashboard />);
     expect(getByText("ADMIN CASI")).toBeTruthy();
   });
 
-  it("handles button presses", () => {
-    // Render the AdminDashboard component
+  it("handles 'Create Survey' button press", () => {
     const { getByText } = render(<AdminDashboard />);
 
-    // Simulate pressing the 'Create Survey' button
     fireEvent.press(getByText("+ Create Survey"));
+    expect(logSpy).toHaveBeenCalledWith("Create Survey Pressed");
+  });
 
-    // Expect that console.log was called with 'Create Survey Pressed'
-    expect(global.console.log).toHaveBeenCalledWith("Create Survey Pressed");
+  it("handles 'Download Results' button press", () => {
+    const { getByText } = render(<AdminDashboard />);
+
+    fireEvent.press(getByText("Download Results"));
+    expect(logSpy).toHaveBeenCalledWith("Download Results Pressed");
+  });
+
+  it("handles 'ID Requests' button press", () => {
+    const { getByText } = render(<AdminDashboard />);
+
+    fireEvent.press(getByText("ID Requests"));
+    expect(logSpy).toHaveBeenCalledWith("ID Requests Pressed");
   });
 });
