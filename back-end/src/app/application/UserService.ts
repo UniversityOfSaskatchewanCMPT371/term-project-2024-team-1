@@ -13,8 +13,13 @@ export class UserService {
     return this._userRepository.getAll();
   };
 
-  public async getById(userId: string): Promise<User> {
-    return this._userRepository.getById(userId);
+  public async getById(userId: string): Promise<User | undefined> {
+    try {
+      return this._userRepository.getById(userId);
+    } catch (error) {
+      console.error("Failed to retrieve user by id: ", error);
+      throw error;
+    }
   };
 
   public async create(user: User): Promise<boolean> {

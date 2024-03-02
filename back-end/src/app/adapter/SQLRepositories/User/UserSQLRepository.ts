@@ -3,6 +3,7 @@ import { User } from "@app/domain/User";
 import "reflect-metadata";
 import { getLogger } from "log4js";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
+import { ResultSetHeader } from "mysql2";
 
 
 export class UserSQLRepository implements IUserRepository {
@@ -26,7 +27,7 @@ export class UserSQLRepository implements IUserRepository {
     }
   }
 
-  async getById(userId: string): Promise<User> {
+  async getById(userId: string): Promise<User | undefined> {
     try {
       return query(this._getByIdQuery, [userId]).then((user: User[][]) => {
         return user[0][0];
@@ -61,8 +62,14 @@ export class UserSQLRepository implements IUserRepository {
 
   async delete(userId: string): Promise<boolean> {
     try {
-      const isDeleted: Promise <boolean> = query(this._deleteQuery, [userId]);
-      return isDeleted;
+      return query(this._deleteQuery, [userId])
+        .then((fieldResults: ResultSetHeader[]) => {
+          const fieldResult: ResultSetHeader = fieldResults[0];
+          return fieldResult.affectedRows > 0;
+        })
+        .catch(err => {
+          throw err;
+        });
     } catch (error) {
       this._logger.error(error);
       return Promise.reject(error);
