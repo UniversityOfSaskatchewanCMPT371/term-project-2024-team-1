@@ -6,13 +6,13 @@ export class User {
   private _isAdmin: boolean;
   private _clinicID: number;
   
-  public constructor(userID: string, password: string, email: string, clinicID: number, id?: number);
-  public constructor(userID: string, password: string, email: string, clinicID: number, id?: number) {
-    this._id = id ?? -1;
+  public constructor(userID: string, email: string, clinicID: number, isAdmin: boolean, id?: number, password?: string);
+  public constructor(userID: string, email: string, clinicID: number, isAdmin: boolean, id: number, password: string) {
+    this._id = id ?? null;
     this._userID = userID;
-    this._password = password;
+    this._password = password ?? null;
     this._email = email;
-    this._isAdmin = false;
+    this._isAdmin = isAdmin;
     this._clinicID = clinicID;
   }
   

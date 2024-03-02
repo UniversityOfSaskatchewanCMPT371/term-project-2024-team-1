@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { Lifecycle, container } from "tsyringe";
 import { UserSQLRepository } from "./SQLRepositories/User/UserSQLRepository";
