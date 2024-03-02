@@ -9,8 +9,8 @@ export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
 
-  private readonly _getAllQuery: string = "SELECT * FROM user";
-  private readonly _getByIdQuery: string = "SELECT * FROM user where username = ?";
+  private readonly _getAllQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user";
+  private readonly _getByIdQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user where username = ?";
   private readonly _createQuery: string = "INSERT INTO user (username, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)";
   private readonly _updateQuery: string = "UPDATE user SET username = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?";
   private readonly _deleteQuery: string = "DELETE FROM user WHERE username = ?";
