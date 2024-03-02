@@ -6,6 +6,7 @@ import {createStackNavigator} from "@react-navigation/stack"
 import TestLoginScreen from "../../src/components/TestLoginScreen"
 
 import SurveyBoard from "../Screen/SurveyBoard"
+import SurveyStartBoard from "../Screen/SurveyStartBoard"
 import CustomDrawer from "./CustomDrawer"
 const Drawer = createDrawerNavigator();
 
@@ -17,6 +18,7 @@ const SurveyStack = () => {
       }} initialRouteName="Survey">
       <AppStack.Screen name="SurveyScreen" component={Survey}/>
       <AppStack.Screen name="SurveyBoard" component={SurveyBoard} />
+      <AppStack.Screen name="SurveyStartBoard" component={SurveyStartBoard} />
     </AppStack.Navigator>
        
     );
