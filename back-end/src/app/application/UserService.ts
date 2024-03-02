@@ -13,8 +13,8 @@ export class UserService {
     return this._userRepository.getAll();
   };
 
-  public async getById(id: number): Promise<User> {
-    return this._userRepository.getById(id);
+  public async getById(userId: string): Promise<User> {
+    return this._userRepository.getById(userId);
   };
 
   public async create(user: User): Promise<boolean> {
@@ -25,7 +25,7 @@ export class UserService {
     return this._userRepository.update(user);
   };
 
-  public async delete(id: number): Promise<boolean> {
-    return this._userRepository.delete(id);
+  public async delete(userId: string): Promise<boolean> {
+    return this._userRepository.delete(userId);
   };
 }

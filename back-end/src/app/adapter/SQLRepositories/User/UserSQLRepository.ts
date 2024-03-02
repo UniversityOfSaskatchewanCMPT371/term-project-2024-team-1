@@ -9,26 +9,28 @@ export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
 
-  private readonly _getAllQuery: string = "SELECT * FROM user";
-  private readonly _getByIdQuery: string = "SELECT * FROM user where id = ?";
-  private readonly _createQuery: string = "INSERT INTO user (userID, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)";
-  private readonly _updateQuery: string = "UPDATE user SET userID = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?";
-  private readonly _deleteQuery: string = "DELETE FROM user WHERE id = ?";
+  private readonly _getAllQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user";
+  private readonly _getByIdQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user where username = ?";
+  private readonly _createQuery: string = "INSERT INTO user (username, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)";
+  private readonly _updateQuery: string = "UPDATE user SET username = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?";
+  private readonly _deleteQuery: string = "DELETE FROM user WHERE username = ?";
 
   async getAll(): Promise<User[]> {
     try {
-      const users: Promise<User[]> = query(this._getAllQuery);
-      return users;
+      return query(this._getAllQuery).then((users: User[][]) => {
+        return users[0];
+      });
     } catch (error) {
       this._logger.error(error);
       return Promise.reject(error);
     }
   }
 
-  async getById(id: number): Promise<User> {
+  async getById(userId: string): Promise<User> {
     try {
-      const user: Promise<User> = query(this._getByIdQuery, [id.toString()]);
-      return user;
+      return query(this._getByIdQuery, [userId]).then((user: User[][]) => {
+        return user[0][0];
+      });
     } catch (error) {
       this._logger.error(error);
       return Promise.reject(error);
@@ -57,9 +59,9 @@ export class UserSQLRepository implements IUserRepository {
     }
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(userId: string): Promise<boolean> {
     try {
-      const isDeleted: Promise <boolean> = query(this._deleteQuery, [id.toString()]);
+      const isDeleted: Promise <boolean> = query(this._deleteQuery, [userId]);
       return isDeleted;
     } catch (error) {
       this._logger.error(error);
