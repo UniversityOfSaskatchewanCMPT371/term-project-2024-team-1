@@ -1,4 +1,4 @@
-name: Continious Deployment
+name: cd
 
 on:
   push:
@@ -10,9 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Curl request to Webhook
-        env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
           curl -X POST -H "Content-Type: application/json" \
-               -d '{"ref": "${{ github.ref }}", "before": "${{ github.before }}", "after": "${{ github.after }}"}' \
-               $WEBHOOK_URL
+               -d '{"ref": "refs/heads/master", "before": "", "after": ""}' \
+               https://casi-survey.usask.ca/webhook
+
