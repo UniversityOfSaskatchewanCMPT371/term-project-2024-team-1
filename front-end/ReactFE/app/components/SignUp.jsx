@@ -4,7 +4,7 @@ import { CheckBox } from 'react-native-elements';
 import { signUp } from '../service/apiService';
 
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const[emailVerify, setEmailVerify] = useState(false);
   const [password, setPassword] = useState('');
@@ -12,7 +12,6 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [clinic, setClinic] = useState('');
   const [agreeToEthics, setAgreeToEthics] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(null);
 
   {/*Handle email inputs to make sure they are not blank */}
@@ -27,14 +26,30 @@ const SignUp = () => {
     }
   };
 
+  const handlePassword = (enteredPass) => {
+    setPassword(enteredPass);
+    setPasswordVerify(false);
+
+    const uppercaseRegex = /[A-Z]/;
+    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    const numberRegex = /[0-9]/;
+
+    if (
+      enteredPass.length > 0 &&
+      !(uppercaseRegex.test(enteredPass) && specialCharRegex.test(enteredPass) && numberRegex.test(enteredPass))
+    ) {
+      setPasswordVerify(true);
+    }
+  };
+
 
   const handleSignUp = async () => {
     try {
-      // Check if the user has agreed to ethics before proceeding with sign-up
-      if (!agreeToEthics) {
-        toggleModal();
-        return;
-      }
+      // Navigate to the EthicsAgreementScreen
+      navigation.navigate('Ethics', {
+        agreeToEthics,
+        setAgreeToEthics,
+      });
 
       const registrationResponse = await signUp(email, password, clinic, agreeToEthics);
 
@@ -63,7 +78,7 @@ const SignUp = () => {
         value={email}
         onChangeText={handleEmail}
       />
-      {email.trim().length < 1 || emailVerify ? null : (
+      {email.trim().length < 1 && email.trim().length < 9 || emailVerify ? null : (
         <Text style={styles.validation}>Please enter a valid email address</Text>
       )}
             {/*
@@ -79,10 +94,12 @@ const SignUp = () => {
              placeholderTextColor="#ffffff"
             secureTextEntry={true}
             value={password}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={handlePassword}
             />
-            {password.trim().length < 1 || passwordVerify ? null : (
-        <Text style={styles.validation}>Please enter a valid password</Text>
+          {password.trim().length < 1 || passwordVerify ? null : (
+        <Text style={styles.validation}>
+          Password must contain at least one uppercase letter, one special character, and one number
+        </Text>
       )}
         </View>
 

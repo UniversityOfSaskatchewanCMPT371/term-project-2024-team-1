@@ -1,23 +1,20 @@
 
-import React from "react";
-import LoginScreen from "./src/components/TestLoginScreen";
-import Index from "./app/index";
-import SignUp from "./app/Screen/SignUp";
-import { View,Text } from "react-native";
-/*
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>TTTTTEST222222</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SignUp from './app/components/SignUp'; // Update with the correct path
+import Ethics from './app/components/Ethics'; // Update with the correct path
 
+const Stack = createStackNavigator();
 
-*/
 const App = () => {
-  return <SignUp id={'welcome'}/>;
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SignUp">
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Ethics" component={Ethics} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;
