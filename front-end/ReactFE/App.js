@@ -10,8 +10,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignUp">
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Ethics" component={Ethics} />
+        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
+        <Stack.Screen name="Ethics" component={Ethics} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
