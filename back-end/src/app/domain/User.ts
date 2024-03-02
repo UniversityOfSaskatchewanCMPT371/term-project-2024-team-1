@@ -1,26 +1,16 @@
 export class User {
-  private _id: number;
   private _userID: string;
   private _password: string;
   private _email: string;
   private _isAdmin: boolean;
   private _clinicID: number;
   
-  private constructor(id: number, userID: string, password: string, email: string, clinicID: number) {
-    this._id = id;
+  public constructor(userID: string, password: string, email: string, clinicID: number) {
     this._userID = userID;
     this._password = password;
     this._email = email;
     this._isAdmin = false;
     this._clinicID = clinicID;
-  }
-  
-  public get id(): number {
-    return this._id;
-  }
-  
-  public set id(newID: number) {
-    this._id = newID;
   }
   
   public get userID(): string {
