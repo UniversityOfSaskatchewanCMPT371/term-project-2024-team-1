@@ -11,7 +11,7 @@ import { ACCESS_TOKEN_SECRET } from "@resources/config";
 
 
 @injectable()
-export class LoginAuthHandler implements IRouteHandler<User> {
+export class LoginAuthHandler implements IRouteHandler<User | undefined> {
   
 
   constructor(private readonly _userService: UserService) {
@@ -23,18 +23,19 @@ export class LoginAuthHandler implements IRouteHandler<User> {
     
 
     const { userId } = req.body;
-    this.execute(req).then((user: User) => {
+    this.execute(req).then((user: User | undefined) => {
       if (user == null) {
         res.status(404).send("User not found!");
         return;
       }
-      // console.log("user", user);
+
 
       const password: string = req.body.password;
       // console.log(user[0].password);
+      console.log(user);
       bcrypt.compare(password, user.password).then((isMatch: boolean) => {
         if (isMatch) {
-          const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET);
+          const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "5m" });
           res.status(200).json({ accessToken });
         } else {
           res.status(403).send("Not Allowed!");
@@ -49,9 +50,9 @@ export class LoginAuthHandler implements IRouteHandler<User> {
     }); 
   }
 
-  public async execute(req: Request): Promise<User> {
+  public async execute(req: Request): Promise<User | undefined> {
     const userId: string = req.body.userId;
-    const user: Promise<User> = this._userService.getById(userId);
+    const user: Promise<User | undefined> = this._userService.getById(userId);
     
     return user;
   }
