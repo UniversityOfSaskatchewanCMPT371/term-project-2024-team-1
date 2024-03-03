@@ -19,7 +19,8 @@ const userRoute: Router = require("@app/adapter/Controllers/UserController");
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
-app.use("/api", userRoute);
+app.use(express.json());
+app.use("/api", userRoute); // confirm
 
 app.get("/", (req: Request, res: Response) => {
   infoLogger.info("GET request received");
