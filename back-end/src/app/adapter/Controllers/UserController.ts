@@ -9,6 +9,7 @@ const router = express.Router();
 const userGetAllHandler: UserGetAllHandler = container.resolve(UserGetAllHandler);
 
 router.get("/users", (req: Request, res: Response) => {
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   userGetAllHandler.handle(req, res);
 });
 

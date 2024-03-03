@@ -6,9 +6,14 @@ export class User {
   private _isAdmin: boolean;
   private _clinicID: number;
   
+<<<<<<< Updated upstream
   public constructor(userID: string, password: string, email: string, clinicID: number, id?: number);
   public constructor(userID: string, password: string, email: string, clinicID: number, id?: number) {
     this._id = id ?? -1;
+=======
+  public constructor(id: number, userID: string, password: string, email: string, clinicID: number) {
+    this._id = id;
+>>>>>>> Stashed changes
     this._userID = userID;
     this._password = password;
     this._email = email;

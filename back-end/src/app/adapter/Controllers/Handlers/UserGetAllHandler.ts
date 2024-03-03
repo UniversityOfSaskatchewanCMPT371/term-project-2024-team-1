@@ -7,33 +7,25 @@ import { container, injectable } from "tsyringe";
 @injectable()
 export class UserGetAllHandler implements IRouteHandler<User[]> {
   
-
   constructor(private readonly _userService: UserService) {
     this._userService = container.resolve(UserService);
   }
 
-  public handle(req: Request, res: Response): void {
-    if (this.validation("test")) {
-      this.execute(req)
-        .then(success => {
-          res.send(success);
-        })
-        .catch(error => {
-          res.status(400).send(error);
-        });
-    } else {
-      res.status(400);
-    };
+  public async handle(req: Request, res: Response): Promise<void> {
+    try {
+      const users: User[] = await this.execute(req);
+      res.send(users);
+    } catch (error) {
+      console.error("Error occurred while fetching users:", error);
+      res.status(500).send("Internal Server Error");
+    }
   }
 
   public async execute(req: Request): Promise<User[]> {
-    const result: Promise<User[]> = this._userService.getAll();
-    return result;
+    return await this._userService.getAll();
   }
 
   public validation(...args: any[]): boolean {
-
-    return true;
+    return true; // Add your validation logic here if needed
   };
-
 }
