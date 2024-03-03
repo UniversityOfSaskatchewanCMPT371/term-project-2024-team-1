@@ -4,6 +4,7 @@ import React from "react";
 import LoginScreen from "./src/components/TestLoginScreen";
 import Index from "./app/index";
 import { View,Text } from "react-native";
+import { AuthProvider } from "./app/context/AuthContext";
 /*
 export default function App() {
   return (
@@ -17,7 +18,9 @@ export default function App() {
 
 */
 const App = () => {
-  return <Index id={'welcome'}/>;
+  return <AuthProvider>
+    <Index id={'welcome'}/>
+  </AuthProvider>;
 };
 
 export default App;

@@ -7,38 +7,24 @@ import {Feather} from "@expo/vector-icons"
 
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import {createStackNavigator} from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native';
 import Survey from './Screen/Survey'
 import Profile from './Screen/Profile';
 
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Login from './Screen/Login';
+import { useAuth } from './context/AuthContext';
 
-/*
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>TTTTTEST222222</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-*/
 export default function Index() {
+  const {authState, onLogout} = useAuth();
   return (
-    <NavigationContainer style={styles.CasiBlue}>
-      <Drawer.Navigator
+    <NavigationContainer style={styles.CasiBlue}>     
+      <Stack.Navigator
         screenOptions={{
           drawerStyle:{
             backgroundColor: "#7f92f0"
@@ -62,18 +48,19 @@ export default function Index() {
         drawerActiveTintColor:"#26177d",
         drawerLabelStyle:{
           color:"#111"
-        }
-      
-
-        }
-          
-        }
+        }}}
       
       initialRouteName="Home">
-       <Drawer.Screen name ="Survey" component={Survey} />
-       <Drawer.Screen name ="Profile" component={Profile} />
+        { authState?.authenticated ? 
+          <Stack.Screen name ="Survey" component={Survey} />: 
+          <Stack.Screen name ="Login" component={Login} />
+        }
+       
+       
+       {/* <Stack.Screen name ="Profile" component={Profile} /> */}
         
-      </Drawer.Navigator>
+      </Stack.Navigator>
+      
     </NavigationContainer>
   );
 }
