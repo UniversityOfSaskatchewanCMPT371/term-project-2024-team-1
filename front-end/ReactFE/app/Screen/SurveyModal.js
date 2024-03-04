@@ -6,7 +6,7 @@ import Paginator from '../navigation/Paginator'
 import {StyleSheet} from 'react-native'
 import {CheckBox} from 'react-native-elements';
 
-export default function SurveyModal({navigation, item, scrollx}) {
+export default function SurveyModal({updateResult,navigation, item, scrollx}) {
 
     let {width, height} = useWindowDimensions();
     width -=20;
@@ -16,32 +16,38 @@ export default function SurveyModal({navigation, item, scrollx}) {
         setIsChecked] = useState(false);
     const setEncounter = (val) => {
 
-        setResult({
-            ...result,
-            "encountered": val
-        })
-        setIsChecked(val)
-        console.log(result);
+        const newVal = {  ...result,
+            "encountered": val}
+            setResult({...newVal})
+            setIsChecked(val)
+              updateResult({...newVal},item.id)
+      
     }
 
     const setNumber = (val) => {
-        setResult({
+        
+        const newVal = {
             ...result,
             "number": parseInt(val)
-        })
+        }
+        setResult({...newVal})
+          updateResult({...newVal},item.id)
     }
 
     const setFrequency = (val) => {
-        setResult({
+        
+        const newVal = {
             ...result,
             "frequency": parseInt(val)
-        })
+        }
+        setResult({...newVal})
+        updateResult({...newVal},item.id)
     }
 
     return (
 
         <View
-            testID={item.id}
+            testID={"card"+item.id}
             style={[
             styles.container, {
                 width: width ,
@@ -80,7 +86,9 @@ export default function SurveyModal({navigation, item, scrollx}) {
                     fontSize: 20,
                     marginBottom: 30,
                     textAlign: "center"
-                }}>{item.questionHeader}</Text>
+                }}
+                testID={'questionHeader'+item.id}
+                >{item.id} : {item.questionHeader}</Text>
 
             </View>
 
@@ -99,9 +107,10 @@ export default function SurveyModal({navigation, item, scrollx}) {
                         containerStyle={{
                         width: "75%"
                     }}
+                        testID={"checkBox"+item.id}
                         iconRight
                         onIconPress={() => setEncounter(!result.encountered)}
-                        onPress={() => console.log("onPress()")}
+                        onPress={() => setEncounter(!result.encountered)}
                         size={30}
                         textStyle={{}}
                         title="Was the disease encountered?"
@@ -112,7 +121,7 @@ export default function SurveyModal({navigation, item, scrollx}) {
                 {isChecked && <View style={{
                     flex: 1
                 }}>
-                    <Text style={{}}>How many cases were encountered</Text>
+                    <Text testID={"encountered"+item.id} style={{}}>How many cases were encountered</Text>
                     <TextInput
                         style={{
                         borderWidth: 3,

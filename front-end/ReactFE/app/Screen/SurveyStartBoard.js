@@ -57,7 +57,7 @@ export default function SurveyStartBoard({navigation, route}) {
                         flex: 3
                     }
                 ]}
-                    testID='surveyModalCard'>
+                    testID='surveyStartCard'>
 
                     <FlatList style={{flex:1}}
                        data={surveyData.map((item, index) => ({ ...item, index }))}
@@ -98,12 +98,14 @@ export default function SurveyStartBoard({navigation, route}) {
                         }}>
                             <TouchableOpacity
                                 onPress={() => handleStart()}
+
                                 style={{
                                 backgroundColor: "darkblue",
                                 borderRadius: 10,
                                 height: 50,
-                                width: 100
-                            }}>
+                                width: 100,
+                               
+                            }} testID="startSurvey">
                                 <Text
                                     style={{
                                     textAlign: "center",
