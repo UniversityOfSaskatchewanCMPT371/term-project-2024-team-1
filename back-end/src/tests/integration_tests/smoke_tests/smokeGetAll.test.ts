@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/typedef */
+/* eslint-disable quotes */
 import request from 'supertest';
 import express, { Express } from 'express';
 import 'reflect-metadata';

@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/typedef */
+/* eslint-disable quotes */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
+/* eslint-disable @typescript-eslint/indent */
 import request from 'supertest';
 import express, { Express } from 'express';
 import 'reflect-metadata';
