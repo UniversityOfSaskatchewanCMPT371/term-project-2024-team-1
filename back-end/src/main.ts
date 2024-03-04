@@ -11,9 +11,7 @@ configure(log4jsConfig);
 registerAllDependencies();
 
 const app: Express = express();
-const infoLogger: Logger = getLogger("info"); // logger for info
-const errLogger: Logger = getLogger("error"); // logger for error
-const debugLogger: Logger = getLogger("debug"); // logger for debug
+const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");
 
@@ -23,7 +21,7 @@ app.use(express.json());
 app.use("/api", userRoute); // confirm
 
 app.get("/", (req: Request, res: Response) => {
-  infoLogger.info("GET request received");
+  logger.info("GET request received");
   res.send("Hello World !!");
 });
 
@@ -40,7 +38,7 @@ app.get("/dbHit", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, HOST, () => {
-  errLogger.error("Testing ERROR logs");
-  debugLogger.debug("Testing DEBUG logs");
+  logger.error("Testing ERROR logs");
+  logger.debug("Testing DEBUG logs");
   console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
 });

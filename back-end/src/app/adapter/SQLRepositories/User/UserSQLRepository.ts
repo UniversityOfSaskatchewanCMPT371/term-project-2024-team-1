@@ -30,6 +30,7 @@ export class UserSQLRepository implements IUserRepository {
   async getById(userId: string): Promise<User | undefined> {
     try {
       return query(this._getByIdQuery, [userId]).then((user: User[][]) => {
+        console.log(user[0][0]);
         return new User(user[0][0].userID, user[0][0].email, user[0][0].clinicID, user[0][0].isAdmin, user[0][0].password);
       });
     } catch (error) {

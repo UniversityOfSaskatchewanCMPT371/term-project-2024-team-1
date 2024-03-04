@@ -11,7 +11,7 @@ import { userRepoToken } from "@app/adapter/DependencyInjections";
 import { flushPromises } from "./common_test_code/util_test";
 import { UserService } from "@app/application/UserService";
 
-fdescribe("UserDeleteHandler", () => {
+describe("UserDeleteHandler", () => {
   const mockUserRepo: IUserRepository = new MockUserRepository();
   container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
   
