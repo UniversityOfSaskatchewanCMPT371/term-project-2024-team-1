@@ -28,7 +28,7 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
+              const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
               res.status(200).json({ accessToken });
             } else {
               res.status(403).send("Incorrect userId or password");
