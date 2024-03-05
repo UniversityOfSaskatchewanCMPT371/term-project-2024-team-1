@@ -1,5 +1,5 @@
 
-import { ADMIN, USER, authenticate } from "@app/application/util";
+import { ADMIN, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
 import { container } from "tsyringe";
 import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
@@ -12,7 +12,7 @@ const userGetAllHandler: UserGetAllHandler = container.resolve(UserGetAllHandler
 const userDeleteHandler: UserDeleteHandler = container.resolve(UserDeleteHandler);
 const loginAuthHandler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
-router.get("/users", authenticate(USER), (req: Request, res: Response) => {
+router.get("/user", authenticate(ADMIN), (req: Request, res: Response) => {
   userGetAllHandler.handle(req, res);
 });
 
