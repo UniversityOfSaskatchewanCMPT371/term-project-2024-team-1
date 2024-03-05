@@ -1,3 +1,10 @@
-export interface IUser {
-  getAll: () => void;
+
+import { User } from "@app/domain/User";
+
+export interface IUserRepository {
+  getAll: () => Promise<User[]>;
+  getById: (userId: string) => Promise<User | undefined>;
+  create: (user: User) => Promise<boolean>;
+  update: (user: User) => Promise<boolean>;
+  delete: (userId: string) => Promise<boolean>;
 }
