@@ -55,7 +55,7 @@ describe("LoginAuthHandler", () => {
 
     it("should return the access token with status code 200 if the credentials are correct", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -76,7 +76,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 404 if execute returned undefined", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(undefined);
@@ -97,7 +97,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 403 if password is not matched", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -118,7 +118,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 500 if bcrypt.compare fails", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -139,7 +139,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 404 if error occurs during getting user info", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockRejectedValue("db error");
@@ -161,7 +161,7 @@ describe("LoginAuthHandler", () => {
     describe("validation", () => {
         it("should return true if userId and password is provided", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userID, password: mockUser.password } } as any as Request;
+            const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -172,7 +172,7 @@ describe("LoginAuthHandler", () => {
         
         it("should return false if userId is provided, but password is null", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userID, password: null } } as any as Request;
+            const req: Request = { body: { userId: mockUser.userId, password: null } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -183,7 +183,7 @@ describe("LoginAuthHandler", () => {
 
         it("should return false if userId is provided, but password is undefined", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userID, password: undefined } } as any as Request;
+            const req: Request = { body: { userId: mockUser.userId, password: undefined } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -262,7 +262,7 @@ describe("LoginAuthHandler", () => {
     describe("execute", () => {
         it("should return the user if user has been successfully retrieved", async () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userID } } as any as Request;
+            const req: Request = { body: { userId: mockUser.userId } } as any as Request;
             jest.spyOn(UserService.prototype, "getById").mockResolvedValue(mockUser);
       
             // Action and Assert
@@ -271,7 +271,7 @@ describe("LoginAuthHandler", () => {
 
           it("should return undefined if user has not been successfully retrieved", async () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userID } } as any as Request;
+            const req: Request = { body: { userId: mockUser.userId } } as any as Request;
             jest.spyOn(UserService.prototype, "getById").mockRejectedValue(undefined);
       
             // Action and Assert

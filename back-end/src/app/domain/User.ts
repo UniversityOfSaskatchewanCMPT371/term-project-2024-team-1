@@ -1,28 +1,26 @@
 export class User {
-  private _userID: string;
+  private _userId: string;
   private _password: string;
   private _email: string;
   private _isAdmin: boolean;
-  private _clinicID: number;
   
-  public constructor(userID: string, email: string, clinicID: number, isAdmin: boolean, password?: string);
-  public constructor(userID: string, email: string, clinicID: number, isAdmin: boolean, password: string) {
+  public constructor(userId: string, email: string, isAdmin: boolean, password?: string);
+  public constructor(userId: string, email: string, isAdmin: boolean, password: string) {
 
-    this._userID = userID;
+    this._userId = userId;
     this._password = password ?? null;
     this._email = email;
     this._isAdmin = isAdmin;
-    this._clinicID = clinicID;
   }
 
 
   
-  public get userID(): string {
-    return this._userID;
+  public get userId(): string {
+    return this._userId;
   }
   
-  public set userID(newUserID: string) {
-    this._userID = newUserID;
+  public set userId(newUserID: string) {
+    this._userId = newUserID;
   }
   
   public get password(): string {
@@ -48,15 +46,5 @@ export class User {
   public set isAdmin(newIsAdmin: boolean) {
     this._isAdmin = newIsAdmin;
   }
-  
-  public get clinicID(): number {
-    return this._clinicID;
-  }
-  
-  public set clinicID(newClinicID: number) {
-    this._clinicID = newClinicID;
-  }
-  
-  
 }
   

@@ -1,4 +1,4 @@
-import { DB_CONNECTION_LIMIT, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER } from "@resources/config";
+import { DB_CONNECTION_LIMIT, DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER } from "@resources/config";
 import mysql from "mysql2/promise";
 
 export const sqlPool: mysql.Pool = mysql.createPool({
@@ -7,7 +7,7 @@ export const sqlPool: mysql.Pool = mysql.createPool({
   user: DB_USER,
   password: DB_PASSWORD,
   port: DB_PORT,
-  database: "test"
+  database: DB_DATABASE
 });
 
 export async function query(sql: string, fields?: string[]): Promise<any> {
