@@ -29,7 +29,7 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
               const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
-              res.status(200).json({ accessToken });
+              res.status(200).json({ userId, accessToken });
             } else {
               res.status(403).send("Incorrect userId or password");
             }
@@ -40,10 +40,10 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
         }
       }).catch((error: any) => {
         console.error("Error executing user retrieval:", error);
-        res.status(404).send("User not found, login failed");
+        res.status(404).send("Incorrect userId or password");
       });
     } else {
-      res.status(422).send("UserID and Password are required");
+      res.status(422).send("UserId and Password are required");
     }
 
   }
@@ -57,7 +57,9 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userId && request.body.password);
+    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userId && request.body.password) && 
+    (request.body.userId !== "" && request.body.password !== "");
+
   };
 
 }

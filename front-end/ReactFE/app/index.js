@@ -20,7 +20,7 @@ import Login from './Screen/Login';
 import { useAuth } from './context/AuthContext';
 
 export default function Index() {
-  const {authState, onLogout} = useAuth();
+  const {authState} = useAuth();
   return (
     <NavigationContainer style={styles.CasiBlue}>     
       <Stack.Navigator

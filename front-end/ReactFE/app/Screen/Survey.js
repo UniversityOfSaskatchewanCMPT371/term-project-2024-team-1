@@ -2,11 +2,11 @@ import { View, Text, Button } from 'react-native'
 import React from 'react'
 import { ScreenStyles } from './Screen'
 import axios from 'axios'; // Add this line to import axios
-import { API_URL, useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Survey() {
 
-    const {onLogout} = useAuth();
+    const {onLogout, authState} = useAuth();
 
     const IPV4_ADDRESS = "10.0.0.15";
     const API_URL = `http://${IPV4_ADDRESS}:3000/api/users`;
@@ -19,7 +19,7 @@ export default function Survey() {
         }
     }
     
-    // THIS IS A TEST FUNCTION 
+    // TEST FUNCTION TO TEST INVALIDITY OF A TOKEN 
     const handleGetAll = async () =>{
         try{
             axios.get(API_URL)
@@ -32,8 +32,7 @@ export default function Survey() {
                 console.error(error.response.status +": "+ error.response.data);
                 if(error.response.status == 401){
                     await onLogout();
-                }
-                    
+                }  
             });
         } catch{
             console.log("ERROR")
@@ -45,6 +44,7 @@ export default function Survey() {
             <Text style={{ color: "#fff", fontSize: 50, fontWeight: "bold" }}>CASI</Text>
             <View style={{ marginTop: "50%" }} >
                 <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 30, marginBottom: 30 }}>SURVEY TEST</Text>
+                <Text style={{ color: "#fff", fontSize: 20 }}>User ID: {authState.userId}</Text>
                 <Button
                     color="#25177B"
                     style={[ScreenStyles.CasiPurple, ScreenStyles.button]}

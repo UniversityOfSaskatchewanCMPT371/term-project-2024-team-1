@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 
 
 interface AuthProps {
-    authState?: {token: string | null};
+    authState?: {userId: string | null, token: string | null};
     onLogin?: (userId: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
@@ -21,18 +21,23 @@ export const useAuth = () => {
 
 export const AuthProvider = ({children}: any) =>{
     const [authState, setAuthState] = useState<{
+        userId: string | null,
         token: string | null; 
+
     }>({
+        userId: null,
         token: null
     })
 
     useEffect(()=>{
         const loadToken = async () =>{
-            const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            
-            if(token){
+            let data = await SecureStore.getItemAsync(TOKEN_KEY);
+            const userData = JSON.parse(data);
+
+            if(data){
                 setAuthState({
-                token: token,
+                userId: userData.userId,
+                token: userData.accessToken
             })
         }
         }
@@ -46,10 +51,11 @@ export const AuthProvider = ({children}: any) =>{
                 const result = response.data;
                 if(result.accessToken){
                     setAuthState({
+                        userId: result.userId,
                         token: result.accessToken,
                     });
                     axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
-                    await SecureStore.setItemAsync(TOKEN_KEY, result.accessToken);
+                    await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, userId: result.userId }));
                     return result;
                 }
             })
@@ -67,6 +73,7 @@ export const AuthProvider = ({children}: any) =>{
         await SecureStore.deleteItemAsync(TOKEN_KEY);
         axios.defaults.headers.common['Authorization'] = "";
         setAuthState({
+            userId: null,
             token: null
         });
     };

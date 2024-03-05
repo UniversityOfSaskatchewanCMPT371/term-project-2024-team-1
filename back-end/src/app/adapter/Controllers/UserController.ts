@@ -21,7 +21,6 @@ router.delete("/user/:userId", authenticate(ADMIN), (req: Request, res: Response
 });
 
 router.post("/login", (req: Request, res: Response) => {
-  console.log("controller reacher");
   loginAuthHandler.handle(req, res);
 });
 
