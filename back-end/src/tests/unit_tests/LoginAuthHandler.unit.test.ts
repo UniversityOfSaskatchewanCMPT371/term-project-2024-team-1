@@ -48,7 +48,7 @@ describe("LoginAuthHandler", () => {
   
         // Assert
         expect(res.status).toHaveBeenCalledWith(422);
-        expect(res.send).toHaveBeenCalledWith("UserID and Password are required");
+        expect(res.send).toHaveBeenCalledWith("UserId and Password are required");
   
       });
     });
@@ -71,7 +71,7 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", accessToken: "jwttoken1" });
     });
 
     it("should fail with status code 404 if execute returned undefined", async() => { 
@@ -155,7 +155,7 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.send).toHaveBeenCalledWith("User not found, login failed");
+        expect(res.send).toHaveBeenCalledWith("Incorrect userId or password");
     });
 
     describe("validation", () => {
