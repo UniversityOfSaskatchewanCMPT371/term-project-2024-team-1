@@ -7,7 +7,7 @@ export class MockUserRepository implements IUserRepository {
   }
 
   async getById(userId: string): Promise<User | undefined> {
-    return Promise.resolve(new User(userId, "abc123", 15, false));
+    return Promise.resolve(new User(userId, "abc123", false));
   }
 
   async create(user: User): Promise<boolean> {

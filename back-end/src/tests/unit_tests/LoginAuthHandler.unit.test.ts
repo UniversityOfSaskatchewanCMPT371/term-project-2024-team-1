@@ -25,7 +25,6 @@ describe("LoginAuthHandler", () => {
     const mockUser: User = new User(
         "test12345",
         "abc123", 
-        123,      
         false, 
         "password1"
     );
