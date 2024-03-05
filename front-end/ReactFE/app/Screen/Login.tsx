@@ -1,6 +1,6 @@
-// Sample test login page component
-// used for sample smoke tests
-import React from "react";
+
+import React, {useState} from "react";
+
 import {
   View,
   TextInput,
@@ -9,25 +9,41 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
-const TestLoginScreen = () => {
+const Login = () => {
+    const [userId, setUserId] = useState("");
+    const [password, setPassword] = useState("");
+    const {onLogin} = useAuth();
+
+    const login = async () => {
+        const result = await onLogin!(userId, password);
+        if(result && result.error){
+          alert(result.msg)
+        }
+      };
+
+    const navigation = useNavigation();
   return (
     <View testID="loginPage" style={loginStyles.container}>
       <TextInput
         testID="userIdInput"
         style={loginStyles.input}
         placeholder="UserID"
+        onChangeText={(text) => setUserId(text)}
       />
       <TextInput
         testID="passwordInput"
         style={loginStyles.input}
         placeholder="Password"
         secureTextEntry={true}
+        onChangeText={(text) => setPassword(text)}
       />
       <Button
         testID="loginButton"
         title="Login"
-        onPress={() => console.log("Login pressed")}
+        onPress={login}
       />
       <TouchableOpacity
         testID="forgotPasswordLink"
@@ -35,6 +51,11 @@ const TestLoginScreen = () => {
       >
         <Text>Forgot Password?</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        testID="signUp">
+            <Text>Sign up</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -49,6 +70,7 @@ const loginStyles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: "gray",
+    backgroundColor: "white",
     borderWidth: 1,
     marginBottom: 16,
     padding: 8,
@@ -56,4 +78,4 @@ const loginStyles = StyleSheet.create({
   },
 });
 
-export default TestLoginScreen;
+export default Login;
