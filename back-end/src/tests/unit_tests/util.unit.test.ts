@@ -100,7 +100,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, 5, true));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, true));
       
 
       // Action
@@ -122,7 +122,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, 5, true));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, true));
       
 
       // Action
@@ -145,7 +145,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, 5, isAdmin));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, isAdmin));
       
 
       // Action
@@ -168,7 +168,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, 5, isAdmin));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, isAdmin));
       
 
       // Action
