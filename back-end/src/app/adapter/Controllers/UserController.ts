@@ -3,7 +3,6 @@ import { ADMIN, USER, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
 import { container } from "tsyringe";
 import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
-import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
 import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
 import { LoginAuthHandler } from "./Handlers/LoginAuthHandler";
 
