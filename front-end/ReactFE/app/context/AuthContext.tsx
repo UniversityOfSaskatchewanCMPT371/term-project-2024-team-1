@@ -3,14 +3,16 @@ import { createContext, useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
+
 interface AuthProps {
-    authState?: {token: string | null; authenticated: boolean | null};
+    authState?: {token: string | null};
     onLogin?: (userId: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
 
 const TOKEN_KEY = 'casi-jwt';
-export const API_URL = 'https://api.developbetterapps.com/';
+const IPV4_ADDRESS = "10.0.0.15";
+export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -20,13 +22,9 @@ export const useAuth = () => {
 export const AuthProvider = ({children}: any) =>{
     const [authState, setAuthState] = useState<{
         token: string | null; 
-        authenticated: boolean | null;
-        // add user info here whose type is a User Interface with all the fields 
     }>({
-        token: null,
-        authenticated: null
+        token: null
     })
-
 
     useEffect(()=>{
         const loadToken = async () =>{
@@ -34,10 +32,8 @@ export const AuthProvider = ({children}: any) =>{
             
             if(token){
                 setAuthState({
-                token: token, 
-                authenticated: true
+                token: token,
             })
-        
         }
         }
         loadToken();
@@ -45,19 +41,22 @@ export const AuthProvider = ({children}: any) =>{
 
     const login = async (userId: string, password: string) => {
         try{
-           const result =  await axios.post(`${API_URL}/auth`, {userId, password});
-
-           setAuthState({
-            token: result.data.token,
-            authenticated: true
-           });
-
-           // ensuring that subsequent requests made with Axios include the token in the header
-           axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.token}`;
-
-           await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
-           // prolly need to add SecureStore.setItemAsync(UserInfo, result.data.userInfo)? 
-           return result;
+            axios.post(API_URL, {userId, password})
+            .then(async (response) => {
+                const result = response.data;
+                if(result.accessToken){
+                    setAuthState({
+                        token: result.accessToken,
+                    });
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
+                    await SecureStore.setItemAsync(TOKEN_KEY, result.accessToken);
+                    return result;
+                }
+            })
+            .catch(error => {
+                alert(error.response.data)
+                console.error(error.response.status +": "+ error.response.data);
+            });
 
         }catch(e){
             return {error: true, msg: (e as any).response.data.msg};
@@ -66,12 +65,9 @@ export const AuthProvider = ({children}: any) =>{
 
     const logout = async() =>{
         await SecureStore.deleteItemAsync(TOKEN_KEY);
-
         axios.defaults.headers.common['Authorization'] = "";
-
         setAuthState({
-            token: null, 
-            authenticated: false
+            token: null
         });
     };
 

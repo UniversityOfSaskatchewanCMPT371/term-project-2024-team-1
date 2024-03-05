@@ -5,6 +5,7 @@ import { NODE_ENV, HOST, PORT } from "@resources/config";
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import log4jsConfig from "@resources/log4js-config.json";
 import { registerAllDependencies } from "@app/adapter/DependencyInjections";
+import cors from "cors";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 configure(log4jsConfig);
 
@@ -17,6 +18,7 @@ const userRoute: Router = require("@app/adapter/Controllers/UserController");
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", userRoute); // confirm
 

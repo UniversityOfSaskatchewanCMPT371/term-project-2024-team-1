@@ -10,7 +10,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native';
 import Survey from './Screen/Survey'
-import Profile from './Screen/Profile';
 
 
 const Drawer = createDrawerNavigator();
@@ -51,7 +50,7 @@ export default function Index() {
         }}}
       
       initialRouteName="Home">
-        { authState?.authenticated ? 
+        { authState?.token ? 
           <Stack.Screen name ="Survey" component={Survey} />: 
           <Stack.Screen name ="Login" component={Login} />
         }

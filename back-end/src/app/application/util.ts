@@ -27,6 +27,7 @@ export function authenticate(role: string) {
       return res.status(401).send("No authorization found, please log in!");
       
     } else if (token[0] === "Bearer") {
+      console.log(token);
       try {
         const result: JwtPayload = jwt.verify(token[1], ACCESS_TOKEN_SECRET) as JwtPayload;
         assert(!nullOrUndefined(result), "Result payload should not be null or undefined");
