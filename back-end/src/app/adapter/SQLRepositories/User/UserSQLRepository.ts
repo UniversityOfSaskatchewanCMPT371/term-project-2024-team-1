@@ -18,8 +18,8 @@ export class UserSQLRepository implements IUserRepository {
 
   async getAll(): Promise<User[]> {
     try {
-      return query(this._getAllQuery).then((users: User[][]) => {
-        return users[0];
+      return query(this._getAllQuery).then((data: [User[]]) => {
+        return data[0];
       });
     } catch (error) {
       this._logger.error(error);
@@ -29,8 +29,8 @@ export class UserSQLRepository implements IUserRepository {
 
   async getById(userId: string): Promise<User | undefined> {
     try {
-      return query(this._getByIdQuery, [userId]).then((user: User[][]) => {
-        return new User(user[0][0].userId, user[0][0].email, user[0][0].isAdmin, user[0][0].password);
+      return query(this._getByIdQuery, [userId]).then((data: [User[]]) => {
+        return new User(data[0][0].userId, data[0][0].email, data[0][0].isAdmin, data[0][0].password);
       });
     } catch (error) {
       this._logger.error(error);
