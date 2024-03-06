@@ -16,6 +16,18 @@ export function nullOrUndefined(object: any): object is null | undefined {
   return object === null || object === undefined;
 }
 
+export function randomAlphanumString(length: number): string {
+  const characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result: string = "";
+  
+  for (let i: number = 0; i < length; i += 1) {
+    const randomIndex: number = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
 export function authenticate(role: string) {
   return function(req: Request, res: Response, next: NextFunction) {
     const userService: UserService = container.resolve(UserService);
