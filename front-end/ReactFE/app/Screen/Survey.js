@@ -1,9 +1,13 @@
+
 import {View, Text, Button, TouchableOpacity} from 'react-native'
 import React from 'react'
 import {ScreenStyles} from './Screen'
 import {useNavigation} from '@react-navigation/native'
 import DrawerButton from '../navigation/CustomDrawerButton'
-export default function Survey({navigation}) {
+
+import axios from 'axios'; // Add this line to import axios
+import { useAuth } from '../context/AuthContext';
+
 
     const mockSurveyInfo = {
         quarter: 1
@@ -53,15 +57,43 @@ export default function Survey({navigation}) {
         }
     ];
 
-    return (
+    const {onLogout, authState} = useAuth();
 
-        <View
-            style={[
-            ScreenStyles.ScreenStyle, {
-                justifyContent: "start",
-                paddingTop: 40
-            }
-        ]}>
+    const IPV4_ADDRESS = "10.0.0.15";
+    const API_URL = `http://${IPV4_ADDRESS}:3000/api/users`;
+
+    const handleLogout = async () => {
+        try {
+            await onLogout();
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    }
+    
+    // TEST FUNCTION TO TEST INVALIDITY OF A TOKEN 
+    const handleGetAll = async () =>{
+        try{
+            axios.get(API_URL)
+            .then(async (response) => {
+                const result = response.data;
+                console.log(result);
+            })
+            .catch(async error => {
+                alert(error.response.data)
+                console.error(error.response.status +": "+ error.response.data);
+                if(error.response.status == 401){
+                    await onLogout();
+                }  
+            });
+        } catch{
+            console.log("ERROR")
+        }
+    }
+
+
+    export default function Survey({navigation}) {
+    return (
+        <View style={[ScreenStyles.ScreenStyle, { justifyContent: "start", paddingTop: 40 }]}>
 
             <DrawerButton/>
 
@@ -75,19 +107,9 @@ export default function Survey({navigation}) {
                     fontWeight: "bold"
                 }}>CASI</Text>
             </View>
-            <View style={{
-                flex: 0.7
-            }}>
-
-                <Text
-                    style={{
-                    color: "#fff",
-                    fontWeight: "bold",
-                    fontSize: 30,
-                    marginBottom: 30,
-                    textAlign: "center"
-                }}>SURVEY TEST</Text>
-
+            <View style={{ flex: 0.7}} >
+                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 30, marginBottom: 30 }}>SURVEY TEST</Text>
+                <Text style={{ color: "#fff", fontSize: 20 }}>User ID: {authState.userId}</Text>
                 <TouchableOpacity
                     testID='TakeSurvey'
                     onPress={() => {
@@ -99,7 +121,17 @@ export default function Survey({navigation}) {
                     </Text>
 
                 </TouchableOpacity>
-
+                <Button
+                    color="#ff0000"
+                    title="Logout"
+                    onPress={handleLogout}
+                />
+                
+                <Button
+                    color="#ff0000"
+                    title="Get All User"
+                    onPress={handleGetAll}
+                />
             </View>
         </View>
     )

@@ -10,16 +10,16 @@ export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
 
-  private readonly _getAllQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user";
-  private readonly _getByIdQuery: string = "SELECT username, email, isAdmin, clinic_id FROM user where username = ?";
-  private readonly _createQuery: string = "INSERT INTO user (username, password, email, isAdmin, clinic_id) VALUES (?, ?, ?, ?, ?)";
-  private readonly _updateQuery: string = "UPDATE user SET username = ?, password = ?, email = ?, isAdmin = ?, clinic_id = ? WHERE id = ?";
-  private readonly _deleteQuery: string = "DELETE FROM user WHERE username = ?";
+  private readonly _getAllQuery: string = "SELECT userId, email, isAdmin, password FROM user";
+  private readonly _getByIdQuery: string = "SELECT userId, email, isAdmin, password FROM user where userId = ?";
+  private readonly _createQuery: string = "INSERT INTO user (userId, password, email, isAdmin) VALUES (?, ?, ?, ?)";
+  private readonly _updateQuery: string = "UPDATE user SET userId = ?, password = ?, email = ?, isAdmin = ?, WHERE userId = ?";
+  private readonly _deleteQuery: string = "DELETE FROM user WHERE userId = ?";
 
   async getAll(): Promise<User[]> {
     try {
-      return query(this._getAllQuery).then((users: User[][]) => {
-        return users[0];
+      return query(this._getAllQuery).then((data: [User[]]) => {
+        return data[0];
       });
     } catch (error) {
       this._logger.error(error);
@@ -29,8 +29,8 @@ export class UserSQLRepository implements IUserRepository {
 
   async getById(userId: string): Promise<User | undefined> {
     try {
-      return query(this._getByIdQuery, [userId]).then((user: User[][]) => {
-        return user[0][0];
+      return query(this._getByIdQuery, [userId]).then((data: [User[]]) => {
+        return new User(data[0][0].userId, data[0][0].email, data[0][0].isAdmin, data[0][0].password);
       });
     } catch (error) {
       this._logger.error(error);
@@ -41,7 +41,7 @@ export class UserSQLRepository implements IUserRepository {
   async create(user: User): Promise<boolean> {
     try {
       const isUserCreated: Promise<boolean> = query(this._createQuery,
-        [user.userID, user.password, user.email, user.isAdmin.toString(), user.clinicID.toString()]);
+        [user.userId, user.password, user.email, user.isAdmin.toString()]);
       return isUserCreated;
     } catch (error) {
       this._logger.error(error);
@@ -52,7 +52,7 @@ export class UserSQLRepository implements IUserRepository {
   async update(user: User): Promise<boolean> {
     try {
       const updateUser: Promise<boolean> = query(this._updateQuery,
-        [user.userID, user.password, user.email, user.isAdmin.toString(), user.clinicID.toString(), user.id.toString()]);
+        [user.userId, user.password, user.email, user.isAdmin.toString()]);
       return updateUser;
     } catch (error) {
       this._logger.error(error);

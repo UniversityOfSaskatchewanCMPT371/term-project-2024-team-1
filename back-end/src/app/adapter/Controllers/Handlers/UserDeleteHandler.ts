@@ -38,7 +38,6 @@ export class UserDeleteHandler implements IRouteHandler<boolean> {
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    console.log("VALIDATION METHOD", request);
     return !nullOrUndefined(request.params) && !nullOrUndefined(request.params.userId);
   };
 
