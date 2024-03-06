@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { ADMIN, USER, authenticate, nullOrUndefined } from "@app/application/util";
+import { ADMIN, USER, authenticate, nullOrUndefined, randomAlphanumString } from "@app/application/util";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
@@ -279,6 +279,30 @@ describe("util functions test", () => {
 
       // Assert
       expect(result).toBeFalsy();
+    });
+  });
+
+  fdescribe("randomAlphanumString", () => {
+    it("should generate random string of specified length", () => {
+      // Setup
+      const length: number = 10;
+  
+      // Action
+      const result: string = randomAlphanumString(length);
+      // Assert
+      expect(result.length).toEqual(length);
+    });
+
+    it("should generate a random string that is alphanumeric only", () => {
+      // Setup
+      const length: number = 10;
+      const regex: RegExp = /^[a-zA-Z0-9]+$/;
+      
+      // Action
+      const result: string = randomAlphanumString(length);
+      
+      // Assert
+      expect(regex.test(result)).toBeTruthy();
     });
   });
 });
