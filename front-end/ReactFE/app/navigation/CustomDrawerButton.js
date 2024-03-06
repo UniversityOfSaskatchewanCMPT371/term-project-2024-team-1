@@ -15,13 +15,13 @@ const DrawerButton = ( ) => {
   return (
     <View testID='menuButton' style={ {
       position: 'absolute', 
-      top: 0, 
+      top: 40, 
       left: 0, 
       padding: 10,
       zIndex:1000}}>
         
     <TouchableOpacity onPress={openDrawer} >
-      <Entypo name="menu" size={30} color="white" />
+      <Entypo name="menu" size={40} color="white" />
     </TouchableOpacity>
     </View>
   );

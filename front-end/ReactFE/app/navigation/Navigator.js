@@ -76,6 +76,7 @@ const SurveyStack = () => {
     return (
       <AppMainStack.Navigator
       screenOptions={{
+        headerShown: false,
         drawerStyle:{
           backgroundColor: "#7f92f0"
         },
