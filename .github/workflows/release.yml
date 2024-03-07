@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: cd-runner
+    runs-on: label-1
     steps:
     - uses: actions/checkout@v3
 
