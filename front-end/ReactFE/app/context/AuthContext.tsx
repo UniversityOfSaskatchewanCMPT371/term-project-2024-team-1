@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 
 
 interface AuthProps {
-    authState?: {userId: string | null, token: string | null};
+    authState?: {userId: string | null, role: string | null, token: string | null};
     onLogin?: (userId: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
@@ -22,21 +22,24 @@ export const useAuth = () => {
 export const AuthProvider = ({children}: any) =>{
     const [authState, setAuthState] = useState<{
         userId: string | null,
+        role: string | null,
         token: string | null; 
 
     }>({
         userId: null,
+        role: null,
         token: null
     })
 
     useEffect(()=>{
         const loadToken = async () =>{
-            let data = await SecureStore.getItemAsync(TOKEN_KEY);
+            const data = await SecureStore.getItemAsync(TOKEN_KEY);
             const userData = JSON.parse(data);
 
             if(data){
                 setAuthState({
                 userId: userData.userId,
+                role: userData.role,
                 token: userData.accessToken
             })
         }
@@ -52,10 +55,11 @@ export const AuthProvider = ({children}: any) =>{
                 if(result.accessToken){
                     setAuthState({
                         userId: result.userId,
-                        token: result.accessToken,
+                        role: result.role,
+                        token: result.accessToken
                     });
                     axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
-                    await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, userId: result.userId }));
+                    await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, role: result.role, userId: result.userId }));
                     return result;
                 }
             })
@@ -74,6 +78,7 @@ export const AuthProvider = ({children}: any) =>{
         axios.defaults.headers.common['Authorization'] = "";
         setAuthState({
             userId: null,
+            role: null,
             token: null
         });
     };
