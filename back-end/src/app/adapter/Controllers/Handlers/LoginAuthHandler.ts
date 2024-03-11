@@ -11,7 +11,7 @@ import { ACCESS_TOKEN_SECRET } from "@resources/config";
 
 
 @injectable()
-export class LoginAuthHandler implements IRouteHandler<User | undefined> {
+export class LoginAuthHandler implements IRouteHandler<User | null> {
   
 
   constructor(private readonly _userService: UserService) {
@@ -21,7 +21,7 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
       const userId: string = req.body.userId;
-      this.execute(req).then((user: User | undefined) => {
+      this.execute(req).then((user: User | null) => {
         if (user == null) {
           res.status(404).send("Incorrect userId or password");
         } else {
@@ -48,9 +48,9 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
 
   }
 
-  public async execute(req: Request): Promise<User | undefined> {
+  public async execute(req: Request): Promise<User | null> {
     const userId: string = req.body.userId;
-    const user: Promise<User | undefined> = this._userService.getById(userId);
+    const user: Promise<User | null> = this._userService.getById(userId);
     
     return user;
   }
