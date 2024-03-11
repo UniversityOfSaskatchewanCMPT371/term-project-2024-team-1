@@ -78,7 +78,7 @@ describe("LoginAuthHandler", () => {
         const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
-        jest.spyOn(handler, "execute").mockResolvedValue(undefined);
+        jest.spyOn(handler, "execute").mockResolvedValue(null);
         jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
             return Promise.resolve(true);
         });
