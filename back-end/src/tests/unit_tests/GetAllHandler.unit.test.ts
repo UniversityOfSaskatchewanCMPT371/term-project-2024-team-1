@@ -5,7 +5,7 @@ describe("UserGetAllHandler Tests", () => {
   // registerAllDependencies();
   // const userGetHandler: UserGetAllHandler = container.resolve(UserGetAllHandler);
   describe("handle", () => {
-    fit("should return all users if success", async () => {
+    it("should return all users if success", async () => {
       // const mockRequest: Request = {
       //   body: {},
       // } as Request;
