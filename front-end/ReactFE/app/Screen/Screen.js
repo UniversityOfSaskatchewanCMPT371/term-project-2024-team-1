@@ -1,6 +1,5 @@
 
 import { StyleSheet,TouchableOpacity, Text, Button, View,SafeAreaView } from 'react-native';
-import TestButton from '../testButton';
 import { useReducer } from 'react';
 import {FontAwesome} from "@expo/vector-icons"
 

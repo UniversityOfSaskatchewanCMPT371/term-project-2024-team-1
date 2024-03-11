@@ -4,15 +4,19 @@ import { nullOrUndefined } from "@app/application/util";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Request, Response } from "express";
 import { container, injectable } from "tsyringe";
+import { configure, getLogger } from "log4js";
+import log4jsConfig from "@resources/log4js-config.json";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_SECRET } from "@resources/config";
-
+/* eslint-disable @typescript-eslint/naming-convention */
+configure(log4jsConfig);
 
 
 @injectable()
 export class LoginAuthHandler implements IRouteHandler<User | undefined> {
   
+  private readonly _logger = getLogger(LoginAuthHandler.name);
 
   constructor(private readonly _userService: UserService) {
     this._userService = container.resolve(UserService);
@@ -28,18 +32,25 @@ export class LoginAuthHandler implements IRouteHandler<User | undefined> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
-              res.status(200).json({ userId, accessToken });
+              this._userService.getById(userId).then((user) => {
+                const role: string = user?.isAdmin ? "ADMIN" : "USER";
+                const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
+                res.status(200).json({ userId, role, accessToken });
+              }).catch((error) => { 
+                this._logger.error("Server Error: ", error);
+              });
+              
+              
             } else {
               res.status(403).send("Incorrect userId or password");
             }
           }).catch((error: any) => {
-            console.error("Error comparing passwords:", error);
+            this._logger.error("Error comparing passwords:", error);
             res.status(500).send("Internal server error");
           });
         }
       }).catch((error: any) => {
-        console.error("Error executing user retrieval:", error);
+        this._logger.error("Error executing user retrieval:", error);
         res.status(404).send("Incorrect userId or password");
       });
     } else {
