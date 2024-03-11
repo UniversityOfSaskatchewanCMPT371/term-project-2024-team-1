@@ -29,6 +29,13 @@ describe("LoginAuthHandler", () => {
         "password1"
     );
     
+    const mockAdmin: User = new User(
+        "admin12345",
+        "def123", 
+        true, 
+        "admin1"
+    );
+    
     
     beforeEach(() => {
         jest.restoreAllMocks();
@@ -52,7 +59,7 @@ describe("LoginAuthHandler", () => {
       });
     });
 
-    it("should return the access token with status code 200 if the credentials are correct", async() => { 
+    it("should return the access token, userId and the role as USER with status code 200 if the USER credentials are correct", async() => { 
         // Setup 
         const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
@@ -61,6 +68,7 @@ describe("LoginAuthHandler", () => {
         jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
             return Promise.resolve(true);
         });
+        
         jest.spyOn(jwt, "sign").mockImplementation(() => {
             return "jwttoken1";
         });
@@ -70,7 +78,29 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", role: "USER", accessToken: "jwttoken1" });
+    });
+
+    it("should return the access token, userId and the role as ADMIN with status code 200 if the ADMIN credentials are correct", async() => { 
+        // Setup 
+        const req: Request = { body: { userId: mockAdmin.userId, password: mockAdmin.password } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(mockAdmin);
+        jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
+            return Promise.resolve(true);
+        });
+        jest.spyOn(mockUserRepo, "getById").mockResolvedValue(mockAdmin);
+        jest.spyOn(jwt, "sign").mockImplementation(() => {
+            return "jwttoken1";
+        });
+         // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
     });
 
     it("should fail with status code 404 if execute returned undefined", async() => { 
