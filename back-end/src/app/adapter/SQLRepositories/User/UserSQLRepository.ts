@@ -27,9 +27,12 @@ export class UserSQLRepository implements IUserRepository {
     }
   }
 
-  async getById(userId: string): Promise<User | undefined> {
+  async getById(userId: string): Promise<User | null> {
     try {
       return query(this._getByIdQuery, [userId]).then((data: [User[]]) => {
+        if (data[0].length === 0) {
+          return null;
+        }
         return new User(data[0][0].userId, data[0][0].email, data[0][0].isAdmin, data[0][0].password);
       });
     } catch (error) {
