@@ -1,10 +1,9 @@
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
-import { User } from "@app/domain/User";
 
 export interface ISurveyAnswerRepository {
-  getAll: (user: User) => Promise<SurveyAnswer[]>;
-  getById: (answerID: number) => Promise<SurveyAnswer>;
-  create: (answer: SurveyAnswer, user: User) => Promise<boolean>;
+  getAllByUserId: (userId: number) => Promise<SurveyAnswer[] | null>;
+  getById: (answerID: number) => Promise<SurveyAnswer | null>;
+  create: (userId: number, answer: SurveyAnswer) => Promise<boolean>;
   update: (answer: SurveyAnswer) => Promise<boolean>;
   delete: (answerId: number) => Promise<boolean>;
 }
