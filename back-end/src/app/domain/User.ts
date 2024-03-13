@@ -1,12 +1,14 @@
 export class User {
+  private _clinicName: string;
   private _userId: string;
   private _password: string;
   private _email: string;
   private _isAdmin: boolean;
   
-  public constructor(userId: string, email: string, isAdmin: boolean, password?: string);
-  public constructor(userId: string, email: string, isAdmin: boolean, password: string) {
+  public constructor(clinicName: string, userId: string, email: string, isAdmin: boolean, password?: string);
+  public constructor(clinicName: string, userId: string, email: string, isAdmin: boolean, password: string) {
 
+    this._clinicName = clinicName;
     this._userId = userId;
     this._password = password ?? null;
     this._email = email;
@@ -14,6 +16,13 @@ export class User {
   }
 
 
+  public get clinicName(): string {
+    return this._clinicName;
+  }
+  
+  public set clinicName(newClinicName: string) {
+    this._clinicName = newClinicName;
+  }
   
   public get userId(): string {
     return this._userId;
