@@ -8,6 +8,7 @@ import SurveyBoard from "../Screen/SurveyBoard"
 import SurveyStartBoard from "../Screen/SurveyStartBoard"
 import CustomDrawer from "./CustomDrawer"
 import { useAuth } from "../context/AuthContext"
+import CreateSurvey from "../Screen/CreateSurvey"
 const Drawer = createDrawerNavigator();
 
 
@@ -102,10 +103,14 @@ const SurveyStack = () => {
       }}}
     
     initialRouteName="Home">
-      { authState?.token ? 
+
+      
+      {/* authState?.token ? 
         <AppMainStack.Screen name ="Home" component={MainDrawer} />: 
         <AppMainStack.Screen name ="Login" component={Login} />
-      }
+    */}
+
+<AppMainStack.Screen name ="CreateSurvey" component={CreateSurvey} /> 
      
      
      

@@ -15,7 +15,7 @@ const DrawerButton = ( ) => {
   return (
     <View testID='menuButton' style={ {
       position: 'absolute', 
-      top: 40, 
+      top: 30, 
       left: 0, 
       padding: 10,
       zIndex:1000}}>
