@@ -68,8 +68,8 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userId && request.body.password) && 
-    (request.body.userId !== "" && request.body.password !== "");
+    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userIdEmail && request.body.password) && 
+    (request.body.userIdEmail !== "" && request.body.password !== "");
 
   };
 
