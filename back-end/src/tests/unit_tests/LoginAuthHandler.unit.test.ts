@@ -22,18 +22,12 @@ describe("LoginAuthHandler", () => {
     container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
     const handler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
-    const mockUser: User = new User(
-        "clinic1",
-        "test12345",
-        "abc123", 
-        false, 
-        "password1"
-    );
+    const mockUser: User = new User("clinic1", "test12345", "abc123@gmail.com", false, "password1");
     
     const mockAdmin: User = new User(
         "adminClinic",
         "admin12345",
-        "def123", 
+        "def123@gmail.com", 
         true, 
         "admin1"
     );
@@ -61,7 +55,7 @@ describe("LoginAuthHandler", () => {
       });
     });
 
-    it("should return the access token, userId and the role as USER with status code 200 if the USER credentials are correct", async() => { 
+    it("should return the access token, userId and the role as USER with status code 200 if the USER logs in with correct userId", async() => { 
         // Setup 
         const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
@@ -80,10 +74,32 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ userIdEmail: "test12345", role: "USER", accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", role: "USER", accessToken: "jwttoken1" });
     });
 
-    it("should return the access token, userId and the role as ADMIN with status code 200 if the ADMIN credentials are correct", async() => { 
+    it("should return the access token, userId and the role as USER with status code 200 if the USER logs in with correct email", async() => { 
+        // Setup 
+        const req: Request = { body: { userIdEmail: mockUser.email, password: mockUser.password } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
+        jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
+            return Promise.resolve(true);
+        });
+        
+        jest.spyOn(jwt, "sign").mockImplementation(() => {
+            return "jwttoken1";
+        });
+         // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", role: "USER", accessToken: "jwttoken1" });
+    });
+
+    it("should return the access token, userId and the role as ADMIN with status code 200 if the ADMIN logs in with correct userId", async() => { 
         // Setup 
         const req: Request = { body: { userIdEmail: mockAdmin.userId, password: mockAdmin.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
@@ -102,7 +118,29 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ userIdEmail: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
+    });
+
+    it("should return the access token, userId and the role as ADMIN with status code 200 if the ADMIN logs in with correct email", async() => { 
+        // Setup 
+        const req: Request = { body: { userIdEmail: mockAdmin.email, password: mockAdmin.password } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(mockAdmin);
+        jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
+            return Promise.resolve(true);
+        });
+        jest.spyOn(mockUserRepo, "get").mockResolvedValue(mockAdmin);
+        jest.spyOn(jwt, "sign").mockImplementation(() => {
+            return "jwttoken1";
+        });
+         // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
     });
 
     it("should fail with status code 404 if execute returned undefined", async() => { 
@@ -192,7 +230,7 @@ describe("LoginAuthHandler", () => {
     describe("validation", () => {
         it("should return true if userId and password is provided", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+            const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -201,9 +239,20 @@ describe("LoginAuthHandler", () => {
             expect(result).toBeTruthy();
         });
         
+        it("should return true if email and password is provided", () => {
+            // Setup
+            const req: Request = { body: { userIdEmail: mockUser.email, password: mockUser.password } } as any as Request;
+      
+            // Action
+            const result: boolean = handler.validation(req);
+      
+            // Assert
+            expect(result).toBeTruthy();
+        });
+
         it("should return false if userId is provided, but password is null", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userId, password: null } } as any as Request;
+            const req: Request = { body: { userIdEmail: mockUser.userId, password: null } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -214,7 +263,7 @@ describe("LoginAuthHandler", () => {
 
         it("should return false if userId is provided, but password is undefined", () => {
             // Setup
-            const req: Request = { body: { userId: mockUser.userId, password: undefined } } as any as Request;
+            const req: Request = { body: { userIdEmail: mockUser.userId, password: undefined } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -225,7 +274,7 @@ describe("LoginAuthHandler", () => {
 
         it("should return false if password is provided, but userId is null", () => {
             // Setup
-            const req: Request = { body: { userId: null, password: mockUser.password } } as any as Request;
+            const req: Request = { body: { userIdEmail: null, password: mockUser.password } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -236,7 +285,7 @@ describe("LoginAuthHandler", () => {
 
         it("should return false if password is provided, but userId is undefined", () => {
             // Setup
-            const req: Request = { body: { userId: undefined, password: mockUser.password } } as any as Request;
+            const req: Request = { body: { userIdEmail: undefined, password: mockUser.password } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
@@ -247,7 +296,7 @@ describe("LoginAuthHandler", () => {
         
         it("should return false if both password and userId are null", () => {
             // Setup
-            const req: Request = { body: { userId: null, password: null } } as any as Request;
+            const req: Request = { body: { userIdEmail: null, password: null } } as any as Request;
       
             // Action
             const result: boolean = handler.validation(req);
