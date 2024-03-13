@@ -164,9 +164,30 @@ describe("LoginAuthHandler", () => {
         expect(res.send).toHaveBeenCalledWith("Incorrect userId or password");
     });
 
-    it("should fail with status code 403 if password is not matched", async() => { 
+    it("should fail with status code 403 if password is not matched with userId", async() => { 
         // Setup 
         const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
+        jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
+            return Promise.resolve(false);
+        });
+        jest.spyOn(jwt, "sign").mockImplementation(() => {
+            return "jwttoken1";
+        });
+         // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.send).toHaveBeenCalledWith("Incorrect userId or password");
+    });
+
+    it("should fail with status code 403 if password is not matched with email", async() => { 
+        // Setup 
+        const req: Request = { body: { userId: mockUser.email, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
