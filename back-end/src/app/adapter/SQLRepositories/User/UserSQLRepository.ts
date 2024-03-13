@@ -10,10 +10,10 @@ export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
 
-  private readonly _getAllQuery: string = "SELECT userId, email, isAdmin, password FROM user";
-  private readonly _getByIdQuery: string = "SELECT userId, email, isAdmin, password FROM user where userId = ?";
-  private readonly _createQuery: string = "INSERT INTO user (userId, password, email, isAdmin) VALUES (?, ?, ?, ?)";
-  private readonly _updateQuery: string = "UPDATE user SET userId = ?, password = ?, email = ?, isAdmin = ?, WHERE userId = ?";
+  private readonly _getAllQuery: string = "SELECT clinicName, userId, email, isAdmin, password FROM user";
+  private readonly _getByIdQuery: string = "SELECT clinicName, userId, email, isAdmin, password FROM user where userId = ?";
+  private readonly _createQuery: string = "INSERT INTO user (clinicName, userId, password, email, isAdmin) VALUES (?, ?, ?, ?, ?)";
+  private readonly _updateQuery: string = "UPDATE user SET clinicName = ?, userId = ?, password = ?, email = ?, isAdmin = ?, WHERE userId = ?";
   private readonly _deleteQuery: string = "DELETE FROM user WHERE userId = ?";
 
   async getAll(): Promise<User[]> {
@@ -44,7 +44,7 @@ export class UserSQLRepository implements IUserRepository {
   async create(user: User): Promise<boolean> {
     try {
       const isUserCreated: Promise<boolean> = query(this._createQuery,
-        [user.userId, user.password, user.email, user.isAdmin.toString()]);
+        [user.clinicName, user.userId, user.password, user.email, user.isAdmin.toString()]);
       return isUserCreated;
     } catch (error) {
       this._logger.error(error);
@@ -55,7 +55,7 @@ export class UserSQLRepository implements IUserRepository {
   async update(user: User): Promise<boolean> {
     try {
       const updateUser: Promise<boolean> = query(this._updateQuery,
-        [user.userId, user.password, user.email, user.isAdmin.toString()]);
+        [user.clinicName, user.userId, user.password, user.email, user.isAdmin.toString()]);
       return updateUser;
     } catch (error) {
       this._logger.error(error);
