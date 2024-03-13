@@ -13,7 +13,7 @@ export class UserService {
     return this._userRepository.getAll();
   };
 
-  public async getById(userId: string): Promise<User | undefined> {
+  public async getById(userId: string): Promise<User | null> {
     try {
       return this._userRepository.getById(userId);
     } catch (error) {

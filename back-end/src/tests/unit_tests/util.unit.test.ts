@@ -77,7 +77,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId: "FakeUserId" };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(undefined);
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(null);
       
 
       // Action
@@ -282,7 +282,7 @@ describe("util functions test", () => {
     });
   });
 
-  fdescribe("randomAlphanumString", () => {
+  describe("randomAlphanumString", () => {
     it("should generate random string of specified length", () => {
       // Setup
       const length: number = 10;
