@@ -23,6 +23,7 @@ describe("LoginAuthHandler", () => {
     const handler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
     const mockUser: User = new User(
+        "clinic1",
         "test12345",
         "abc123", 
         false, 
@@ -30,6 +31,7 @@ describe("LoginAuthHandler", () => {
     );
     
     const mockAdmin: User = new User(
+        "adminClinic",
         "admin12345",
         "def123", 
         true, 

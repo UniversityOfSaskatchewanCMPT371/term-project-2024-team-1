@@ -33,7 +33,7 @@ export class UserSQLRepository implements IUserRepository {
         if (data[0].length === 0) {
           return null;
         }
-        return new User(data[0][0].userId, data[0][0].email, data[0][0].isAdmin, data[0][0].password);
+        return new User(data[0][0].clinicName, data[0][0].userId, data[0][0].email, data[0][0].isAdmin, data[0][0].password);
       });
     } catch (error) {
       this._logger.error(error);
