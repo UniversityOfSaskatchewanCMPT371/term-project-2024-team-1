@@ -63,7 +63,7 @@ describe("LoginAuthHandler", () => {
 
     it("should return the access token, userId and the role as USER with status code 200 if the USER credentials are correct", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -80,19 +80,19 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ userId: "test12345", role: "USER", accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userIdEmail: "test12345", role: "USER", accessToken: "jwttoken1" });
     });
 
     it("should return the access token, userId and the role as ADMIN with status code 200 if the ADMIN credentials are correct", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockAdmin.userId, password: mockAdmin.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockAdmin.userId, password: mockAdmin.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockAdmin);
         jest.spyOn(bcrypt, "compare").mockImplementation(async () => {
             return Promise.resolve(true);
         });
-        jest.spyOn(mockUserRepo, "getById").mockResolvedValue(mockAdmin);
+        jest.spyOn(mockUserRepo, "get").mockResolvedValue(mockAdmin);
         jest.spyOn(jwt, "sign").mockImplementation(() => {
             return "jwttoken1";
         });
@@ -102,12 +102,12 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
+        expect(res.json).toHaveBeenCalledWith({ userIdEmail: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
     });
 
     it("should fail with status code 404 if execute returned undefined", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(null);
@@ -294,7 +294,7 @@ describe("LoginAuthHandler", () => {
         it("should return the user if user has been successfully retrieved", async () => {
             // Setup
             const req: Request = { body: { userId: mockUser.userId } } as any as Request;
-            jest.spyOn(UserService.prototype, "getById").mockResolvedValue(mockUser);
+            jest.spyOn(UserService.prototype, "get").mockResolvedValue(mockUser);
       
             // Action and Assert
             await expect(handler.execute(req)).resolves.toEqual(mockUser);
@@ -303,7 +303,7 @@ describe("LoginAuthHandler", () => {
           it("should return undefined if user has not been successfully retrieved", async () => {
             // Setup
             const req: Request = { body: { userId: mockUser.userId } } as any as Request;
-            jest.spyOn(UserService.prototype, "getById").mockRejectedValue(undefined);
+            jest.spyOn(UserService.prototype, "get").mockRejectedValue(undefined);
       
             // Action and Assert
             await expect(handler.execute(req)).rejects.toEqual(undefined);

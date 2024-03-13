@@ -24,7 +24,7 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
-      const userId: string = req.body.userId;
+      const userIdEmail: string = req.body.userIdEmail;
       this.execute(req).then((user: User | null) => {
         if (user == null) {
           res.status(404).send("Incorrect userId or password");
@@ -32,10 +32,10 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              this._userService.getById(userId).then((user) => {
+              this._userService.get(userIdEmail).then((user) => {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
-                const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
-                res.status(200).json({ userId, role, accessToken });
+                const accessToken: string = jwt.sign({ userIdEmail }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
+                res.status(200).json({ userIdEmail, role, accessToken });
               }).catch((error) => { 
                 this._logger.error("Server Error: ", error);
               });
@@ -60,8 +60,8 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
   }
 
   public async execute(req: Request): Promise<User | null> {
-    const userId: string = req.body.userId;
-    const user: Promise<User | null> = this._userService.getById(userId);
+    const userIdEmail: string = req.body.userIdEmail;
+    const user: Promise<User | null> = this._userService.get(userIdEmail);
     
     return user;
   }
