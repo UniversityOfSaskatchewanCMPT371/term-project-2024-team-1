@@ -13,12 +13,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-    const [userId, setUserId] = useState("");
+    const [userIdEmail, setUserIdEmail] = useState("");
     const [password, setPassword] = useState("");
     const {onLogin} = useAuth();
 
     const login = async () => {
-        const result = await onLogin!(userId, password);
+        const result = await onLogin!(userIdEmail, password);
         if(result && result.error){
           alert(result.msg)
         }
@@ -28,10 +28,10 @@ const Login = () => {
   return (
     <View testID="loginPage" style={loginStyles.container}>
       <TextInput
-        testID="userIdInput"
+        testID="userIdEmailInput"
         style={loginStyles.input}
-        placeholder="UserID"
-        onChangeText={(text) => setUserId(text)}
+        placeholder="UserId or email"
+        onChangeText={(text) => setUserIdEmail(text)}
       />
       <TextInput
         testID="passwordInput"
