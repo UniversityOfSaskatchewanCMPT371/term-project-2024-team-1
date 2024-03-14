@@ -92,6 +92,7 @@ describe("util functions test", () => {
 
     it("should call next() no matter what role is permitted if user is admin", async () => {
       // Setup
+      const clinicName: string = "clinic1";
       const userId: string = "RealUserId";
       const email: string = "admin@email.com";
       const req: Request = { headers: { authorization: "Bearer 123" } } as Request;
@@ -100,7 +101,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, true));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -113,6 +114,7 @@ describe("util functions test", () => {
 
     it("should call next() if role is USER and the user permission level is admin", async () => {
       // Setup
+      const clinicName: string = "clinic1";
       const userId: string = "RealUserId";
       const email: string = "admin@email.com";
       const authRole: string = USER;
@@ -122,7 +124,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, true));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -135,6 +137,7 @@ describe("util functions test", () => {
 
     it("should call next() if role is USER and the user permission level is user", async () => {
       // Setup
+      const clinicName: string = "clinic1";
       const userId: string = "RealUserId";
       const email: string = "admin@email.com";
       const authRole: string = USER;
@@ -145,7 +148,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, isAdmin));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action
@@ -158,6 +161,7 @@ describe("util functions test", () => {
 
     it("should fail with 403 if role is ADMIN and user permission level is user", async () => {
       // Setup
+      const clinicName: string = "clinic1";
       const userId: string = "RealUserId";
       const email: string = "admin@email.com";
       const authRole: string = ADMIN;
@@ -168,7 +172,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(userId, email, isAdmin));
+      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action

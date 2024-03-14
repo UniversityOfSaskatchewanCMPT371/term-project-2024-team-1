@@ -18,9 +18,6 @@ export default function Index() {
 
     <NavigationContainer style={AppStyles.CasiBlue}>
      <Navigator/>
-   
-    
-
     </NavigationContainer>
   );
 }
