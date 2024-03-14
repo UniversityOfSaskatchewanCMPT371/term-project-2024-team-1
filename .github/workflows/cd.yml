@@ -10,8 +10,6 @@ jobs:
     runs-on: cd-runner
     name: Execute workflow.sh on cd-runner
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
     - name: Execute workflow script
       run: |
         /server/workflow.sh
