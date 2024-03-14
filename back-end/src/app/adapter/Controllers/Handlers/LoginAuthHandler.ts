@@ -25,7 +25,6 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
-      const userIdEmail: string = req.body.userIdEmail;
       this.execute(req).then((user: User | null) => {
         if (user == null) {
           res.status(404).send("Incorrect userId or password");
@@ -33,27 +32,20 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              this._userService.get(userIdEmail).then((user) => {
-                console.log(user);
-                if (user) {
-                  const role: string = user?.isAdmin ? "ADMIN" : "USER";
-                  assert(!nullOrUndefined(role), "Role should not be null or undefined");
-                  const userId: string | undefined = user?.userId;
-                  console.log("userId", userId);
-                  assert(!nullOrUndefined(userId), "UserId should not be null or undefined");
-                  const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
-                  assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
-                  res.status(200).json({ userId, role, accessToken });
-                } else {
-                  this._logger.error("Error executing user retrieval");
-                  res.status(404).send("Incorrect userId or password");
-                }
-                
-              }).catch((error) => { 
-                this._logger.error("Server Error: ", error);
-              });
-              
-              
+              console.log(user);
+              if (user) {
+                const role: string = user?.isAdmin ? "ADMIN" : "USER";
+                assert(!nullOrUndefined(role), "Role should not be null or undefined");
+                const userId: string | undefined = user?.userId;
+                console.log("userId", userId);
+                assert(!nullOrUndefined(userId), "UserId should not be null or undefined");
+                const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
+                assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
+                res.status(200).json({ userId, role, accessToken });
+              } else {
+                this._logger.error("Error executing user retrieval");
+                res.status(404).send("Incorrect userId or password");
+              }
             } else {
               res.status(403).send("Incorrect userId or password");
             }
