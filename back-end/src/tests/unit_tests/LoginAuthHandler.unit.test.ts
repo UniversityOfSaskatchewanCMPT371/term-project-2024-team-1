@@ -31,6 +31,7 @@ describe("LoginAuthHandler", () => {
         true, 
         "admin1"
     );
+
     
     
     beforeEach(() => {
@@ -140,6 +141,7 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
         expect(res.json).toHaveBeenCalledWith({ userId: "admin12345", role: "ADMIN", accessToken: "jwttoken1" });
     });
 
