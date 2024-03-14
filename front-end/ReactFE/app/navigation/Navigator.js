@@ -9,6 +9,7 @@ import SurveyStartBoard from "../Screen/SurveyStartBoard"
 import CustomDrawer from "./CustomDrawer"
 import { useAuth } from "../context/AuthContext"
 import Admin from "../Screen/Admin"
+import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin"
 const Drawer = createDrawerNavigator();
 
 
@@ -111,7 +112,7 @@ const SurveyStack = () => {
           <AppMainStack.Screen name="Home" component={MainDrawer} />
         )
       ) : (
-        <AppMainStack.Screen name="Login" component={Login} />
+        <AppMainStack.Screen name="Login" component={ViewResultsAsAdmin} />
       )}
      
      
