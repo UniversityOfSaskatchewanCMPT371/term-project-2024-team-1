@@ -3,7 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - cd-runner-config
+      - development
 
 jobs:
   execute-workflow-script:
