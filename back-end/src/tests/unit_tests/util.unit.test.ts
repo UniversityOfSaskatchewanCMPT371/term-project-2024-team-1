@@ -6,9 +6,9 @@ import { ADMIN, USER, authenticate, nullOrUndefined, randomAlphanumString } from
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import jwt from "jsonwebtoken";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "../common_test_code/util_test";
 import { User } from "@app/domain/User";
 
 describe("util functions test", () => {
