@@ -1,34 +1,37 @@
 export class User {
-  private _id: number;
-  private _userID: string;
+  private _clinicName: string;
+  private _userId: string;
   private _password: string;
   private _email: string;
+  private _agreedToEthics: boolean;
   private _isAdmin: boolean;
-  private _clinicID: number;
   
-  private constructor(id: number, userID: string, password: string, email: string, clinicID: number) {
-    this._id = id;
-    this._userID = userID;
-    this._password = password;
+  public constructor(clinicName: string, userId: string, email: string, agreedToEthics: boolean, isAdmin: boolean, password?: string);
+  public constructor(clinicName: string, userId: string, email: string, agreedToEthics: boolean, isAdmin: boolean, password: string) {
+
+    this._clinicName = clinicName;
+    this._userId = userId;
+    this._password = password ?? null;
     this._email = email;
-    this._isAdmin = false;
-    this._clinicID = clinicID;
+    this._agreedToEthics = agreedToEthics;
+    this._isAdmin = isAdmin;
+  }
+
+
+  public get clinicName(): string {
+    return this._clinicName;
   }
   
-  public get id(): number {
-    return this._id;
+  public set clinicName(newClinicName: string) {
+    this._clinicName = newClinicName;
   }
   
-  public set id(newID: number) {
-    this._id = newID;
+  public get userId(): string {
+    return this._userId;
   }
   
-  public get userID(): string {
-    return this._userID;
-  }
-  
-  public set userID(newUserID: string) {
-    this._userID = newUserID;
+  public set userId(newUserID: string) {
+    this._userId = newUserID;
   }
   
   public get password(): string {
@@ -46,6 +49,14 @@ export class User {
   public set email(newEmail: string) {
     this._email = newEmail;
   }
+
+  public get agreedToEthics(): boolean {
+    return this._agreedToEthics;
+  }
+  
+  public set agreedToEthics(newEthics: boolean) {
+    this._agreedToEthics = newEthics;
+  }
   
   public get isAdmin(): boolean {
     return this._isAdmin;
@@ -54,15 +65,5 @@ export class User {
   public set isAdmin(newIsAdmin: boolean) {
     this._isAdmin = newIsAdmin;
   }
-  
-  public get clinicID(): number {
-    return this._clinicID;
-  }
-  
-  public set clinicID(newClinicID: number) {
-    this._clinicID = newClinicID;
-  }
-  
-  
 }
   

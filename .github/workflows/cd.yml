@@ -1,0 +1,15 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  execute-workflow-script:
+    runs-on: cd-runner
+    name: Execute workflow.sh on cd-runner
+    steps:
+    - name: Execute workflow script
+      run: |
+        /server/workflow.sh

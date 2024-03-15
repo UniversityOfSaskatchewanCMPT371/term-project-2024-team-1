@@ -1,6 +1,5 @@
 
 import { StyleSheet,TouchableOpacity, Text, Button, View,SafeAreaView } from 'react-native';
-import TestButton from '../testButton';
 import { useReducer } from 'react';
 import {FontAwesome} from "@expo/vector-icons"
 
@@ -28,6 +27,8 @@ export const ScreenStyles = StyleSheet.create({
 
 container: {
     flex:1,
+    justifyContent:"center",
+    alignItems:"center"
 },
 text:{
     color: "#161924",
@@ -53,7 +54,21 @@ button: {
     padding:15,
     borderRadius:30,
 },
+buttonText:{
+    color:"#ffffff",
+    fontSize:30,
+    padding:10,
+    borderRadius:30,
+},
+
 ScreenStyle:{
-    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"}
+    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"},
+
+    modal: {
+        borderRadius:10,
+        backgroundColor:"#ffffff",
+        
+        
+    }
 });
 export default Screen;

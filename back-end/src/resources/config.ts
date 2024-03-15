@@ -17,5 +17,7 @@ const DB_USER: string = process.env.DB_USER ?? "root";
 const DB_PASSWORD: string = process.env.DB_PASSWORD ?? "";
 const DB_CONNECTION_LIMIT: number = process.env.DB_CONNECTION_LIMIT != null ? parseInt(process.env.DB_CONNECTION_LIMIT) : 10;
 const DB_DATABASE: string = process.env.DB_DATABASE ?? "test";
+const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET ?? "ACCESS_CMPT371";
+const REFRESH_TOKEN_SECRET: string = process.env.REFRESH_TOKEN_SECRET ?? "REFRESH_CMPT371";
 
-export { NODE_ENV, HOST, PORT, DB_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_CONNECTION_LIMIT, DB_DATABASE };
+export { NODE_ENV, HOST, PORT, DB_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_CONNECTION_LIMIT, DB_DATABASE, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET };

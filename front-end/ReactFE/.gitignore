@@ -4,6 +4,7 @@
 node_modules
 .expo/
 android/
+ios/
 # Native
 *.orig.*
 *.jks
