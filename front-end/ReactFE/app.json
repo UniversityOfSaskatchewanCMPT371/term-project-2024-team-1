@@ -6,10 +6,14 @@
     "orientation": "portrait",
     "icon": "./assets/Icon.png",
     "userInterfaceStyle": "light",
+    "androidStatusBar": {
+      "backgroundColor": "#7f92f0",
+      "translucent": false
+    },
     "splash": {
       "image": "./assets/Icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#EEEEEE"
+      "backgroundColor": "#7f92f0"
     },
     "plugins": ["@config-plugins/detox"],
     "assetBundlePatterns": [

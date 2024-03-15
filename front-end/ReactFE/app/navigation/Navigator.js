@@ -110,7 +110,7 @@ const SurveyStack = () => {
 <AppMainStack.Screen name ="CreateSurvey" component={CreateSurvey} /> 
      
 
-      {/*authState?.token ? (
+      { /*authState?.token ? (
         authState?.role === "ADMIN" ? (
           <AppMainStack.Screen name="Admin" component={Admin} />
         ) : (

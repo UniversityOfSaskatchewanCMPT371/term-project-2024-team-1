@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { ScreenStyles } from './Screen'
 import DrawerButton from '../navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
@@ -11,18 +11,69 @@ const CreateSurvey = ({ navigation }) => {
 
     const [surveyTitle, setSurveyTitle] = useState("")
 
-    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 1, "questionName": "", "questionType": "checkBox", }])
 
+
+    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "questionType": "Written Answer", "derived":0, "parentIndex":-1 }])
+    const createQuestionRef = useRef(null);
     const [currentSurveyIndex, setCurrentSurveyIndex] = useState(0);
+  
+  
     const setQuestion = (questionInfo, index) => {
 
-        let currentQuestions = { ...surveyQuestions }
+
+        
+        let currentQuestions = [ ...surveyQuestions ]
+        questionInfo["index"] = index;
 
         currentQuestions[index] = questionInfo
-
+      
         setSurveysQuestions(currentQuestions);
 
     }
+
+    
+    const setQuestionAdd = (questionInfo, index) => {
+
+
+        
+        let currentQuestions = [ ...surveyQuestions ]
+        questionInfo["index"] = index;
+        console.log(questionInfo);
+        currentQuestions[index] = questionInfo
+        console.log(currentQuestions)
+        
+
+     
+        setCurrentSurveyIndex(currentSurveyIndex+1);
+
+      
+
+        currentQuestions[index+1] = { "index": 0, "questionName": "", "questionType": "Written Answer",  "derived":0, "parentIndex":-1  }
+        console.log("now")
+        console.log(currentQuestions)
+
+            setSurveysQuestions(currentQuestions);
+
+    }
+
+
+    const addNewQuestion = () =>{
+
+        createQuestionRef.current.triggerQuestionChangeAdd();
+
+
+           
+    }
+
+    const switchQuestion = (val) =>{
+
+        const newIndex =currentSurveyIndex+val;
+
+        setCurrentSurveyIndex(newIndex);
+        createQuestionRef.current.switchQuestion(newIndex);
+    }
+
+
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#7f92f0" }}>
 
@@ -97,15 +148,35 @@ const CreateSurvey = ({ navigation }) => {
 
                 <View style={{ flex: 10, height: "100%", width: "100%", alignItems: "center", }}>
 
-                    <CreateSurveyQuestions setQuestion={setQuestion}/>
+                    <CreateSurveyQuestions childRef={createQuestionRef} setQuestion={setQuestion} setQuestionAdd={setQuestionAdd} questions={surveyQuestions} index={currentSurveyIndex}/>
 
                 </View>
-                <View style={{ flex: 1.3, justifyContent: "center", width: "100%", alignItems: "center", paddingVertical: 10 }}>
-
+                <View style={{ flex: 1.3, justifyContent:"space-between", flexDirection:"row", width: "100%", alignItems:"center", paddingVertical: 10 }}>
+                <View style={{flex:1, justifyContent:"flex-end", alignItems:"center"}}>
+                    
+                {currentSurveyIndex>0 &&
                     <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-                        onPress={() => console.log("Add")}>
+                        onPress={() => switchQuestion(-1)}>
+                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"<-"} </Text>
+                    </TouchableOpacity>
+                    }
+                    </View>
+                    <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+                  
+                    <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                        onPress={() => addNewQuestion()}>
                         <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>+</Text>
                     </TouchableOpacity>
+                    </View>
+                    <View style={{flex:1, justifyContent:"flex-end", alignItems:"center"}}>
+                    
+                    {currentSurveyIndex < surveyQuestions.length-1 &&
+                    <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                        onPress={() => switchQuestion(1)}>
+                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"->"}</Text>
+                    </TouchableOpacity>
+                    }
+                    </View>
                 </View>
 
             </View>
