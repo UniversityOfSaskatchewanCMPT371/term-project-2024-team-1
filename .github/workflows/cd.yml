@@ -1,18 +1,15 @@
-name: Continious Deployment
+name: Continuous Deployment
 
 on:
   push:
     branches:
-      - master
+      - development
 
 jobs:
-  webhook-notification:
-    runs-on: ubuntu-latest
+  execute-workflow-script:
+    runs-on: cd-runner
+    name: Execute workflow.sh on cd-runner
     steps:
-      - name: Curl request to Webhook
-        env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-               -d '{"ref": "${{ github.ref }}", "before": "${{ github.before }}", "after": "${{ github.after }}"}' \
-               $WEBHOOK_URL
+    - name: Execute workflow script
+      run: |
+        /server/workflow.sh

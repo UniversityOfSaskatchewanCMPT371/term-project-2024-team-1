@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 
 interface AuthProps {
     authState?: {userId: string | null, role: string | null, token: string | null};
-    onLogin?: (userId: string, password: string) => Promise<any>;
+    onLogin?: (userIdEmail: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
 
@@ -47,20 +47,22 @@ export const AuthProvider = ({children}: any) =>{
         loadToken();
     }, [])
 
-    const login = async (userId: string, password: string) => {
+    const login = async (userIdEmail: string, password: string) => {
         try{
-            axios.post(API_URL, {userId, password})
+            axios.post(API_URL, {userIdEmail, password})
             .then(async (response) => {
-                const result = response.data;
-                if(result.accessToken){
-                    setAuthState({
-                        userId: result.userId,
-                        role: result.role,
-                        token: result.accessToken
-                    });
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
-                    await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, role: result.role, userId: result.userId }));
-                    return result;
+                if(response){ 
+                    const result = response.data;
+                    if(result.accessToken){
+                        setAuthState({
+                            userId: result.userId,
+                            role: result.role,
+                            token: result.accessToken
+                        });
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
+                        await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, role: result.role, userId: result.userId }));
+                        return result;
+                    }
                 }
             })
             .catch(error => {

@@ -9,6 +9,7 @@ import log4jsConfig from "@resources/log4js-config.json";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_SECRET } from "@resources/config";
+import { assert } from "console";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 
@@ -24,7 +25,6 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
-      const userId: string = req.body.userId;
       this.execute(req).then((user: User | null) => {
         if (user == null) {
           res.status(404).send("Incorrect userId or password");
@@ -32,15 +32,20 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              this._userService.getById(userId).then((user) => {
+              console.log(user);
+              if (user) {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
+                assert(!nullOrUndefined(role), "Role should not be null or undefined");
+                const userId: string | undefined = user?.userId;
+                console.log("userId", userId);
+                assert(!nullOrUndefined(userId), "UserId should not be null or undefined");
                 const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
+                assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
                 res.status(200).json({ userId, role, accessToken });
-              }).catch((error) => { 
-                this._logger.error("Server Error: ", error);
-              });
-              
-              
+              } else {
+                this._logger.error("Error executing user retrieval");
+                res.status(404).send("Incorrect userId or password");
+              }
             } else {
               res.status(403).send("Incorrect userId or password");
             }
@@ -60,16 +65,16 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
   }
 
   public async execute(req: Request): Promise<User | null> {
-    const userId: string = req.body.userId;
-    const user: Promise<User | null> = this._userService.getById(userId);
+    const userIdEmail: string = req.body.userIdEmail;
+    const user: Promise<User | null> = this._userService.get(userIdEmail);
     
     return user;
   }
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userId && request.body.password) && 
-    (request.body.userId !== "" && request.body.password !== "");
+    return !nullOrUndefined(request.body) && !nullOrUndefined(request.body.userIdEmail && request.body.password) && 
+    (request.body.userIdEmail !== "" && request.body.password !== "");
 
   };
 

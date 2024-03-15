@@ -23,7 +23,6 @@ app.delete('/api/user/:userId', (req, res) => {
 describe('SMOKE TEST DELETE /api/user/:userId', () => {
   it('smoke test for /api/user/:userId to ensure service', async () => {
     const userId = "test12345";
-
     const response = await request(app)
       .delete(`/api/user/${userId}`);
 
