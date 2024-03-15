@@ -6,8 +6,8 @@ export class User {
   private _agreedToEthics: boolean;
   private _isAdmin: boolean;
   
-  public constructor(clinicName: string, userId: string, email: string, agreedToEthics:boolean, isAdmin: boolean, password?: string);
-  public constructor(clinicName: string, userId: string, email: string, agreedToEthics:boolean, isAdmin: boolean, password: string) {
+  public constructor(clinicName: string, userId: string, email: string, agreedToEthics: boolean, isAdmin: boolean, password?: string);
+  public constructor(clinicName: string, userId: string, email: string, agreedToEthics: boolean, isAdmin: boolean, password: string) {
 
     this._clinicName = clinicName;
     this._userId = userId;
