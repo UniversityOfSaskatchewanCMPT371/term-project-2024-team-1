@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
-import React, { useState,useRef } from 'react'
+import React, { useState, useRef,useEffect } from 'react'
 import { ScreenStyles } from './Screen'
 import DrawerButton from '../navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
 import CreateSurveyQuestions from './CreateSurveyQuestions'
 import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
+import { waitFor } from '@testing-library/react-native'
 
 
 const CreateSurvey = ({ navigation }) => {
@@ -13,102 +14,200 @@ const CreateSurvey = ({ navigation }) => {
 
 
 
-    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "questionType": "Written Answer", "derived":0, "parentIndex":-1 }])
+    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": -1 }])
     const createQuestionRef = useRef(null);
     const [currentSurveyIndex, setCurrentSurveyIndex] = useState(0);
-  
-  
+
+
+
+
+    const triggerDone = () =>{
+        createQuestionRef.current.triggerDone();
+
+    }
+
+    const convertToNested = (questionInfo, index) =>{
+        let currentQuestions = [...surveyQuestions]
+        questionInfo["index"] = index;
+
+        currentQuestions[index] = questionInfo;
+        currentQuestions.map(a=>a["children"] = [])
+        let questionConvert = [...currentQuestions]
+
+        console.log(currentQuestions)
+
+        for(let i =currentQuestions.length-1 ; i>=0;i--){
+                let parent = questionConvert[i].parentIndex
+            if(parent!=-1){
+                questionConvert[parent]["children"].unshift({...questionConvert[i]})
+                questionConvert.splice(i,1)
+
+                
+            }
+
+
+
+
+        }
+
+        console.log(questionConvert)
+
+
+
+
+
+        setSurveysQuestions(currentQuestions);
+    }
     const setQuestion = (questionInfo, index) => {
 
 
-        
-        let currentQuestions = [ ...surveyQuestions ]
+
+        let currentQuestions = [...surveyQuestions]
         questionInfo["index"] = index;
 
         currentQuestions[index] = questionInfo
-      
+
         setSurveysQuestions(currentQuestions);
 
     }
 
-    
+
     const setQuestionAdd = (questionInfo, index) => {
 
 
-        
-        let currentQuestions = [ ...surveyQuestions ]
+
+        let currentQuestions = [...surveyQuestions]
         questionInfo["index"] = index;
-    
+
         currentQuestions[index] = questionInfo
+
+
+        let nextIndex = index + 1;
+     
+        for (let i = nextIndex; i < currentQuestions.length; i++) {
+
+            nextIndex = i;
+
+            if (currentQuestions[nextIndex].parentIndex == -1 && currentQuestions[nextIndex].derived == 0) {
+           
+                break
+            }
+        }
       
-        
 
      
-        setCurrentSurveyIndex(currentSurveyIndex+1);
+            setCurrentSurveyIndex(nextIndex);
 
-      
 
-        currentQuestions[index+1] = { "index": 0, "questionName": "", "questionType": "Written Answer",  "derived":0, "parentIndex":-1  }
- 
+        currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": -1 })
+
+        for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
+            currentQuestions[i].index += 1;
+            if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
+                currentQuestions[i].parentIndex += 1
+            }
+        }
+
+
 
         setSurveysQuestions(currentQuestions);
         createQuestionRef.current.setDefaultValues();
 
     }
 
+    const setQuestionAddDerived = (questionInfo, index) => {
 
-    const addNewQuestion = () =>{
+
+
+        let currentQuestions = [...surveyQuestions]
+        questionInfo["index"] = index;
+
+        currentQuestions[index] = questionInfo
+
+
+
+        let nextIndex = index + 1;
+     
+        for (let i = nextIndex; i < currentQuestions.length; i++) {
+
+            nextIndex = i;
+
+            if (currentQuestions[nextIndex].parentIndex != index) {
+               
+                break
+            }
+        }
+      
+
+        setCurrentSurveyIndex(nextIndex);
+
+
+
+        currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": index })
+
+        for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
+            currentQuestions[i].index += 1;
+            if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
+                currentQuestions[i].parentIndex += 1
+            }
+        }
+        setSurveysQuestions(currentQuestions);
+        createQuestionRef.current.setDefaultValues();
+
+    }
+
+    const addNewQuestion = () => {
 
         createQuestionRef.current.triggerQuestionChangeAdd();
 
 
-           
+
     }
 
-    const switchQuestion = (val) =>{
+    const switchQuestion = (val) => {
 
-        const newIndex =currentSurveyIndex+val;
+        const newIndex = currentSurveyIndex + val;
         console.log(surveyQuestions)
         setCurrentSurveyIndex(newIndex);
-        console.log("newIndex is "+ newIndex.toString())
+        console.log("newIndex is " + newIndex.toString())
         createQuestionRef.current.switchQuestion(newIndex);
     }
 
 
-    const handleRemove = (index) =>{
-        let currentQuestions = [ ...surveyQuestions ]
+    const handleRemove = (index) => {
+        let currentQuestions = [...surveyQuestions]
 
-        console.log("questions to remove: "+index.toString())
+        console.log("questions to remove: " + index.toString())
         console.log(currentQuestions)
 
-        for(let i = index+1;i<currentQuestions.length;i++){
-            currentQuestions[i].index-=1;
-            if(currentQuestions[i].parentIndex !=-1 && currentQuestions[i].parentIndex>index){
-                currentQuestions[i].parentIndex-=1;
+        for (let i = index + 1; i < currentQuestions.length; i++) {
+            currentQuestions[i].index -= 1;
+            if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > index) {
+                currentQuestions[i].parentIndex -= 1;
             }
 
         }
 
-        if(currentQuestions[index].parentIndex!=-1){
-            currentQuestions[currentQuestions[index].parentIndex].derived -=1;
+        if (currentQuestions[index].parentIndex != -1) {
+            currentQuestions[currentQuestions[index].parentIndex].derived -= 1;
         }
 
 
         console.log("removing the")
-        console.log(currentQuestions.splice(index,1));
-   
-        if(index >0){
+        console.log(currentQuestions.splice(index, 1));
+
+        if (index > 0) {
             switchQuestion(-1);
             setSurveysQuestions(currentQuestions);
         }
-        else{
+        else {
             setSurveysQuestions(currentQuestions);
-            createQuestionRef.current.setDefaultValues(currentQuestions[0].questionType,currentQuestions[0].questionName);
+            createQuestionRef.current.setDefaultValues(currentQuestions[0].questionType, currentQuestions[0].questionName);
 
         }
-        
-        
-      
+
+
+
     }
 
     return (
@@ -128,7 +227,7 @@ const CreateSurvey = ({ navigation }) => {
                     <TouchableOpacity
                         testID='PreviewButton'
                         onPress={() => {
-                            console.log("Preview")
+                            console.log(surveyQuestions)
                         }}
 
                         style={{
@@ -185,34 +284,34 @@ const CreateSurvey = ({ navigation }) => {
 
                 <View style={{ flex: 10, height: "100%", width: "100%", alignItems: "center", }}>
 
-                    <CreateSurveyQuestions childRef={createQuestionRef} handleRemove={handleRemove} setQuestion={setQuestion} setQuestionAdd={setQuestionAdd} questions={surveyQuestions} index={currentSurveyIndex}/>
+                    <CreateSurveyQuestions childRef={createQuestionRef} handleRemove={handleRemove} triggerDone={convertToNested} setQuestion={setQuestion} setQuestionAdd={setQuestionAdd} setQuestionAddDerived={setQuestionAddDerived} questions={surveyQuestions} index={currentSurveyIndex} />
 
                 </View>
-                <View style={{ flex: 1.3, justifyContent:"space-between", flexDirection:"row", width: "100%", alignItems:"center", paddingVertical: 10 }}>
-                <View style={{flex:1, justifyContent:"flex-end", alignItems:"center"}}>
-                    
-                {currentSurveyIndex>0 &&
-                    <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-                        onPress={() => switchQuestion(-1)}>
-                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"<-"} </Text>
-                    </TouchableOpacity>
-                    }
+                <View style={{ flex: 1.3, justifyContent: "space-between", flexDirection: "row", width: "100%", alignItems: "center", paddingVertical: 10 }}>
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
+
+                        {currentSurveyIndex > 0 &&
+                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                                onPress={() => switchQuestion(-1)}>
+                                <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"<-"} </Text>
+                            </TouchableOpacity>
+                        }
                     </View>
-                    <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-                  
-                    <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-                        onPress={() => addNewQuestion()}>
-                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>+</Text>
-                    </TouchableOpacity>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
+                        <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                            onPress={() => addNewQuestion()}>
+                            <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>+</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{flex:1, justifyContent:"flex-end", alignItems:"center"}}>
-                    
-                    {currentSurveyIndex < surveyQuestions.length-1 &&
-                    <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-                        onPress={() => switchQuestion(1)}>
-                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"->"}</Text>
-                    </TouchableOpacity>
-                    }
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
+
+                        {currentSurveyIndex < surveyQuestions.length - 1 &&
+                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                                onPress={() => switchQuestion(1)}>
+                                <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"->"}</Text>
+                            </TouchableOpacity>
+                        }
                     </View>
                 </View>
 
@@ -222,7 +321,7 @@ const CreateSurvey = ({ navigation }) => {
                 <TouchableOpacity
                     testID='DoneButton'
                     onPress={() => {
-                        console.log("Done")
+                       triggerDone();
                     }}
 
                     style={{

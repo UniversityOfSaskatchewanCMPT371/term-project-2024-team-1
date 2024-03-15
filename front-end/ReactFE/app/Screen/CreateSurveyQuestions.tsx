@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { CheckBox } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 const CreateSurveyQuestions = (props) => {
 
     const [questionName, setQuestionName] = useState("")
@@ -21,7 +22,13 @@ const CreateSurveyQuestions = (props) => {
 
     ]
 
+    const triggerDone = () =>{
+        let question = { ...props.questions[props.index] }
+        question["questionName"] = questionName;
+        question["type"] = questionType
 
+        props.triggerDone(question,props.index);
+    }
     const triggerQuestionChange = () => {
 
         let question = { ...props.questions[props.index] }
@@ -37,6 +44,16 @@ const CreateSurveyQuestions = (props) => {
 
 
         props.setQuestionAdd(question, props.index);
+    }
+
+    const triggerQuestionChangeAddDerived = () => {
+        let question = { ...props.questions[props.index] }
+        question["questionName"] = questionName;
+        question["type"] = questionType
+        question["derived"] += 1 
+
+
+        props.setQuestionAddDerived(question, props.index);
     }
 
     const setDefaultValues = (type="Written Answer", name="") =>{
@@ -61,6 +78,7 @@ const CreateSurveyQuestions = (props) => {
         triggerQuestionChangeAdd: triggerQuestionChangeAdd,
         switchQuestion: switchQuestion,
         setDefaultValues:setDefaultValues,
+        triggerDone:triggerDone
     };
 
     return (
@@ -115,6 +133,19 @@ const CreateSurveyQuestions = (props) => {
 
                 </View>
                 <View style={{ flex: 9, justifyContent: "center", }}>
+                    
+                    <View style={{flex:1}}>
+
+                        {props.questions[props.index].parentIndex != -1
+                        && <View style={{flex:1}}>
+                        <Text> Derived QuestionThis question will be shown if {props.questions[props.questions[props.index].parentIndex].questionName } is checked</Text></View>}
+                        {props.questions[props.index].derived > 0
+                        && <View style={{flex:1}}>
+                        <Text> this question has {props.questions[props.index].derived } derived questions</Text></View>}
+                   
+                   
+                    </View>
+                    <View style={{flex:10}}>
                     {questionType === "Check Box" &&
 
                         <CheckBox
@@ -133,6 +164,7 @@ const CreateSurveyQuestions = (props) => {
                             titleProps={{}}
                             uncheckedColor="#00F" />
                     }
+                    </View>
 
                 </View>
 
@@ -152,7 +184,7 @@ const CreateSurveyQuestions = (props) => {
 
                         {questionType === "Check Box" &&
                             <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", backgroundColor: "rgba(30,196,176,255)", padding: 3, height: "100%", width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)" }}
-                                onPress={() => console.log("Done")}>
+                                onPress={() => triggerQuestionChangeAddDerived()}>
                                 <Text style={{ fontSize: 15, color: "white", textAlign: "center" }}>Derive</Text>
                             </TouchableOpacity>
                         }
