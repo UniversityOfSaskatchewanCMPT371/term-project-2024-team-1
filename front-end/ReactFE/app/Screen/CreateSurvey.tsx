@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
-import React, { useState, useRef,useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { ScreenStyles } from './Screen'
 import DrawerButton from '../navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
 import CreateSurveyQuestions from './CreateSurveyQuestions'
 import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
-import { waitFor } from '@testing-library/react-native'
-
+import * as RNFS from 'react-native-fs';
 
 const CreateSurvey = ({ navigation }) => {
 
@@ -14,35 +13,35 @@ const CreateSurvey = ({ navigation }) => {
 
 
 
-    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": -1 }])
+    const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": -1, "MC":[] }])
     const createQuestionRef = useRef(null);
     const [currentSurveyIndex, setCurrentSurveyIndex] = useState(0);
 
 
 
 
-    const triggerDone = () =>{
+    const triggerDone = () => {
         createQuestionRef.current.triggerDone();
 
     }
 
-    const convertToNested = (questionInfo, index) =>{
+    const convertToNested = (questionInfo, index) => {
+
+        let survey = {"name":surveyTitle,"dateCreated":Date()}
         let currentQuestions = [...surveyQuestions]
         questionInfo["index"] = index;
 
         currentQuestions[index] = questionInfo;
-        currentQuestions.map(a=>a["children"] = [])
+        currentQuestions.map(a => a["children"] = [])
         let questionConvert = [...currentQuestions]
 
-        console.log(currentQuestions)
+        for (let i = currentQuestions.length - 1; i >= 0; i--) {
+            let parent = questionConvert[i].parentIndex
+            if (parent != -1) {
+                questionConvert[parent]["children"].unshift({ ...questionConvert[i] })
+                questionConvert.splice(i, 1)
 
-        for(let i =currentQuestions.length-1 ; i>=0;i--){
-                let parent = questionConvert[i].parentIndex
-            if(parent!=-1){
-                questionConvert[parent]["children"].unshift({...questionConvert[i]})
-                questionConvert.splice(i,1)
 
-                
             }
 
 
@@ -50,14 +49,37 @@ const CreateSurvey = ({ navigation }) => {
 
         }
 
-        console.log(questionConvert)
+        survey["questions"] = questionConvert
 
+
+        
+
+
+        console.log(survey);
+     
 
 
 
 
         setSurveysQuestions(currentQuestions);
     }
+
+ 
+
+
+
+    const writeFile = (data) => {
+        data = [data]
+        var path = RNFS.DocumentDirectoryPath + '/test.txt';
+      
+        RNFS.writeFile(path, JSON.stringify(data), 'utf8')
+         .then(() => console.log('FILE WRITTEN!'))
+         .catch((err) => console.log(err.message));
+     }
+  
+   
+  
+   
     const setQuestion = (questionInfo, index) => {
 
 
@@ -83,34 +105,49 @@ const CreateSurvey = ({ navigation }) => {
 
 
         let nextIndex = index + 1;
-     
+        let found = false
         for (let i = nextIndex; i < currentQuestions.length; i++) {
 
             nextIndex = i;
 
             if (currentQuestions[nextIndex].parentIndex == -1 && currentQuestions[nextIndex].derived == 0) {
-           
+                found = true;
                 break
             }
         }
-      
 
-     
+
+
+
+        if(!found){
+            nextIndex= currentQuestions.length;
             setCurrentSurveyIndex(nextIndex);
-
-
-        currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": -1 })
-
-        for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
-            currentQuestions[i].index += 1;
-            if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
-                currentQuestions[i].parentIndex += 1
-            }
+            currentQuestions.push({ "index": nextIndex, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": -1,"MC":[] })
+            setSurveysQuestions(currentQuestions);
         }
 
+        else{
+            
+
+            setCurrentSurveyIndex(nextIndex);
+            currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": -1,"MC":[] })
+    
+            for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
+                currentQuestions[i].index += 1;
+                if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
+                    currentQuestions[i].parentIndex += 1
+                }
+            }
+            setSurveysQuestions(currentQuestions);
+
+        }
+        
+
+       
+    
 
 
-        setSurveysQuestions(currentQuestions);
+       
         createQuestionRef.current.setDefaultValues();
 
     }
@@ -127,30 +164,41 @@ const CreateSurvey = ({ navigation }) => {
 
 
         let nextIndex = index + 1;
-     
+        let found = false;
         for (let i = nextIndex; i < currentQuestions.length; i++) {
 
             nextIndex = i;
 
             if (currentQuestions[nextIndex].parentIndex != index) {
-               
+                found=true;
                 break
             }
         }
-      
-
-        setCurrentSurveyIndex(nextIndex);
 
 
 
-        currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "questionType": "Written Answer", "derived": 0, "parentIndex": index })
+       
+       
 
-        for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
-            currentQuestions[i].index += 1;
-            if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
-                currentQuestions[i].parentIndex += 1
+        if(!found){
+            nextIndex=currentQuestions.length;
+            setCurrentSurveyIndex(nextIndex);
+            currentQuestions.push( { "index": nextIndex, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": index,"MC":[] })
+        }
+        else {
+            setCurrentSurveyIndex(nextIndex);
+            currentQuestions.splice(nextIndex, 0, { "index": nextIndex, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": index,"MC":[] })
+
+            for (let i = nextIndex + 1; i < currentQuestions.length; i++) {
+                currentQuestions[i].index += 1;
+                if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > nextIndex) {
+                    currentQuestions[i].parentIndex += 1
+                }
             }
         }
+
+     
+       
         setSurveysQuestions(currentQuestions);
         createQuestionRef.current.setDefaultValues();
 
@@ -167,9 +215,9 @@ const CreateSurvey = ({ navigation }) => {
     const switchQuestion = (val) => {
 
         const newIndex = currentSurveyIndex + val;
-        console.log(surveyQuestions)
+        
         setCurrentSurveyIndex(newIndex);
-        console.log("newIndex is " + newIndex.toString())
+      
         createQuestionRef.current.switchQuestion(newIndex);
     }
 
@@ -177,8 +225,7 @@ const CreateSurvey = ({ navigation }) => {
     const handleRemove = (index) => {
         let currentQuestions = [...surveyQuestions]
 
-        console.log("questions to remove: " + index.toString())
-        console.log(currentQuestions)
+     
 
         for (let i = index + 1; i < currentQuestions.length; i++) {
             currentQuestions[i].index -= 1;
@@ -193,8 +240,7 @@ const CreateSurvey = ({ navigation }) => {
         }
 
 
-        console.log("removing the")
-        console.log(currentQuestions.splice(index, 1));
+    
 
         if (index > 0) {
             switchQuestion(-1);
@@ -202,7 +248,7 @@ const CreateSurvey = ({ navigation }) => {
         }
         else {
             setSurveysQuestions(currentQuestions);
-            createQuestionRef.current.setDefaultValues(currentQuestions[0].questionType, currentQuestions[0].questionName);
+            createQuestionRef.current.setDefaultValues(currentQuestions[0].type, currentQuestions[0].questionName, currentQuestions[0]["MC"]);
 
         }
 
@@ -321,7 +367,7 @@ const CreateSurvey = ({ navigation }) => {
                 <TouchableOpacity
                     testID='DoneButton'
                     onPress={() => {
-                       triggerDone();
+                        triggerDone();
                     }}
 
                     style={{
