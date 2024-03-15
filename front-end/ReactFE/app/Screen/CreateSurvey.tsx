@@ -38,9 +38,9 @@ const CreateSurvey = ({ navigation }) => {
         
         let currentQuestions = [ ...surveyQuestions ]
         questionInfo["index"] = index;
-        console.log(questionInfo);
+    
         currentQuestions[index] = questionInfo
-        console.log(currentQuestions)
+      
         
 
      
@@ -49,10 +49,10 @@ const CreateSurvey = ({ navigation }) => {
       
 
         currentQuestions[index+1] = { "index": 0, "questionName": "", "questionType": "Written Answer",  "derived":0, "parentIndex":-1  }
-        console.log("now")
-        console.log(currentQuestions)
+ 
 
-            setSurveysQuestions(currentQuestions);
+        setSurveysQuestions(currentQuestions);
+        createQuestionRef.current.setDefaultValues();
 
     }
 
@@ -68,11 +68,48 @@ const CreateSurvey = ({ navigation }) => {
     const switchQuestion = (val) =>{
 
         const newIndex =currentSurveyIndex+val;
-
+        console.log(surveyQuestions)
         setCurrentSurveyIndex(newIndex);
+        console.log("newIndex is "+ newIndex.toString())
         createQuestionRef.current.switchQuestion(newIndex);
     }
 
+
+    const handleRemove = (index) =>{
+        let currentQuestions = [ ...surveyQuestions ]
+
+        console.log("questions to remove: "+index.toString())
+        console.log(currentQuestions)
+
+        for(let i = index+1;i<currentQuestions.length;i++){
+            currentQuestions[i].index-=1;
+            if(currentQuestions[i].parentIndex !=-1 && currentQuestions[i].parentIndex>index){
+                currentQuestions[i].parentIndex-=1;
+            }
+
+        }
+
+        if(currentQuestions[index].parentIndex!=-1){
+            currentQuestions[currentQuestions[index].parentIndex].derived -=1;
+        }
+
+
+        console.log("removing the")
+        console.log(currentQuestions.splice(index,1));
+   
+        if(index >0){
+            switchQuestion(-1);
+            setSurveysQuestions(currentQuestions);
+        }
+        else{
+            setSurveysQuestions(currentQuestions);
+            createQuestionRef.current.setDefaultValues(currentQuestions[0].questionType,currentQuestions[0].questionName);
+
+        }
+        
+        
+      
+    }
 
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#7f92f0" }}>
@@ -148,7 +185,7 @@ const CreateSurvey = ({ navigation }) => {
 
                 <View style={{ flex: 10, height: "100%", width: "100%", alignItems: "center", }}>
 
-                    <CreateSurveyQuestions childRef={createQuestionRef} setQuestion={setQuestion} setQuestionAdd={setQuestionAdd} questions={surveyQuestions} index={currentSurveyIndex}/>
+                    <CreateSurveyQuestions childRef={createQuestionRef} handleRemove={handleRemove} setQuestion={setQuestion} setQuestionAdd={setQuestionAdd} questions={surveyQuestions} index={currentSurveyIndex}/>
 
                 </View>
                 <View style={{ flex: 1.3, justifyContent:"space-between", flexDirection:"row", width: "100%", alignItems:"center", paddingVertical: 10 }}>
