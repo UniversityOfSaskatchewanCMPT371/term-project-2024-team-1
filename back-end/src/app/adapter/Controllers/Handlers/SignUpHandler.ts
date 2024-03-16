@@ -50,7 +50,7 @@ export class SignUpHandler implements IRouteHandler<boolean> {
     const rawPassword: string = req.body.password;
     const hashedPassword: string = this.hashPassword(rawPassword); 
 
-    const user: UserRequest = new UserRequest(0, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP);
+    const user: UserRequest = new UserRequest(0, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP, null);
     return this._userRequestService.create(user);
   };
 
