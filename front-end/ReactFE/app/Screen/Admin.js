@@ -6,7 +6,7 @@ import axios from 'axios'; // Add this line to import axios
 import { useAuth } from '../context/AuthContext';
 
 
-export default function Admin() {
+export default function Admin({navigation}) {
 
     const {onLogout} = useAuth();
 
