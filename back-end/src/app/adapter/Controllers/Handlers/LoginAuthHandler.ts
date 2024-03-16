@@ -32,12 +32,10 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              console.log(user);
               if (user) {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
                 assert(!nullOrUndefined(role), "Role should not be null or undefined");
                 const userId: string | undefined = user?.userId;
-                console.log("userId", userId);
                 assert(!nullOrUndefined(userId), "UserId should not be null or undefined");
                 const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
                 assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
