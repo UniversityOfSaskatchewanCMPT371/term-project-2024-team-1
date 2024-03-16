@@ -1,3 +1,4 @@
+import { expect } from 'detox';
 describe('NavigationTest', () => {
     beforeAll(async () => {
       await device.launchApp();
