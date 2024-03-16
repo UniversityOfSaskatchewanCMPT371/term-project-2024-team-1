@@ -10,8 +10,8 @@ export class UserRequest {
   private _decisionDate: Date | null;
   private readonly _requestType: RequestTypeEnum;
 
-  // public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate: Date);
-  public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate?: Date) {
+  public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate: Date | null);
+  public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate?: Date | null) {
     this._id = id;
     this._clinicName = clinicName;
     this._password = password;

@@ -11,8 +11,8 @@ interface AuthProps {
 }
 
 const TOKEN_KEY = 'casi-jwt';
-const IPV4_ADDRESS = "10.0.0.15";
-export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
+const IPV4_ADDRESS = "10.237.243.118";
+// export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -49,7 +49,7 @@ export const AuthProvider = ({children}: any) =>{
 
     const login = async (userIdEmail: string, password: string) => {
         try{
-            axios.post(API_URL, {userIdEmail, password})
+            axios.post(`http://${IPV4_ADDRESS}:3000/api/login`, {userIdEmail, password})
             .then(async (response) => {
                 if(response){ 
                     const result = response.data;
@@ -85,10 +85,37 @@ export const AuthProvider = ({children}: any) =>{
         });
     };
 
+    const signUp = async (email, password, clinic, agreeToEthics) => {
+        try {
+          const response = await fetch(`http://${IPV4_ADDRESS}:3000/request/signup`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+              clinic,
+              agreeToEthics,
+            }),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Registration failed: ${response.statusText}`);
+          }
+      
+          const data = await response.json();
+          return data; // use this to return success,jwt,or failure 
+        } catch (error) {
+          throw new Error(`Network error: ${error.message}`);
+        }
+      };
+
 
     const value = {
         onLogin: login,
         onLogout: logout, 
+        onSignup: signUp,
         authState
     };
 

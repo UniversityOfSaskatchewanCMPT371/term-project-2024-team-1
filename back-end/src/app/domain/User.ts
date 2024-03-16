@@ -66,4 +66,3 @@ export class User {
     this._isAdmin = newIsAdmin;
   }
 }
-  

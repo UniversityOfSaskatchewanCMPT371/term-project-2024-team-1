@@ -77,7 +77,5 @@ export class UserSQLRepository implements IUserRepository {
       this._logger.error(error);
       return Promise.reject(error);
     }
-  }
-
-  
+  } 
 }
