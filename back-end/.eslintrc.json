@@ -25,6 +25,8 @@
       "@typescript-eslint/space-infix-ops": "warn",
       "@typescript-eslint/member-delimiter-style": "off",
       "@typescript-eslint/explicit-function-return-type": "error",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/strict-boolean-expressions": "off",
       "@typescript-eslint/no-inferrable-types": 0,
       "@typescript-eslint/typedef": [
           "warn",

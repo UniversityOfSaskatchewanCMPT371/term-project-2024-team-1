@@ -206,6 +206,12 @@ const config: Config.InitialOptions = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  moduleNameMapper: {
+    "@app/(.*)": "<rootDir>/src/app/$1",
+    "@resources/(.*)": "<rootDir>/src/resources/$1",
+    "@tests/(.*)": "<rootDir>/src/tests/$1",
+  }
 };
 
 export default config;

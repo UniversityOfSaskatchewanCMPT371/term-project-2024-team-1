@@ -1,26 +1,34 @@
 {
   "expo": {
-    "name": "ReactFE",
-    "slug": "ReactFE",
+    "name": "CASI",
+    "slug": "CAIS",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Icon.png",
     "userInterfaceStyle": "light",
+    "androidStatusBar": {
+      "backgroundColor": "#7f92f0",
+      "translucent": false
+    },
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#EEEEEE"
+      "backgroundColor": "#7f92f0"
     },
     "plugins": ["@config-plugins/detox"],
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true, 
+      "config":{
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.SURVEY.CASI"
