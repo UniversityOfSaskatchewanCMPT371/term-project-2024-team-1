@@ -9,8 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "buildReleaseAndroid": "cd android && gradlew.bat assembleRelease assembleAndroidTest -DtestBuildType=release",
-    "smoke-test": "jest ./src/tests/smoke_tests",
-    "e2e-test": "jest ./e2e"
+    "smoke-test": "jest test/smoke",
+    "e2e-test": "jest test/e2e"
   },
   "jest": {
     "preset": "react-native",
