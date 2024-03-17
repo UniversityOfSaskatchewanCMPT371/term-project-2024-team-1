@@ -1,38 +1,36 @@
-import { userReqRepoToken } from "@app/adapter/DependencyInjections";
-import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
-import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
+import { userRepoToken } from "@app/adapter/DependencyInjections";
 import { UserRequest } from "@app/domain/UserRequest";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class UserRequestService {
-  constructor(@inject(userReqRepoToken) private readonly _userReqRepository: IUserRequestRepository) {
+export class UserRequestService {  
+  constructor(@inject(userRepoToken) private readonly _userRequestRepository: IUserRequestRepository) {
 
   }
 
-  public async getAll(requestType?: RequestTypeEnum, requestStatus?: RequestStatusEnum): Promise<UserRequest[]> {
-    return this._userReqRepository.getAll(requestType);
+  public async getAll(): Promise<UserRequest> {
+    return this._userRequestRepository.getAll();
   }
 
-  public async get(requestId: number): Promise<UserRequest | null> {
+  public async get(email: string): Promise<UserRequest | null> {
     try {
-      return this._userReqRepository.get(requestId);
+      return this._userRequestRepository.get(email);
     } catch (error) {
-      console.error("Failed to retrieve user by requestId: ", error);
+      console.error("Failed to retrieve user by email: ", error);
       throw error;
     }
   };
 
-  public async create(request: UserRequest): Promise<boolean> {
-    return this._userReqRepository.create(request);
+  public async create(user: UserRequest): Promise<boolean> {
+    return this._userRequestRepository.create(user);
   };
 
-  public async update(request: UserRequest): Promise<boolean> {
-    return this._userReqRepository.update(request);
+  public async update(user: UserRequest): Promise<boolean> {
+    return this._userRequestRepository.update(user);
   };
 
-  public async delete(requestId: number): Promise<boolean> {
-    return this._userReqRepository.delete(requestId);
+  public async delete(requestID: number): Promise<boolean> {
+    return this._userRequestRepository.delete(requestID);
   };
 }

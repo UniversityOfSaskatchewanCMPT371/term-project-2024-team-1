@@ -5,13 +5,13 @@
 /* eslint-disable @typescript-eslint/indent */
 import "reflect-metadata";
 import { Request, Response } from "express";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { container } from "tsyringe";
 import { LoginAuthHandler } from "@app/adapter/Controllers/Handlers/LoginAuthHandler";
 import { userRepoToken } from "@app/adapter/DependencyInjections";
 import { User } from "@app/domain/User";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "../common_test_code/util_test";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserService } from "@app/application/UserService";

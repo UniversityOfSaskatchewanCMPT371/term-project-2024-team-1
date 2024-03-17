@@ -5,6 +5,7 @@ import { container } from "tsyringe";
 import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
 import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
 import { LoginAuthHandler } from "./Handlers/LoginAuthHandler";
+import { SignUpHandler } from "./Handlers/SignUpHandler";
 import { CreateUserHandler } from "./Handlers/CreateUserHandler";
 
 
@@ -12,6 +13,7 @@ import { CreateUserHandler } from "./Handlers/CreateUserHandler";
 const userGetAllHandler: UserGetAllHandler = container.resolve(UserGetAllHandler);
 const userDeleteHandler: UserDeleteHandler = container.resolve(UserDeleteHandler);
 const loginAuthHandler: LoginAuthHandler = container.resolve(LoginAuthHandler);
+const signUpHandler: SignUpHandler = container.resolve(SignUpHandler);
 const createUserHandler: CreateUserHandler = container.resolve(CreateUserHandler);
 export const router: Router = express.Router();
 
@@ -30,6 +32,10 @@ router.post("/signup", authenticate(ADMIN), (req: Request, res: Response) => {
 router.post("/login", (req: Request, res: Response) => {
   console.log("login route!");
   loginAuthHandler.handle(req, res);
+});
+
+router.post("/signup", (req: Request, res: Response) => {
+  signUpHandler.handle(req, res);
 });
 
 module.exports = router;

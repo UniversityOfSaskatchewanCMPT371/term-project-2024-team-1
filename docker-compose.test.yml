@@ -15,7 +15,7 @@ services:
     build: 
       context: ./back-end
       dockerfile: Dockerfile
-      target: dev
+      target: test
     ports: 
       - 3000:3000
     volumes: 
