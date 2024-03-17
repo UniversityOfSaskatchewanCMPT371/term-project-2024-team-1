@@ -33,10 +33,29 @@ const CreateSurvey = ({ navigation }) => {
 
         currentQuestions[index] = questionInfo;
         currentQuestions.map(a => a["children"] = [])
-        let questionConvert = [...currentQuestions]
+        let questionConvert = []
+
+
+
+
+        for(let i = 0; i< currentQuestions.length;i++){
+            questionConvert[i] = {}
+            questionConvert[i]["questionName"] = currentQuestions[i]["questionName"]
+            questionConvert[i]["type"] = currentQuestions[i]["type"]
+            questionConvert[i]["children"] = currentQuestions[i]["children"]
+            questionConvert[i]["MC"] = currentQuestions[i]["MC"]
+        }
+        
+       
+
+
 
         for (let i = currentQuestions.length - 1; i >= 0; i--) {
-            let parent = questionConvert[i].parentIndex
+            let parent = currentQuestions[i].parentIndex;
+           
+            
+            
+
             if (parent != -1) {
                 questionConvert[parent]["children"].unshift({ ...questionConvert[i] })
                 questionConvert.splice(i, 1)

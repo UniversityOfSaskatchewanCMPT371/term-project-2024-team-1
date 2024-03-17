@@ -14,7 +14,7 @@ import Admin from "../Screen/Admin"
 
 
 /*Test constants */
-const runSurveyCreationTest = true;
+const runSurveyCreationTest = false;
 
 
 
