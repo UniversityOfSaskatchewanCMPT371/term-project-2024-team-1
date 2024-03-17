@@ -44,7 +44,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                 this._logger.INFO("user request status updated to approved");
                 assert(userRequest.clinicName && userRequest.email && userRequest.password);
                 const userId: string = randomAlphanumString(this.USERID_LENGTH);
-                assert(userId.length === 8, "userId must be eight characters long");
+                assert(userId.length === this.USERID_LENGTH, "userId must be eight characters long");
                 assert(this.isValidHashedPassword(userRequest.password), "Password is not hashed");
                 const newUser: User = new User(userRequest.clinicName, userId, userRequest.email, false, userRequest.password);
                 this.create_user_execute(newUser).then(() => {
