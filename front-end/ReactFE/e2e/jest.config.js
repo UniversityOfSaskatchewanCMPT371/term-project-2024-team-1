@@ -10,6 +10,6 @@ module.exports = {
   testEnvironment: "detox/runners/jest/testEnvironment",
   verbose: true,
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(ts|tsx)$": "babel-jest",
   },
 };
