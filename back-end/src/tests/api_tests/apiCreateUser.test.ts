@@ -26,21 +26,23 @@ container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
 container.register<IUserRequestRepository>(userReqRepoToken, { useValue: mockUserReqRepo });
 container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
 
-const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MTA2Mzc5MTJ9.YSpO-XXbZdGZrZb7-MANJB1KKNwPOq5LTwwqrlAP5pY";
+const ADMIN_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MTA2Mzc5MTJ9.YSpO-XXbZdGZrZb7-MANJB1KKNwPOq5LTwwqrlAP5pY";
+const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MDk2NzIxODd9.MFSQJhBnwwB2rXGbUzmxycmUIdhMDFz4hhN4jBcJtFM";
 
 describe("Create User API Test /api/signup", () => {
   let userReq: UserRequest;
   let notSignupUserReq: UserRequest;
   let decisionMadeUserReq: UserRequest;
-  const user: User = new User("testClinic", "test12345", "test@gmail.com", true, "smkfomg452AM$");
-
+  const admin: User = new User("testClinic", "test12345", "test@gmail.com", true, "smkfomg452AM$");
+  const user: User = new User("testClinic", "test12345", "test@gmail.com", false, "smkfomg452AM$");
+  
   beforeEach(() => {
     userReq = new UserRequest(1, "test@gmail.com", "testClinic", "$2a$10$jIRie1ZM8CVysp4olOIoqOviEcG.kPWQutEftr5897GD54Cr0uNcS", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
     notSignupUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
     decisionMadeUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.APPROVED, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
 
     jest.spyOn(UserRequestSQLRepository.prototype, "get").mockImplementation(async (requestId) => mockUserReqRepo.get(requestId));
-    jest.spyOn(UserService.prototype, "get").mockImplementation(async () => user);
+    jest.spyOn(UserService.prototype, "get").mockImplementation(async () => admin);
     jest.spyOn(UserRequestService.prototype, "update").mockImplementation(async () => true);
   });
 
@@ -50,7 +52,7 @@ describe("Create User API Test /api/signup", () => {
     jest.spyOn(UserSQLRepository.prototype, "create").mockImplementation(async (user1) => mockUserRepo.create(user1));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => userReq);
 
-    const response = await request(app).post("/api/signup").send({ approved: true, requestId: userReq.id }).set("Authorization", `Bearer ${USER_TOKEN}`);
+    const response = await request(app).post("/api/signup").send({ approved: true, requestId: userReq.id }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toContain("User successfully approved and created");
@@ -61,7 +63,7 @@ describe("Create User API Test /api/signup", () => {
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(userReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => userReq);
 
-    const response = await request(app).post("/api/signup").send({ approved: false, requestId: userReq.id }).set("Authorization", `Bearer ${USER_TOKEN}`);
+    const response = await request(app).post("/api/signup").send({ approved: false, requestId: userReq.id }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
     expect(response.statusCode).toBe(403);
     expect(response.text).toContain("Forbidden! User request has not been approved");
@@ -73,7 +75,7 @@ describe("Create User API Test /api/signup", () => {
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(notSignupUserReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => notSignupUserReq);
 
-    const response = await request(app).post("/api/signup").send({ approved: false, requestId: notSignupUserReq.id }).set("Authorization", `Bearer ${USER_TOKEN}`);
+    const response = await request(app).post("/api/signup").send({ approved: false, requestId: notSignupUserReq.id }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
     expect(response.statusCode).toBe(400);
     expect(response.text).toContain("Bad request: The request does not meet the required criteria");
@@ -85,9 +87,22 @@ describe("Create User API Test /api/signup", () => {
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(decisionMadeUserReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => decisionMadeUserReq);
 
-    const response = await request(app).post("/api/signup").send({ approved: true, requestId: decisionMadeUserReq.id }).set("Authorization", `Bearer ${USER_TOKEN}`);
+    const response = await request(app).post("/api/signup").send({ approved: true, requestId: decisionMadeUserReq.id }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
     expect(response.statusCode).toBe(400);
     expect(response.text).toContain("Bad request: The request does not meet the required criteria");
+  });
+
+  it("should fail to create the user if the endpoint was hit by a non-ADMIN user", async () => {
+    await mockUserReqRepo.create(decisionMadeUserReq);
+    jest.spyOn(UserRequestSQLRepository.prototype, "get").mockImplementation(async () => decisionMadeUserReq);
+    jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(decisionMadeUserReq));
+    jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => decisionMadeUserReq);
+    jest.spyOn(UserService.prototype, "get").mockImplementation(async () => user);
+
+    const response = await request(app).post("/api/signup").send({ approved: true, requestId: decisionMadeUserReq.id }).set("Authorization", `Bearer ${USER_TOKEN}`);
+
+    expect(response.statusCode).toBe(403);
+    expect(response.text).toContain("Unauthorized access, you do not have permissions!");
   });
 });
