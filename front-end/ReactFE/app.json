@@ -4,14 +4,14 @@
     "slug": "CAIS",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "androidStatusBar": {
       "backgroundColor": "#7f92f0",
       "translucent": false
     },
     "splash": {
-      "image": "./assets/Icon.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#7f92f0"
     },
@@ -28,7 +28,7 @@
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.SURVEY.CASI"

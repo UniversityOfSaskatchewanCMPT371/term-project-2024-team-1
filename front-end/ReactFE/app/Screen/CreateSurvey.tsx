@@ -5,7 +5,7 @@ import DrawerButton from '../navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
 import CreateSurveyQuestions from './CreateSurveyQuestions'
 import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
-import * as RNFS from 'react-native-fs';
+//import * as RNFS from 'react-native-fs';
 
 const CreateSurvey = ({ navigation }) => {
 
@@ -70,11 +70,12 @@ const CreateSurvey = ({ navigation }) => {
 
     const writeFile = (data) => {
         data = [data]
-        var path = RNFS.DocumentDirectoryPath + '/test.txt';
+        /*var path = RNFS.DocumentDirectoryPath + '/test.txt';
       
         RNFS.writeFile(path, JSON.stringify(data), 'utf8')
          .then(() => console.log('FILE WRITTEN!'))
          .catch((err) => console.log(err.message));
+         */
      }
   
    
