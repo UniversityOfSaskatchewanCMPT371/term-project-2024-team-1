@@ -35,7 +35,7 @@ describe("Create User API Test /api/signup", () => {
   const user: User = new User("testClinic", "test12345", "test@gmail.com", true, "smkfomg452AM$");
 
   beforeEach(() => {
-    userReq = new UserRequest(1, "test@gmail.com", "testClinic", "smkfomg452AM$", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
+    userReq = new UserRequest(1, "test@gmail.com", "testClinic", "$2a$10$jIRie1ZM8CVysp4olOIoqOviEcG.kPWQutEftr5897GD54Cr0uNcS", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
     notSignupUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
     decisionMadeUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.APPROVED, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
 

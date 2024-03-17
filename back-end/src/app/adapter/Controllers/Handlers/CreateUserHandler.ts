@@ -45,6 +45,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                 assert(userRequest.clinicName && userRequest.email && userRequest.password);
                 const userId: string = randomAlphanumString(this.USERID_LENGTH);
                 assert(userId.length === 8, "userId must be eight characters long");
+                assert(this.isValidHashedPassword(userRequest.password), "Password is not hashed");
                 const newUser: User = new User(userRequest.clinicName, userId, userRequest.email, false, userRequest.password);
                 this.create_user_execute(newUser).then(() => {
                   this._logger.INFO("user added successfully");
@@ -98,7 +99,6 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     return success;
   }
 
-
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
     return (
@@ -109,5 +109,10 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     !isNaN(Number(request.body.requestId))
     ); 
   };
+
+  private isValidHashedPassword(password: string): boolean {
+    const regex: RegExp = /^\$2a\$10\$.{53}$/;
+    return regex.test(password);
+  }
 
 }

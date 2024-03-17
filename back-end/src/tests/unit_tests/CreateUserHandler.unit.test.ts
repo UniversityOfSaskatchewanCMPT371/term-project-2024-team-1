@@ -26,7 +26,7 @@ describe("CreateUser and Modify Request", () => {
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   const handler: CreateUserHandler = container.resolve(CreateUserHandler);
 
-  const mockReq: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
+  const mockReq: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "$2a$10$jIRie1ZM8CVysp4olOIoqOviEcG.kPWQutEftr5897GD54Cr0uNcS", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
   
   const mockReq_not_SIGNUP: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
   const mockReq_date_not_null: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
