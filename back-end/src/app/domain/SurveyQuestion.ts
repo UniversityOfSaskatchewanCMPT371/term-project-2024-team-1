@@ -10,7 +10,7 @@ export class SurveyQuestion {
   public constructor(id: number, question: string, childQuestions: SurveyQuestion[], answer: SurveyAnswer) {
     this._id = id;
     this._question = question;
-    this._childQuestions = childQuestions ?? null;
+    this._childQuestions = childQuestions;
     this._answer = answer ?? null;
   }
     
