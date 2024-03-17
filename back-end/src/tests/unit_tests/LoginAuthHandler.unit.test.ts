@@ -22,7 +22,7 @@ describe("LoginAuthHandler", () => {
     container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
     const handler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
-    const mockUser: User = new User("clinic1", "test12345", "abc123@gmail.com", false, "password1");
+    const mockUser: User = new User("testClinic", "test12345", "test@gmail.com", false, "smkfomg452AM$");
     
     const mockAdmin: User = new User(
         "adminClinic",
@@ -168,7 +168,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 403 if password is not matched with userId", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -189,7 +189,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 403 if password is not matched with email", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.email, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.email, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -210,7 +210,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 500 if bcrypt.compare fails", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -231,7 +231,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 404 if error occurs during getting user info", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockRejectedValue("db error");

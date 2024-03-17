@@ -3,6 +3,7 @@ import { RequestTypeEnum } from "./RequestTypeEnum";
 
 export class UserRequest {
   private readonly _id: number;
+  private readonly _email: string; 
   private readonly _clinicName: string;
   private readonly _password: string;
   private _status: RequestStatusEnum;
@@ -10,9 +11,10 @@ export class UserRequest {
   private _decisionDate: Date | null;
   private readonly _requestType: RequestTypeEnum;
 
-  public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate: Date);
-  public constructor(id: number, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate?: Date) {
+  public constructor(id: number, email: string, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate: Date | null);
+  public constructor(id: number, email: string, clinicName: string, password: string, status: RequestStatusEnum, createdDate: Date, requestType: RequestTypeEnum, decisionDate?: Date | null) {
     this._id = id;
+    this._email = email;
     this._clinicName = clinicName;
     this._password = password;
     this._status = status;
@@ -23,6 +25,10 @@ export class UserRequest {
 
   public get id(): number {
     return this._id;
+  }
+
+  public get email(): string {
+    return this._email;
   }
 
   public get clinicName(): string {

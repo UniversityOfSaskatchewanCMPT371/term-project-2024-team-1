@@ -15,11 +15,11 @@ export class UserRequestService {
     return this._userReqRepository.getAll(requestType);
   }
 
-  public async get(email: string): Promise<UserRequest | null> {
+  public async get(requestId: number): Promise<UserRequest | null> {
     try {
-      return this._userReqRepository.get(email);
+      return this._userReqRepository.get(requestId);
     } catch (error) {
-      console.error("Failed to retrieve user by email: ", error);
+      console.error("Failed to retrieve user by requestId: ", error);
       throw error;
     }
   };

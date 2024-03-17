@@ -9,7 +9,7 @@ import log4jsConfig from "@resources/log4js-config.json";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_SECRET } from "@resources/config";
-import { assert } from "console";
+import assert from "assert";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 
@@ -32,14 +32,12 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              console.log(user);
               if (user) {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
                 assert(!nullOrUndefined(role), "Role should not be null or undefined");
                 const userId: string | undefined = user?.userId;
-                console.log("userId", userId);
                 assert(!nullOrUndefined(userId), "UserId should not be null or undefined");
-                const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
+                const accessToken: string = jwt.sign({ userId }, ACCESS_TOKEN_SECRET);
                 assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
                 res.status(200).json({ userId, role, accessToken });
               } else {

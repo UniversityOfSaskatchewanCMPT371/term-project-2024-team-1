@@ -11,7 +11,7 @@ configure(log4jsConfig);
 
 registerAllDependencies();
 
-const app: Express = express();
+export const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");

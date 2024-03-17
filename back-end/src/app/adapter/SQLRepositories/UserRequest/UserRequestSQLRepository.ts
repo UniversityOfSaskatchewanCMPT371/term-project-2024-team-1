@@ -11,7 +11,7 @@ export class UserRequestSQLRepository implements IUserRequestRepository {
 
   private readonly _getQuery: string = `SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
                                         FROM Request
-                                        WHERE email = ?;`;
+                                        WHERE id = ?;`;
 
   private readonly _create: string = "INSERT INTO Request (email, password, clinicName, status, createdDate, requestType) VALUES (?, ?, ?, ?, ?, ?);";
   private readonly _delete: string = "DELETE FROM Request WHERE id = ?;";
@@ -31,7 +31,7 @@ export class UserRequestSQLRepository implements IUserRequestRepository {
   }
 
 
-  public async get(email: string): Promise<UserRequest | null> {
+  public async get(requestId: number): Promise<UserRequest | null> {
     throw new Error("get method not implemented.");
   }
 
