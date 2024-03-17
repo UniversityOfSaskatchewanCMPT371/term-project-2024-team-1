@@ -9,17 +9,21 @@ import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { container } from "tsyringe";
 import { LoginAuthHandler } from "@app/adapter/Controllers/Handlers/LoginAuthHandler";
-import { userRepoToken } from "@app/adapter/DependencyInjections";
+import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
 import { User } from "@app/domain/User";
 import { flushPromises } from "../common_test_code/util_test";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserService } from "@app/application/UserService";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 
 
 describe("LoginAuthHandler", () => {
     const mockUserRepo: IUserRepository = new MockUserRepository();
     container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
+    container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
+    
     const handler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
     const mockUser: User = new User("testClinic", "test12345", "test@gmail.com", false, "smkfomg452AM$");

@@ -5,25 +5,29 @@
 import "reflect-metadata";
 import { Request, Response } from "express";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
-import { MockUserRequestRepository } from "./mocked_repository/MockUserRequestRepository";
+import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequestRepository";
 import { container } from "tsyringe";
 import { CreateUserHandler } from "@app/adapter/Controllers/Handlers/CreateUserHandler";
-import { userRepoToken, userReqRepoToken } from "@app/adapter/DependencyInjections";
+import { loggerToken, userRepoToken, userReqRepoToken } from "@app/adapter/DependencyInjections";
 import { UserRequest } from "@app/domain/UserRequest";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "@tests/common_test_code/util_test";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
+import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
+import { ILogger } from "@app/domain/interfaces/ILogger";
 
 describe("CreateUser and Modify Request", () => {
   const mockUserReqRepo: IUserRequestRepository = new MockUserRequestRepository();
   const mockUserRepo: IUserRepository = new MockUserRepository();
   container.register<IUserRequestRepository>(userReqRepoToken, { useValue: mockUserReqRepo });
   container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
+  container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   const handler: CreateUserHandler = container.resolve(CreateUserHandler);
 
   const mockReq: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
+  
   const mockReq_not_SIGNUP: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
   const mockReq_date_not_null: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
   const mockReq_rejected: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);

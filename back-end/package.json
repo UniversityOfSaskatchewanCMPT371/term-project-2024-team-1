@@ -7,7 +7,7 @@
     "unit-tests": "jest ./src/tests/unit_tests",
     "integration-tests": "jest ./src/tests/integration_tests",
     "system-tests": "jest ./src/tests/system_tests",
-    "api-tests": "jest ./src/tests/api_tests/apiLoginAuth.test.ts",
+    "api-tests": "jest ./src/tests/api_tests",
     "lint": "eslint ./src --ext .ts",
     "build": "tsc -p tsconfig.build.json && tsc-alias && cp ./src/resources/log4js-config.json ./build/resources"
   },

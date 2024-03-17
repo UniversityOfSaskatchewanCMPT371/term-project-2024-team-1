@@ -9,13 +9,13 @@ export class UserRequestService {
 
   }
 
-  public async getAll(): Promise<UserRequest> {
+  public async getAll(): Promise<UserRequest[]> {
     return this._userRequestRepository.getAll();
   }
 
-  public async get(email: string): Promise<UserRequest | null> {
+  public async get(requestId: number): Promise<UserRequest | null> {
     try {
-      return this._userRequestRepository.get(email);
+      return this._userRequestRepository.get(requestId);
     } catch (error) {
       console.error("Failed to retrieve user by email: ", error);
       throw error;

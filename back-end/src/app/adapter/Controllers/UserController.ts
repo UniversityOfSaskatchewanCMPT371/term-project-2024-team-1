@@ -30,7 +30,6 @@ router.post("/signup", authenticate(ADMIN), (req: Request, res: Response) => {
 });
 
 router.post("/login", (req: Request, res: Response) => {
-  console.log("login route!");
   loginAuthHandler.handle(req, res);
 });
 

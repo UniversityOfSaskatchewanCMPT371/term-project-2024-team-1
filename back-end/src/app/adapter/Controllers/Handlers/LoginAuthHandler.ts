@@ -10,6 +10,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_SECRET } from "@resources/config";
 import assert from "assert";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 
@@ -17,7 +19,7 @@ configure(log4jsConfig);
 @injectable()
 export class LoginAuthHandler implements IRouteHandler<User | null> {
   
-  private readonly _logger = getLogger(LoginAuthHandler.name);
+  private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
 
   constructor(private readonly _userService: UserService) {
     this._userService = container.resolve(UserService);
@@ -25,13 +27,16 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
+      this._logger.INFO("validation passed")
       this.execute(req).then((user: User | null) => {
         if (user == null) {
+          this._logger.INFO("Incorrect userId or password")
           res.status(404).send("Incorrect userId or password");
         } else {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
+              this._logger.INFO("password matched")
               if (user) {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
                 assert(!nullOrUndefined(role), "Role should not be null or undefined");
@@ -41,22 +46,23 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
                 assert(!nullOrUndefined(accessToken), "Access token should not be null or undefined");
                 res.status(200).json({ userId, role, accessToken });
               } else {
-                this._logger.error("Error executing user retrieval");
+                this._logger.INFO("Error executing user retrieval");
                 res.status(404).send("Incorrect userId or password");
               }
             } else {
               res.status(403).send("Incorrect userId or password");
             }
           }).catch((error: any) => {
-            this._logger.error("Error comparing passwords:", error);
+            this._logger.ERROR("Error comparing passwords");
             res.status(500).send("Internal server error");
           });
         }
       }).catch((error: any) => {
-        this._logger.error("Error executing user retrieval:", error);
+        this._logger.ERROR("Error executing user retrieval");
         res.status(404).send("Incorrect userId or password");
       });
     } else {
+      this._logger.INFO("UserId and Password are required");
       res.status(422).send("UserId and Password are required");
     }
 

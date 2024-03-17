@@ -17,6 +17,7 @@ export class MockUserRepository implements IUserRepository {
     if (user === undefined) {
       return Promise.resolve(null);
     } else {
+      console.log(user);
       return Promise.resolve(user);
     }
   }
