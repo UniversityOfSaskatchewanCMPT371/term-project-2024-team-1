@@ -208,6 +208,7 @@ const config: Config.InitialOptions = {
   // watchman: true,
 
   moduleNameMapper: {
+    "src/(.*)": "<rootDir>/src/$1",
     "@app/(.*)": "<rootDir>/src/app/$1",
     "@resources/(.*)": "<rootDir>/src/resources/$1",
     "@tests/(.*)": "<rootDir>/src/tests/$1",

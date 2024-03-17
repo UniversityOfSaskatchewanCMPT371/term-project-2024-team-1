@@ -39,8 +39,12 @@ app.get("/dbHit", (req: Request, res: Response) => {
 
 });
 
-app.listen(PORT, HOST, () => {
-  logger.error("Testing ERROR logs");
-  logger.debug("Testing DEBUG logs");
-  console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
-});
+if (NODE_ENV !== "test") {
+  app.listen(PORT, HOST, () => {
+    logger.error("Testing ERROR logs");
+    logger.debug("Testing DEBUG logs");
+    console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
+  });
+}
+
+export default app;
