@@ -29,7 +29,7 @@ const password: string = "smkfomg452AM$";
 describe("Login API Test /api/login", () => {
 
   it("should fail if the userId doesn't exist", async () => {
-    mockUserRepo.create(notUser);
+    await mockUserRepo.create(notUser);
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async () => null);
     const response = await request(app).post("/api/login").send({ userIdEmail: notUser.userId, password: notUser.password });
 
@@ -39,7 +39,7 @@ describe("Login API Test /api/login", () => {
   });
 
   it("should fail if the userEmail doesn't exist", async () => {
-    mockUserRepo.create(notUser);
+    await mockUserRepo.create(notUser);
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async () => null);
     const response = await request(app).post("/api/login").send({ userIdEmail: notUser.email, password: notUser.password });
     
@@ -50,7 +50,7 @@ describe("Login API Test /api/login", () => {
 
   it("should fail if the password is incorrect", async () => {
     
-    mockUserRepo.create(user1);
+    await mockUserRepo.create(user1);
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
     const response = await request(app).post("/api/login").send({ userIdEmail: wrongPasswordUser.email, password: wrongPasswordUser.password });
     
@@ -60,9 +60,9 @@ describe("Login API Test /api/login", () => {
   });
 
   it("should return an auth token when logged in with the correct email/password", async () => {
-    mockUserRepo.create(user1);
+    await mockUserRepo.create(user1);
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
-    const response = await request(app).post("/api/login").send({ userIdEmail: user1.email, password: password});
+    const response = await request(app).post("/api/login").send({ userIdEmail: user1.email, password });
     
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("accessToken");
@@ -71,9 +71,9 @@ describe("Login API Test /api/login", () => {
   });
 
   it("should return an auth token when logged in with the correct userId/password", async () => {
-    mockUserRepo.create(user1);
+    await mockUserRepo.create(user1);
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
-    const response = await request(app).post("/api/login").send({ userIdEmail: user1.userId, password: password });
+    const response = await request(app).post("/api/login").send({ userIdEmail: user1.userId, password });
     
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("accessToken");

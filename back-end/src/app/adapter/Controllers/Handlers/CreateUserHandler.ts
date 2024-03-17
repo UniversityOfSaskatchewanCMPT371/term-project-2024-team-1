@@ -6,7 +6,7 @@ import { nullOrUndefined, randomAlphanumString } from "@app/application/util";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Request, Response } from "express";
 import { container, injectable } from "tsyringe";
-import { configure, getLogger } from "log4js";
+import { configure } from "log4js";
 import log4jsConfig from "@resources/log4js-config.json";
 import assert from "assert";
 import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
@@ -49,7 +49,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                 this.create_user_execute(newUser).then(() => {
                   this._logger.INFO("user added successfully");
                   res.status(200).send("User successfully approved and created");
-                }).catch((error: any) => {
+                }).catch(() => {
                   this._logger.ERROR("unable to add the user");
                   res.status(500).send("Unable to create the user. Please try again later");
                 });
@@ -57,7 +57,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                 this._logger.INFO("user not approved");
                 res.status(403).send("Forbidden! User request has not been approved");
               }
-            }).catch((error: any) => {
+            }).catch(() => {
               this._logger.ERROR("unable to update the request");
               res.status(500).send("Unable to update the request. Try again");
             });
@@ -69,7 +69,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
           this._logger.INFO("unable to fetch the request was found");
           res.status(404).send("Unable to retrieve the request! Try again");
         }
-      }).catch((error: any) => {
+      }).catch(() => {
         this._logger.ERROR("error executing request retrieval");
         res.status(404).send("Unable to retrieve the request! Try again");
       });
@@ -89,7 +89,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   public async update_req_execute(userRequest: UserRequest): Promise<boolean> { 
     userRequest.decisionDate = new Date();
     const success: boolean = await this._userRequestService.update(userRequest);
-    console.log("success: ", success)
+    console.log("success: ", success);
     return success;
   }
 

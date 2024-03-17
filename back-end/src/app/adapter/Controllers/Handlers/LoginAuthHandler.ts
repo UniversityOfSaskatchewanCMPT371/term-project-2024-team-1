@@ -4,7 +4,7 @@ import { nullOrUndefined } from "@app/application/util";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Request, Response } from "express";
 import { container, injectable } from "tsyringe";
-import { configure, getLogger } from "log4js";
+import { configure } from "log4js";
 import log4jsConfig from "@resources/log4js-config.json";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -27,16 +27,16 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
-      this._logger.INFO("validation passed")
+      this._logger.INFO("validation passed");
       this.execute(req).then((user: User | null) => {
         if (user == null) {
-          this._logger.INFO("Incorrect userId or password")
+          this._logger.INFO("Incorrect userId or password");
           res.status(404).send("Incorrect userId or password");
         } else {
           const password: string = req.body.password;
           bcrypt.compare(password, user.password).then((isMatch: boolean) => {
             if (isMatch) {
-              this._logger.INFO("password matched")
+              this._logger.INFO("password matched");
               if (user) {
                 const role: string = user?.isAdmin ? "ADMIN" : "USER";
                 assert(!nullOrUndefined(role), "Role should not be null or undefined");
@@ -52,12 +52,12 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
             } else {
               res.status(403).send("Incorrect userId or password");
             }
-          }).catch((error: any) => {
+          }).catch(() => {
             this._logger.ERROR("Error comparing passwords");
             res.status(500).send("Internal server error");
           });
         }
-      }).catch((error: any) => {
+      }).catch(() => {
         this._logger.ERROR("Error executing user retrieval");
         res.status(404).send("Incorrect userId or password");
       });

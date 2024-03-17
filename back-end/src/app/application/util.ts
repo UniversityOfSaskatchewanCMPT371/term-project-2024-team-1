@@ -47,7 +47,6 @@ export function authenticate(role: string) {
         
         userService.get(callerUserId).then(user => {
           if (nullOrUndefined(user)) {
-            console.log("not found??")
             return res.status(404).send("UserID not found");
           } else {
             if (user.isAdmin) {

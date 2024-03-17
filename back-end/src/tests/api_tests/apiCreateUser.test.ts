@@ -26,7 +26,7 @@ container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
 container.register<IUserRequestRepository>(userReqRepoToken, { useValue: mockUserReqRepo });
 container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
 
-const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MTA2Mzc5MTJ9.YSpO-XXbZdGZrZb7-MANJB1KKNwPOq5LTwwqrlAP5pY"
+const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MTA2Mzc5MTJ9.YSpO-XXbZdGZrZb7-MANJB1KKNwPOq5LTwwqrlAP5pY";
 
 describe("Create User API Test /api/signup", () => {
   let userReq: UserRequest;
@@ -45,8 +45,8 @@ describe("Create User API Test /api/signup", () => {
   });
 
   it("should successfully create the user if the request was approved", async () => {
-    mockUserReqRepo.create(userReq);
-    jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(userReq))
+    await mockUserReqRepo.create(userReq);
+    jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(userReq));
     jest.spyOn(UserSQLRepository.prototype, "create").mockImplementation(async (user1) => mockUserRepo.create(user1));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => userReq);
 
@@ -57,7 +57,7 @@ describe("Create User API Test /api/signup", () => {
   });
 
   it("should fail to create the user if the request was rejected", async () => {
-    mockUserReqRepo.create(userReq);
+    await mockUserReqRepo.create(userReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(userReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => userReq);
 
@@ -68,7 +68,7 @@ describe("Create User API Test /api/signup", () => {
   });
 
   it("should fail to create the user if the request type was not SIGNUP", async () => {
-    mockUserReqRepo.create(notSignupUserReq);
+    await mockUserReqRepo.create(notSignupUserReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "get").mockImplementation(async () => notSignupUserReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(notSignupUserReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => notSignupUserReq);
@@ -80,7 +80,7 @@ describe("Create User API Test /api/signup", () => {
   });
 
   it("should fail to create the user if the request had a decision already made", async () => {
-    mockUserReqRepo.create(decisionMadeUserReq);
+    await mockUserReqRepo.create(decisionMadeUserReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "get").mockImplementation(async () => decisionMadeUserReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(decisionMadeUserReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => decisionMadeUserReq);
