@@ -12,7 +12,9 @@ import CreateSurvey from "../Screen/CreateSurvey"
 import Admin from "../Screen/Admin"
 const Drawer = createDrawerNavigator();
 
-
+const AppSurveyStack = createStackNavigator();
+const AppMainStack = createStackNavigator();
+const AdminDrawer = createDrawerNavigator();
 
 const SurveyStack = () => {
     return (
@@ -22,9 +24,56 @@ const SurveyStack = () => {
       <AppSurveyStack.Screen name="SurveyScreen" component={Survey}/>
       <AppSurveyStack.Screen name="SurveyBoard" component={SurveyBoard} />
       <AppSurveyStack.Screen name="SurveyStartBoard" component={SurveyStartBoard} />
+     
     </AppSurveyStack.Navigator>
        
     );
+  }
+
+  const AdminMainDrawer = () =>{
+    return (
+    
+        <Drawer.Navigator testID={"drawer"} tabBarTestID={"drawer"} id={"drawer"}
+        
+        screenOptions={{
+          overlayColor:"transparent",
+          drawerStyle:{
+            backgroundColor: "#5f6fc0"
+          },
+          screenOptions:{
+            backgroundColor: "black" ,
+            fontSize:"2em",
+            
+            width:250,
+          },
+          cardStyle: {
+            backgroundColor: '#7f92f0',
+         },
+        headerShown:false,
+        drawerActiveTintColor:"#26177d",
+        drawerLabelStyle:{
+          color:"#fff",
+          fontSize:20,
+          paddingLeft:10
+        }
+        
+        
+        }
+          
+        }
+    
+        drawerContent={props=><CustomDrawer {...props}  />}
+    
+    
+        
+        initialRouteName="AdminHome">
+        <Drawer.Screen name ="AdminHome" testID={"adminHomeID"} component={Admin} />
+        <Drawer.Screen name ="Create Survey" testID={"createsurvey"} component={CreateSurvey} />
+        
+        </Drawer.Navigator>
+        )
+       
+    
   }
 
   const MainDrawer = () =>{
@@ -71,8 +120,6 @@ const SurveyStack = () => {
     )
   }
 
-  const AppSurveyStack = createStackNavigator();
-  const AppMainStack = createStackNavigator();
 
   const MainStack = () =>{
     const {authState} = useAuth();
@@ -107,20 +154,20 @@ const SurveyStack = () => {
     initialRouteName="Home">
 
 
-<AppMainStack.Screen name ="CreateSurvey" component={CreateSurvey} /> 
+
      
 
-      { /*authState?.token ? (
+     {!authState?.token ? (
         authState?.role === "ADMIN" ? (
-          <AppMainStack.Screen name="Admin" component={Admin} />
+          <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
         ) : (
           <AppMainStack.Screen name="Home" component={MainDrawer} />
         )
       ) : (
         <AppMainStack.Screen name="Login" component={Login} />
-      )*/}
+      )
 
-     
+      }
      
       
     </AppMainStack.Navigator>

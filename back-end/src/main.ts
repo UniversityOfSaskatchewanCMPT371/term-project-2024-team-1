@@ -24,7 +24,7 @@ app.use("/api", userRoute); // confirm
 
 app.get("/", (req: Request, res: Response) => {
   logger.info("GET request received");
-  res.send("Hello World !!");
+  res.send("Service Active");
 });
 
 app.get("/dbHit", (req: Request, res: Response) => {

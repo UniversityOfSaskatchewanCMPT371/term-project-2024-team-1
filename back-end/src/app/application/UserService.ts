@@ -13,9 +13,9 @@ export class UserService {
     return this._userRepository.getAll();
   };
 
-  public async getById(userId: string): Promise<User | null> {
+  public async get(userIdEmail: string): Promise<User | null> {
     try {
-      return this._userRepository.getById(userId);
+      return this._userRepository.get(userIdEmail);
     } catch (error) {
       console.error("Failed to retrieve user by id: ", error);
       throw error;
