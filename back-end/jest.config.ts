@@ -23,7 +23,7 @@ const config: Config.InitialOptions = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    "src/app/**",
+    "src/app/**/*.ts",
     "!vendor/**/*.{js,jsx}",
     "!**/node_modules/**"
   ],
