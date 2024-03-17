@@ -50,7 +50,6 @@ export function authenticate(role: string) {
             return res.status(404).send("UserID not found");
           } else {
             if (user.isAdmin) {
-              console.log(user);
               next();
             } else if (role === USER) {
               next();
