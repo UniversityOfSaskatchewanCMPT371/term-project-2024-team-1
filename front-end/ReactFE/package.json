@@ -13,10 +13,14 @@
     "e2e-test": "jest e2e"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "jest-expo",
     "transform": {
       "^.+\\.(ts|tsx)$": "babel-jest"
     }
+  },
+  "detox": {
+    "test-runner": "jest",
+    "runnerConfig": "e2e/config.json"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
