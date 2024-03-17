@@ -25,7 +25,8 @@ services:
       - mysql
     command: >
       sh -c "
-        npm run integration-tests &&
-        npm run system-tests
+        npm run system-tests &&
+        npm run smoke-tests &&
+        npm run unit-tests
       "
 
