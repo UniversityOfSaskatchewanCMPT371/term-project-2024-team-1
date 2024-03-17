@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react-native";
 import Login from "../../app/Screen/Login"; // Update with the actual path to your Login component
 
-describe("<Login />", () => {
+describe("Login", () => {
   it("renders correctly", () => {
     const { getByTestId } = render(<Login />);
 

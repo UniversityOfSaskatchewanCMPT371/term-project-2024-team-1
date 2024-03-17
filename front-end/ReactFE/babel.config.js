@@ -3,8 +3,8 @@ module.exports = function (api) {
   return {
     presets: [
       ["@babel/preset-env", { targets: { node: "current" } }],
-      "@babel/p reset-typescript",
       ["babel-preset-expo"],
+      "@babel/preset-typescript",
     ],
     plugins: ["react-native-reanimated/plugin"],
   };
