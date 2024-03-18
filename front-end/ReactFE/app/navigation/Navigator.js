@@ -12,13 +12,12 @@ import CreateSurvey from "../Screen/CreateSurvey"
 import Admin from "../Screen/Admin"
 
 import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin"
-const Drawer = createDrawerNavigator();
 
 
 
 
 /*Test constants */
-const runSurveyCreationTest = false;
+const runSurveyCreationTest = true;
 
 
 
