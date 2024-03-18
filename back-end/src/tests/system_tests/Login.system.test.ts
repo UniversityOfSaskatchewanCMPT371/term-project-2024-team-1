@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/typedef */
 import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
@@ -48,34 +49,68 @@ describe("Login System Test", () => {
     void mockUserRepo.create(adminUser1);
     void flushPromises();
   });
-  
-  it("should fail with if user password is incorrect", async () => {
+
+  it("should fail with if bcrypt comparison returns false", async () => {
     const loginInfo: object = { userIdEmail: user1.email, password: randomAlphanumString(15) };
     
-    jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
+    const userSQLGetSpy = jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
+    const bcryptCompareSpy = jest.spyOn(bcrypt, "compare");
 
     await request(app)
       .post("/api/login")
       .send(loginInfo)
       .expect(403);
+
+    const bcryptCompareSpyResult: Promise<boolean> = bcryptCompareSpy.mock.results[0].value;
+
+    expect(userSQLGetSpy).toHaveBeenCalled();
+    await expect(bcryptCompareSpyResult).resolves.toEqual(false);
   });
 
-  it("should be able to login with email", async () => {
+  it("should call to bcrypt compare with the request password and user password", async () => {
+    const randomPassword = randomAlphanumString(15);
+    const loginInfo: object = { userIdEmail: user1.email, password: randomPassword };
+    jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
+    const bcryptCompareSpy = jest.spyOn(bcrypt, "compare");
+
+    await request(app)
+      .post("/api/login")
+      .send(loginInfo);
+
+    expect(bcryptCompareSpy).toHaveBeenCalled();
+    expect(bcryptCompareSpy).toHaveBeenCalledWith(randomPassword, user1.password);
+  });
+
+  it("should call jwt.sign upon successful user verification", async () => {
     const loginInfo: object = { userIdEmail: user1.email, password: user1pw };
     
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
-    const accessToken = jwt.sign({ userId: user1.userId }, ACCESS_TOKEN_SECRET, { expiresIn: "5s" });
-    jest.spyOn(jwt, "sign").mockImplementation(() => {
-      return { userId: user1.userId, role: "USER", accessToken };
-    });
+    const jwtSignSpy = jest.spyOn(jwt, "sign");
+    
+    await request(app)
+      .post("/api/login")
+      .send(loginInfo)
+      .expect(200);
+    
+    expect(jwtSignSpy).toHaveBeenCalled();
+  });
+
+  it("should return true from bcrypt comparison if passwords match", async () => {
+    const loginInfo: object = { userIdEmail: user1.email, password: user1pw };
+    
+    jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
+    const bcryptCompareSpy = jest.spyOn(bcrypt, "compare");
     
     void flushPromises();
     await request(app)
       .post("/api/login")
       .send(loginInfo)
       .expect(200);
-      
+
+    expect(bcryptCompareSpy).toHaveBeenCalled();
+    expect(bcryptCompareSpy).toHaveBeenCalledWith(user1pw, user1.password);
   });
+
 
   it("should be able to login with userId", async () => {
     const loginInfo: object = { userIdEmail: user1.userId, password: user1pw };
@@ -92,10 +127,11 @@ describe("Login System Test", () => {
       .expect(200);
   });
   
-  it("should return auth token if user credentials are correct", async () => {
+  it("should call jwt.sign to get a valid accessToken for user", async () => {
     const loginInfo: object = { userIdEmail: user1.userId, password: user1pw };
     
     jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
+    // Mocking this out so the token doesn't actually last a long time; token expires after this test is done
     const accessToken = jwt.sign({ userId: user1.userId }, ACCESS_TOKEN_SECRET, { expiresIn: "5s" });
     jest.spyOn(jwt, "sign").mockImplementation(() => {
       return { userId: user1.userId, role: "USER", accessToken };
@@ -109,5 +145,6 @@ describe("Login System Test", () => {
     expect(requestResponse.body.userId).toBeDefined();
     expect(requestResponse.body.role).toBeDefined();
     expect(requestResponse.body.accessToken).toBeDefined();
+    expect(requestResponse.body.accessToken.accessToken).toEqual(accessToken);
   });
 });
