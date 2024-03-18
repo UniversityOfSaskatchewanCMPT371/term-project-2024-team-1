@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/typedef */
 import "reflect-metadata";
 import express, { Router, Request, Response, Express } from "express";
 import { Logger, configure, getLogger } from "log4js";
@@ -27,8 +28,11 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Service Active");
 });
 
-app.get("/dbHit", (req: Request, res: Response) => {
-  const result: Promise<string> = query("SELECT * FROM VetClinics");
+
+
+app.get("/insert", (req: Request, res: Response) => {
+  
+  const result: Promise<string> = query("SELECT * FROM Request");
   
   result.then(result => {
     console.log(result);
