@@ -120,7 +120,7 @@ const CreateSurveyQuestions = (props) => {
 
                 <TextInput
                     style={{ paddingLeft: 10, height: 40, width: "80%" }}
-                    placeholder="title for survey"
+                    placeholder="Question Name"
                     onChangeText={newText => setQuestionName(newText)}
                     value={questionName}
 

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import { ScreenStyles } from './Screen'
 import DrawerButton from '../navigation/CustomDrawerButton'
@@ -10,8 +10,8 @@ import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
 const CreateSurvey = ({ navigation }) => {
 
     const [surveyTitle, setSurveyTitle] = useState("")
-
-
+    const [modalText, setModalText] = useState("")
+    const [modalVisible, setModalVisible] = useState(false);
 
     const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": -1, "MC":[] }])
     const createQuestionRef = useRef(null);
@@ -21,8 +21,12 @@ const CreateSurvey = ({ navigation }) => {
 
 
     const triggerDone = () => {
-        createQuestionRef.current.triggerDone();
 
+      
+        if(surveyTitle === "") { setModalText("Survey Title cant be empty"); setModalVisible(true);}
+        else
+        createQuestionRef.current.triggerDone();
+       
     }
 
     const convertToNested = (questionInfo, index) => {
@@ -34,6 +38,21 @@ const CreateSurvey = ({ navigation }) => {
         currentQuestions[index] = questionInfo;
         currentQuestions.map(a => a["children"] = [])
 
+
+
+        let valid = true;
+        
+        for(let i =0; i<currentQuestions.length;i++){
+            if(currentQuestions[i].questionName===""){
+                valid = false;
+                break;
+            }
+        }
+        if(!valid){
+            setModalText("Survey question cant be empty"); 
+        setModalVisible(true);
+        return
+        }
         let questionConvert = []
 
 
@@ -248,7 +267,7 @@ const CreateSurvey = ({ navigation }) => {
         let currentQuestions = [...surveyQuestions]
 
      
-
+        console.log(index)
         for (let i = index + 1; i < currentQuestions.length; i++) {
             currentQuestions[i].index -= 1;
             if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > index) {
@@ -262,7 +281,7 @@ const CreateSurvey = ({ navigation }) => {
         }
 
 
-    
+        currentQuestions.splice(index,1);
 
         if (index > 0) {
             switchQuestion(-1);
@@ -415,6 +434,28 @@ const CreateSurvey = ({ navigation }) => {
 
                 </TouchableOpacity>
             </View>
+
+
+            <Modal
+        animationType="slide"
+        style={{height:400, flex:1}}
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+        
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={{ flex:1, justifyContent:"center", alignItems:"center", paddingBottom:20, height:200,backgroundColor: "rgba(225,229,245,255)"}}>
+          <View style={{flex:1,justifyContent:"center", alignItems:"center", height:200, width:"80%", borderRadius:10,backgroundColor: "rgba(225,229,245,255)"}}>
+            <Text style={{fontSize:20, marginBottom:40}}>{modalText}</Text>
+            <TouchableOpacity
+              style={{ width:100, padding:10, backgroundColor: "blue",   }}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={{ textAlign:"center", color:"white", fontSize:25}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
         </View>
     )
 }
