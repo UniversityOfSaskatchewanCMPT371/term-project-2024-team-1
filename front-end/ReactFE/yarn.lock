@@ -7121,6 +7121,16 @@ react-native-elements@^3.4.3:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-logger@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/react-native-logger/-/react-native-logger-1.0.3.tgz"
+  integrity sha512-jhqr1+eycDDSDsPhh1T1S/7eDcziycBNg/JDS8yqBiYCaNI7c9hJSkj2LLgtt9UIh8+P1k0M/zXLX1JN+uoLQA==
+
+react-native-logs@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/react-native-logs/-/react-native-logs-5.1.0.tgz"
+  integrity sha512-bnTDoML/xH2V16ica6q4OJN7LIT0yz9mgeiAR1l3lvMTV6qfPGpiyy1G39mNfVorGIh3KbMLd6Av8dE2Pc33yA==
+
 react-native-modal-datetime-picker@^17.1.0:
   version "17.1.0"
   resolved "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-17.1.0.tgz"

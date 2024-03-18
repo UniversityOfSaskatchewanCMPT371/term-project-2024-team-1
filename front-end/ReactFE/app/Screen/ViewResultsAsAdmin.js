@@ -6,6 +6,12 @@ import { ScreenStyles } from './Screen';
 import { useEffect, useState, useRef } from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import { date } from 'yup';
+import { logger } from "react-native-logs";
+
+const log = logger.createLogger();
+
+
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -33,7 +39,7 @@ export default function ViewResultsAsAdmin() {
     const [year, month, day] = reminderDate.split('-');
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
-
+    
     const triggerDate = new Date(
         parseInt(year),
         parseInt(month) - 1,
@@ -41,6 +47,7 @@ export default function ViewResultsAsAdmin() {
         parseInt(hours),
         parseInt(minutes)
     );
+
 
     const delayInSeconds = Math.floor((triggerDate.getTime() - Date.now()) / 1000);
 
@@ -51,7 +58,7 @@ export default function ViewResultsAsAdmin() {
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
+            log.info(response);
         });
 
         return () => {
@@ -61,17 +68,46 @@ export default function ViewResultsAsAdmin() {
 
     }, [])
 
-
+    // Preconditions: Ensure the required fields are not empty before scheduling a notification
     async function schedulePushNotification() {
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                title: remindTitle,
-                body: remindMessage,
-            },
-            trigger: { seconds: delayInSeconds },
-        });
+        try {
+            if (!reminderDate) {
+                log.warn('Reminder date is not set. Cannot schedule push notification.');
+                return;
+            }
+    
+            if (!reminderTime) {
+                log.warn('Reminder time is not set. Cannot schedule push notification.');
+                return;
+            }
+    
+            if (!remindTitle) {
+                log.warn('Reminder title is not set. Cannot schedule push notification.');
+                return;
+            }
+    
+            if (!remindMessage) {
+                log.warn('Reminder message is not set. Cannot schedule push notification.');
+                return;
+            }
+    
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: remindTitle,
+                    body: remindMessage,
+                },
+                trigger: { seconds: delayInSeconds },
+            });
+            log.info('Reminder Notification Created Successfully for', { triggerDate });
+        } catch (error) {
+            log.error('Error creating Reminder Notification', error);
+            log.warn('Failed to schedule push notification');
+            log.debug('Error details:', error);
+        }
     }
-
+    
+    
+    // Preconditions: Ensure proper permissions are granted before retrieving push token
     async function registerForPushNotificationsAsync() {
         let token;
 
@@ -97,7 +133,7 @@ export default function ViewResultsAsAdmin() {
             }
 
             token = (await Notifications.getExpoPushTokenAsync({ projectId: 'your-project-id' })).data;
-            console.log(token);
+            log.info(token);
         } else {
             alert('Must use physical device for Push Notifications');
         }
@@ -105,54 +141,102 @@ export default function ViewResultsAsAdmin() {
         return token;
     }
 
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Show the date picker
     const showDatePicker = () => {
-        setDatePickerVisibility(true);
+        try {
+            log.debug('Showing date picker');
+            setDatePickerVisibility(true);
+        } catch (error) {
+            log.error('Error while showing date picker:', error);
+        }
     };
 
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Hide the date picker 
     const hideDatePicker = () => {
-        setDatePickerVisibility(false);
+        try {
+            log.debug('Hiding date picker');
+            setDatePickerVisibility(false);
+        } catch (error) {
+            log.error('Error while hiding date picker:', error);
+        }
     };
-
+    
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Set the selected date as the reminder date
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
-        setReminderDate(date.toISOString().split('T')[0]);
-        hideDatePicker();
+        try {
+            log.debug('Confirming date:', date);
+            setReminderDate(date.toISOString().split('T')[0]);
+            hideDatePicker();
+        } catch (error) {
+            log.error('Error while confirming date:', error);
+        }
     };
-
+    
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Show the time picker
     const showTimePicker = () => {
-        setTimePickerVisibility(true);
+        try {
+            log.debug('Showing time picker');
+            setTimePickerVisibility(true);
+        } catch (error) {
+            log.error('Error while showing time picker:', error);
+        }
     };
-
+    
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Show the time picker
     const hideTimePicker = () => {
-        setTimePickerVisibility(false);
+        try {
+            log.debug('Hiding time picker');
+            setTimePickerVisibility(false);
+        } catch (error) {
+            log.error('Error while hiding time picker:', error);
+        }
     };
-
+    
+    // Preconditions: Reminder Modal must be opened
+    // Postconditions: Set the selected time as the reminder time
     const handleTimeConfirm = (time) => {
-        const formattedTime = time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-        setReminderTime(formattedTime);
-        hideTimePicker();
+        try {
+            const formattedTime = time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            log.debug('Confirming time:', formattedTime);
+            setReminderTime(formattedTime);
+            hideTimePicker();
+        } catch (error) {
+            log.error('Error while confirming time:', error);
+        }
     };
-
-
+    
+    // TO DO: Implement as part of download results feature
     const handleDownloadButton = async (id) => {
         try {
-            console.log('Download Button clicked', { id })
+            log.info('Download Button clicked', { id });
         } catch (error) {
-            console.error('Error during logout:', error);
+            log.error('Error during download button click:', error);
         }
-    }
-
+    };
+    
+    // Preconditions: Reminder Modal is closed
+    // Postconditions: Open the reminder modal
     const handleRemindButton = async (id) => {
         try {
+            log.info('Remind Button clicked', { id });
             setModalVisible(true);
         } catch (error) {
-            console.error('Error during logout:', error);
+            log.error('Error during remind button click:', error);
         }
-    }
+    };
+    
 
 
     
-
+    /*  Preconditions: id, onDownloadPress, and onRemindPress functions must be provided and working correctly
+                       styleSheet must contain required properties
+        PostConditions: Creates Components with buttons that triggers a download page or opens a Reminder Modal
+    */
     const surveyResultContainer = ({ id, onDownloadPress, onRemindPress }) => (
         <View style={styles.container} id={id}>
             <Text style={styles.Text}>Quarter {id} Survey</Text>
@@ -175,7 +259,16 @@ export default function ViewResultsAsAdmin() {
         </View>
     );
 
-    const confirmRemindModal = () => (
+    /*  
+    Preconditions: The confirmModalVisible, reminderDate, reminderTime, remindTitle, and remindMessage 
+    states must be provided and working correctly; styleSheet must contain required properties
+    PostConditions: The modal is opened with the confirmation message displaying the reminder details.
+    */
+    const confirmRemindModal = () => {
+        log.info('Opening ConfirmReminderModal for Survey');
+
+        return (
+
         <Modal
             animationType="slide"
             visible={confirmModalVisible}
@@ -207,16 +300,29 @@ export default function ViewResultsAsAdmin() {
             </View >
         </Modal>
     );
+    }
 
 
-    const reminderModal = ({ id }) => (
-        <Modal
-            animationType="scale"
-            visible={modalVisible}
-            onRequestClose={() => {
-                setModalVisible(!modalVisible);
-            }}
-        >
+    /*  
+        Preconditions: All needed states must be provided and working correctly; styleSheet must contain required properties
+        PostConditions: A reminder notification is scheduled when schedule button is clicked. Otherwise nothing when canceled button is clicked.
+    */
+    const reminderModal = ({ id }) => {
+        log.info('Opening reminderModal for Survey', { id });
+    
+        if (modalVisible) {
+            log.warn('reminderModal is visible unexpectedly');
+        }
+    
+        return (
+            <Modal
+                animationType="scale"
+                visible={modalVisible}
+                onRequestClose={() => {
+                    log.debug('Closing reminderModal');
+                    setModalVisible(!modalVisible);
+                }}
+            >
             <View style={[styles.centeredView, { padding: 20, height: '100%' }, { backgroundColor: '#8093F1' }]}>
                 <View style={[styles.modalView]}>
                     <Text style={[styles.Text, { paddingBottom: 15 }]}>Create Reminder for Quarter Survey {id}</Text>
@@ -264,7 +370,6 @@ export default function ViewResultsAsAdmin() {
                         <Text style={[styles.logoContainer]}>⏰</Text>
                         <TextInput
                             style={[styles.input, { marginLeft: 5 }]}
-                            // onChangeText={text => setReminderDate(text)}
                             editable={true}
                             onFocus={showTimePicker}
                             placeholder="HH-MM AM"
@@ -308,6 +413,7 @@ export default function ViewResultsAsAdmin() {
             </View>
         </Modal>
     )
+    }
 
     const styles = StyleSheet.create({
         container: {
