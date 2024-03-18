@@ -1,6 +1,6 @@
 FROM node:18.0.0-alpine AS base
 WORKDIR /usr/project/back-end
-EXPOSE 3000:3000
+EXPOSE 8080:8080
 
 ###########################################################################################################################################################################################
 
@@ -22,17 +22,13 @@ CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.jso
 
 ############################################################################################################################################################################################
 
-FROM base AS prod
-WORKDIR /usr/project/back-end
-COPY --from=build /usr/project/back-end/build ./build
-COPY package.json .
-COPY package-lock.json .
-RUN npm ci --omit=dev
+FROM build AS prod
 ENV NODE_ENV=production
-CMD npm run prod
+CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.json -m src/resources/database/migrations && npm run dev"]
+
 
 ############################################################################################################################################################################################
 
-# FROM build AS test
-# RUN npm run lint
-# RUN npm run test
+FROM build AS test
+RUN NODE_ENV=test
+CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.json -m src/resources/database/migrations && npm run test-app"]

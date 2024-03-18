@@ -24,7 +24,7 @@ services:
     env_file:
       - ./back-end/src/resources/development.env
     ports: 
-      - 3000:3000
+      - 8080:8080
     volumes: 
       - ./back-end:/usr/project/back-end
       - /usr/project/back-end/node_modules
