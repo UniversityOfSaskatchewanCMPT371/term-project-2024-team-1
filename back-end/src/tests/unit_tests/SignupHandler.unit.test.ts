@@ -5,15 +5,13 @@
 /* eslint-disable @typescript-eslint/indent */
 import "reflect-metadata";
 import { Request, Response } from "express";
-import { MockUserRepository } from "../mocked_repository/MockUserRepository";
+import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequestRepository";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
 import { container } from "tsyringe";
 import { SignUpHandler } from "@app/adapter/Controllers/Handlers/SignUpHandler";
 import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
 import { UserRequest } from "@app/domain/UserRequest";
 import { flushPromises } from "../common_test_code/util_test";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
@@ -21,7 +19,7 @@ import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 
 describe("LoginAuthHandler", () => {
-    const mockUserRepo: IUserRequestRepository = new MockUserRepository();
+    const mockUserRepo: IUserRequestRepository = new MockUserRequestRepository();
     container.register<IUserRequestRepository>(userRepoToken, { useValue: mockUserRepo });
     container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
     
