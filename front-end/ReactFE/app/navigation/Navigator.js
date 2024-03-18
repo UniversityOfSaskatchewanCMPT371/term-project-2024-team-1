@@ -15,7 +15,6 @@ import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin"
 
 
 
-
 /*Test constants */
 const runSurveyCreationTest = true;
 
