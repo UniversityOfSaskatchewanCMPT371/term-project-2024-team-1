@@ -33,6 +33,7 @@ const CreateSurvey = ({ navigation }) => {
 
         currentQuestions[index] = questionInfo;
         currentQuestions.map(a => a["children"] = [])
+
         let questionConvert = []
 
 
@@ -55,6 +56,7 @@ const CreateSurvey = ({ navigation }) => {
            
             
             
+
 
             if (parent != -1) {
                 questionConvert[parent]["children"].unshift({ ...questionConvert[i] })

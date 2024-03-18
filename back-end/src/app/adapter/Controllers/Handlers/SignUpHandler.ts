@@ -45,12 +45,13 @@ export class SignUpHandler implements IRouteHandler<boolean> {
 
   public async execute(req: Request): Promise<boolean> {
     const clinic: string = req.body.clinic;
+    const email: string = req.body.email;
     const dateCreated: Date = new Date();
 
     const rawPassword: string = req.body.password;
     const hashedPassword: string = this.hashPassword(rawPassword); 
 
-    const user: UserRequest = new UserRequest(0, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP);
+    const user: UserRequest = new UserRequest(0, email, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP, null);
     return this._userRequestService.create(user);
   };
 

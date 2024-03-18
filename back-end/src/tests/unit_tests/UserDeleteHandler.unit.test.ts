@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import "reflect-metadata";
 import { Request, Response } from "express";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { container } from "tsyringe";
 import { UserDeleteHandler } from "@app/adapter/Controllers/Handlers/UserDeleteHandler";
 import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "../common_test_code/util_test";
 import { UserService } from "@app/application/UserService";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { ILogger } from "@app/domain/interfaces/ILogger";

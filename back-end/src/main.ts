@@ -11,7 +11,7 @@ configure(log4jsConfig);
 
 registerAllDependencies();
 
-const app: Express = express();
+export const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");
@@ -39,8 +39,12 @@ app.get("/dbHit", (req: Request, res: Response) => {
 
 });
 
-app.listen(PORT, HOST, () => {
-  logger.error("Testing ERROR logs");
-  logger.debug("Testing DEBUG logs");
-  console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
-});
+if (NODE_ENV !== "test") {
+  app.listen(PORT, HOST, () => {
+    logger.error("Testing ERROR logs");
+    logger.debug("Testing DEBUG logs");
+    console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
+  });
+}
+
+export default app;

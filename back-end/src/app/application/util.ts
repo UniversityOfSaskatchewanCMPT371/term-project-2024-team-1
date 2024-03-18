@@ -63,6 +63,7 @@ export function authenticate(role: string) {
         });
 
       } catch (e) {
+        console.log(e);
         return res.status(401).send("Invalid authorization, please log in!");
       }
     } else {
