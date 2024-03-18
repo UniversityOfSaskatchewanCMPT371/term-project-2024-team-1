@@ -15,18 +15,20 @@ const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");
-// const surveyRoute: Router = require("@app/adapter/Controllers/UserController");
+const surveyRoute: Router = require("@app/adapter/Controllers/SurveyController");
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
 app.use(cors());
 app.use(express.json());
 app.use("/api", userRoute);
+app.use("/api", surveyRoute);
 
 app.get("/", (req: Request, res: Response) => {
   logger.info("GET request received");
   res.send("Service Active");
 });
+
 
 app.get("/dbHit", (req: Request, res: Response) => {
   const result: Promise<string> = query("SELECT * FROM VetClinics");

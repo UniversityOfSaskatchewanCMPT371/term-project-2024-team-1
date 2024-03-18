@@ -1,6 +1,7 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { Survey } from "@app/domain/Survey";
-import { SurveySQLRepository } from "/Users/aaryanpatel/Documents/cmpt371/casi/term-project-2024-team-1/back-end/src/app/adapter/SQLRepositories/Survey/SurveySQLRespository";
+import { SurveySQLRepository } from "../../../app/adapter/SQLRepositories/Survey/SurveySQLRespository";
+/* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
   query: jest.fn(),
@@ -17,7 +18,7 @@ describe("SurveySQLRepository", () => {
   describe("getAll", () => {
     const mockSurveys = [
       new Survey("Survey 1", new Date()),
-      new Survey("Survey 2", new Date()),
+      new Survey("Survey 2", new Date())
     ];
 
     it("should return an array of Survey objects", async () => {
