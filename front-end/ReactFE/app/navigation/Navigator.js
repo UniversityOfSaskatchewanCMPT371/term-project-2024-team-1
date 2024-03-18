@@ -11,6 +11,10 @@ import { useAuth } from "../context/AuthContext"
 import CreateSurvey from "../Screen/CreateSurvey"
 import Admin from "../Screen/Admin"
 
+import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin"
+const Drawer = createDrawerNavigator();
+
+
 
 
 /*Test constants */
