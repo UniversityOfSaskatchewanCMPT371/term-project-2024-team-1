@@ -15,12 +15,13 @@ const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");
+// const surveyRoute: Router = require("@app/adapter/Controllers/UserController");
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoute); // confirm
+app.use("/api", userRoute);
 
 app.get("/", (req: Request, res: Response) => {
   logger.info("GET request received");

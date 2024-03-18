@@ -1,4 +1,3 @@
-
 import { ADMIN, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
 import { container } from "tsyringe";

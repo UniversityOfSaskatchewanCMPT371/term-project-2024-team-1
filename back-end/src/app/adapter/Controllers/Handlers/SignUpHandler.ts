@@ -3,9 +3,7 @@ import { Request, Response } from "express";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { UserRequest } from "@app/domain/UserRequest";
-
 import bcrypt from "bcrypt";
-
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
