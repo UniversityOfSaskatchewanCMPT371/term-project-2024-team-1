@@ -29,10 +29,10 @@ export class SurveySQLRepository implements ISurveyRepository {
       if (data.length === 0) {
         return null;
       }
-      return data[0]; // Return the first survey if found
+      return data[0];
     } catch (error) {
       this._logger.error(error);
-      throw error; // Rethrow for consistency
+      throw error;
     }
   }
 

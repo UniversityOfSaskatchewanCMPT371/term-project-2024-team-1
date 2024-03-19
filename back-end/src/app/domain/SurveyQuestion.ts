@@ -1,30 +1,30 @@
 export class SurveyQuestion {
-  private readonly _id: number;
-  private _surveyId: number;
   private _question: string;
   private _standard: boolean;
   private _type: string;
+  private _parentId: number | null; // Updated to reflect possible null
 
-  public constructor(id: number, surveyId: number, question: string, standard: boolean, type: string) {
-    this._id = id;
-    this._surveyId = surveyId;
+  // Simplified to a single constructor signature for demonstration.
+  // If parentId is not provided, it defaults to null.
+  public constructor(question: string, standard: boolean, type: string, parentId?: number);
+  public constructor(question: string, standard: boolean, type: string, parentId: number) {
     this._question = question;
     this._standard = standard;
     this._type = type;
+    this._parentId = parentId ?? null; // If parentId is undefined, default to null
   }
 
-  public get id(): number {
-    return this._id;
+  // Getter reflects that _parentId can be null
+  public get parentId(): number | null {
+    return this._parentId;
   }
 
-  public get surveyId(): number {
-    return this._surveyId;
+  // Setter allows setting parentId, which could be improved to allow setting it to null explicitly if needed
+  public set parentId(addParentById: number | null) {
+    this._parentId = addParentById;
   }
 
-  public set surveyId(newSurveyId: number) {
-    this._surveyId = newSurveyId;
-  }
-
+  // Other getters and setters remain unchanged
   public get question(): string {
     return this._question;
   }

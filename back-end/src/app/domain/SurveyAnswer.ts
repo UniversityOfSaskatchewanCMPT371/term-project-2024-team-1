@@ -1,17 +1,15 @@
 export class SurveyAnswer {
-  private readonly _questionId: number;
+  private readonly _question: string;
   private readonly _id: number;
   private _answer: string;
-  private _note: string;
     
-  public constructor(id: number, questionID: number, answer: string, note: string) {
+  public constructor(id: number, answer: string, question: string) {
     this._id = id;
     this._answer = answer;
-    this._questionId = questionID;
-    this._note = note;
+    this._question = question;
   }
     
-  public get id(): number {
+  public get id(): number {       
     return this._id;
   }
 
@@ -23,15 +21,7 @@ export class SurveyAnswer {
     this._answer = newAnswer;
   }
 
-  public get questionID(): number {
-    return this._questionId;
-  }
-
-  public get note(): string {
-    return this._note;
-  }
-    
-  public set note(newNote: string) {
-    this._note = newNote;
+  public get question(): string {
+    return this._question;
   }
 }
