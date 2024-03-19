@@ -5,24 +5,28 @@
 /* eslint-disable @typescript-eslint/indent */
 import "reflect-metadata";
 import { Request, Response } from "express";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { container } from "tsyringe";
 import { LoginAuthHandler } from "@app/adapter/Controllers/Handlers/LoginAuthHandler";
-import { userRepoToken } from "@app/adapter/DependencyInjections";
+import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
 import { User } from "@app/domain/User";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "../common_test_code/util_test";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserService } from "@app/application/UserService";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 
 
 describe("LoginAuthHandler", () => {
     const mockUserRepo: IUserRepository = new MockUserRepository();
     container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
+    container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
+    
     const handler: LoginAuthHandler = container.resolve(LoginAuthHandler);
 
-    const mockUser: User = new User("clinic1", "test12345", "abc123@gmail.com", false, "password1");
+    const mockUser: User = new User("testClinic", "test12345", "test@gmail.com", false, "smkfomg452AM$");
     
     const mockAdmin: User = new User(
         "adminClinic",
@@ -168,7 +172,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 403 if password is not matched with userId", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -189,7 +193,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 403 if password is not matched with email", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.email, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.email, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -210,7 +214,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 500 if bcrypt.compare fails", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockResolvedValue(mockUser);
@@ -231,7 +235,7 @@ describe("LoginAuthHandler", () => {
 
     it("should fail with status code 404 if error occurs during getting user info", async() => { 
         // Setup 
-        const req: Request = { body: { userId: mockUser.userId, password: mockUser.password } } as any as Request;
+        const req: Request = { body: { userIdEmail: mockUser.userId, password: mockUser.password } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
         jest.spyOn(handler, "execute").mockRejectedValue("db error");

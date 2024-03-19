@@ -3,9 +3,7 @@ import { Request, Response } from "express";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { UserRequest } from "@app/domain/UserRequest";
-
 import bcrypt from "bcrypt";
-
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
@@ -45,12 +43,13 @@ export class SignUpHandler implements IRouteHandler<boolean> {
 
   public async execute(req: Request): Promise<boolean> {
     const clinic: string = req.body.clinic;
+    const email: string = req.body.email;
     const dateCreated: Date = new Date();
 
     const rawPassword: string = req.body.password;
     const hashedPassword: string = this.hashPassword(rawPassword); 
 
-    const user: UserRequest = new UserRequest(0, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP);
+    const user: UserRequest = new UserRequest(0, email, clinic, hashedPassword, RequestStatusEnum.AWAITING, dateCreated, RequestTypeEnum.SIGNUP, null);
     return this._userRequestService.create(user);
   };
 

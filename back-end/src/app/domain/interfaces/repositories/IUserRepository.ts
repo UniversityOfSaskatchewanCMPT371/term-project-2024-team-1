@@ -1,4 +1,3 @@
-
 import { User } from "@app/domain/User";
 
 export interface IUserRepository {

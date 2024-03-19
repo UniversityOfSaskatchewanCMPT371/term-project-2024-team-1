@@ -5,7 +5,6 @@ import { getLogger } from "log4js";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { ResultSetHeader } from "mysql2";
 
-
 export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
@@ -77,7 +76,5 @@ export class UserSQLRepository implements IUserRepository {
       this._logger.error(error);
       return Promise.reject(error);
     }
-  }
-
-  
+  } 
 }

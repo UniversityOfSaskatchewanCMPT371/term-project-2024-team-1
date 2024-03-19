@@ -113,14 +113,22 @@ const CreateSurveyQuestions = (props) => {
         <View style={[styles.container, { width: "100%" }]}>
 
             {/*survey input*/}
+<<<<<<< HEAD
             <View style={{ flex: 1, marginVertical: 20, borderRadius: 10, width: "80%", padding: 0, justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1 }}>
+=======
+            <View style={{ flex: 1, marginVertical: 10, borderRadius: 10, width: "80%", padding: 0, justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1 }}>
+>>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 
                 {/*dropDown */}
 
 
                 <TextInput
                     style={{ paddingLeft: 10, height: 40, width: "80%" }}
+<<<<<<< HEAD
                     placeholder="title for survey"
+=======
+                    placeholder="Question Name"
+>>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
                     onChangeText={newText => setQuestionName(newText)}
                     value={questionName}
 
@@ -133,7 +141,11 @@ const CreateSurveyQuestions = (props) => {
 
             {/*Inner blue box*/}
             <View style={{ flex: 8, height: "100%", width: "90%", borderRadius: 10, backgroundColor: "rgba(128,147,241,255)", alignItems: 'center', justifyContent: "center" }}>
+<<<<<<< HEAD
                 <View style={{ flex: 2, width: "100%", zIndex: 10, height: "100%", alignItems: "center", paddingTop: 5 }}>
+=======
+                <View style={{ flex: 2, width: "100%", zIndex: 10, height: "100%", alignItems: "center", paddingTop: 5,marginBottom:5 }}>
+>>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 
                     <Dropdown
 
