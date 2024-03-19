@@ -3,7 +3,6 @@ import "reflect-metadata";
 import express, { Router, Request, Response, Express } from "express";
 import { Logger, configure, getLogger } from "log4js";
 import { NODE_ENV, HOST, PORT } from "@resources/config";
-import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import log4jsConfig from "@resources/log4js-config.json";
 import { registerAllDependencies } from "@app/adapter/DependencyInjections";
 import cors from "cors";
