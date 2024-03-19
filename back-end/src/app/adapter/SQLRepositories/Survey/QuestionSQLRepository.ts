@@ -39,4 +39,15 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
     }
   }
 
+  async create(question: SurveyQuestion): Promise<boolean> {
+    try {
+      const isQuestionCreated: Promise<boolean> = query(this._createQuestionQuery,
+        [question.question, (question.standard ? 1 : 0).toString(), question.type, question.parentId.toString()]);
+      return isQuestionCreated;
+    } catch (error) {
+      this._logger.error(error);
+      return Promise.reject(error);
+    }
+  }
+
 }
