@@ -22,7 +22,7 @@ const surveyAddHandler: SurveyAddHandler = container.resolve(SurveyAddHandler);
 //   surveyGetHandler.hand(req, res);
 // });
 
-router.post("/survey", authenticate(ADMIN), (req: Request, res: Response) => {
+router.post("/survey", (req: Request, res: Response) => {
   void surveyAddHandler.handle(req, res);
 });
 
