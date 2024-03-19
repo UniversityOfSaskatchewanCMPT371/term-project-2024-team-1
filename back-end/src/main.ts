@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/typedef */
 import "reflect-metadata";
 import express, { Router, Request, Response, Express } from "express";
 import { Logger, configure, getLogger } from "log4js";
@@ -11,7 +12,7 @@ configure(log4jsConfig);
 
 registerAllDependencies();
 
-const app: Express = express();
+export const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
 const userRoute: Router = require("@app/adapter/Controllers/UserController");
@@ -29,21 +30,12 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Service Active");
 });
 
-
-app.get("/dbHit", (req: Request, res: Response) => {
-  const result: Promise<string> = query("SELECT * FROM VetClinics");
-  
-  result.then(result => {
-    console.log(result);
-    res.send(result[0]);
-  }).catch(error => {
-    console.log(error);
+if (NODE_ENV !== "test") {
+  app.listen(PORT, HOST, () => {
+    logger.error("Testing ERROR logs");
+    logger.debug("Testing DEBUG logs");
+    console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
   });
+}
 
-});
-
-app.listen(PORT, HOST, () => {
-  logger.error("Testing ERROR logs");
-  logger.debug("Testing DEBUG logs");
-  console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
-});
+export default app;

@@ -1,3 +1,4 @@
+import { expect } from 'detox';
 const mockSurveyData = [
   {
       id: '0',

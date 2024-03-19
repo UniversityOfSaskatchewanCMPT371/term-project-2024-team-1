@@ -29,6 +29,6 @@ CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.jso
 
 ############################################################################################################################################################################################
 
-# FROM build AS test
-# RUN npm run lint
-# RUN npm run test
+FROM build AS test
+RUN NODE_ENV=test
+CMD ["sh", "-c", "npx db-migrate up --config src/resources/database/database.json -m src/resources/database/migrations && npm run test-app"]

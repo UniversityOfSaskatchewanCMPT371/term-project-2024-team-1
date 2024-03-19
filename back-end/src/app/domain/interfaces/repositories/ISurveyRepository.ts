@@ -5,4 +5,6 @@ export interface ISurveyRepository {
   getSurvey: (surveyName: string) => Promise<Survey | null>;
   createSurvey: (survey: Survey) => Promise<boolean>;
   deleteSurvey: (surveyName: string) => Promise<boolean>;
+  addQuestions: (surveyId: number, question: SurveyQuestion[]) => Promise<boolean>;
+  deleteQuestions: (surveyId: number, questionIds: number[]) => Promise<boolean>;
 }
