@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable */
+
 import { UserRequestService } from "@app/application/UserRequestService";
 import { UserService } from "@app/application/UserService";
 import { UserRequest } from "@app/domain/UserRequest";

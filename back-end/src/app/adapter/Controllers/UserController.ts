@@ -8,7 +8,6 @@ import { SignUpHandler } from "./Handlers/SignUpHandler";
 import { CreateUserHandler } from "./Handlers/CreateUserHandler";
 
 
-
 const userGetAllHandler: UserGetAllHandler = container.resolve(UserGetAllHandler);
 const userDeleteHandler: UserDeleteHandler = container.resolve(UserDeleteHandler);
 const loginAuthHandler: LoginAuthHandler = container.resolve(LoginAuthHandler);

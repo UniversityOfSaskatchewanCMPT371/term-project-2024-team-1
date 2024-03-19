@@ -29,10 +29,5 @@ export class SurveyService {
     return this._surveyRepository.deleteSurvey(surveyName);
   };
 
-  public async createFakeSurvey(): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/typedef
-    const fakeSurvey = new Survey("Fake Survey", new Date());
-    return this._surveyRepository.createSurvey(fakeSurvey);
-  }
 }
 

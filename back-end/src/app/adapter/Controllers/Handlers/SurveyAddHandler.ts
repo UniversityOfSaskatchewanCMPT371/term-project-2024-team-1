@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { container, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
 import { getLogger } from "log4js";
+import { Survey } from "@app/domain/Survey";
+import { formatDateForSQL } from "@app/application/util";
 
 @injectable()
 export class SurveyAddHandler {
@@ -14,25 +16,25 @@ export class SurveyAddHandler {
   public async handle(req: Request, res: Response): Promise<void> {
     try {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const isSuccess: boolean = await this.execute(req);
-      if (isSuccess) {
+      if (await this.execute(req)) {
         res.status(200).send("Sample survey added successfully.");
       } else {
-        res.status(400).send("Failed to add sample survey."); // Adjust based on your logic
+        res.status(400).send("Failed to add sample survey.");
       }
     } catch (error) {
-      // Assuming all error handling is done within execute, this catch may be redundant
       res.status(500).send("Error occurred while adding sample survey.");
     }
   }
 
   private async execute(req: Request): Promise<boolean> {
     try {
-      // Directly return the result of createFakeSurvey, assuming it resolves to a boolean
-      return await this._surveyService.createFakeSurvey();
+      const surveyName: string = req.body.surveyName;
+      const dateCreated: string = formatDateForSQL(new Date());
+      const newSurvey: Survey = new Survey(surveyName, dateCreated);
+      return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
       this._logger.error("Error adding sample survey:", error);
-      throw error; // Rethrow the error to be handled in the calling method
+      throw error;
     }
   }
 }

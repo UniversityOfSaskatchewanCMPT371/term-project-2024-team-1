@@ -1,8 +1,8 @@
 export class Survey {
   private _surveyName: string;
-  private _dateCreated: Date;
+  private _dateCreated: string;
 
-  public constructor(surveyName: string, dateCreated: Date) {
+  public constructor(surveyName: string, dateCreated: string) {
     this._surveyName = surveyName;
     this._dateCreated = dateCreated;
   }
@@ -15,11 +15,11 @@ export class Survey {
     this._surveyName = newSurveyName;
   }
 
-  public get dateCreated(): Date {
+  public get dateCreated(): string {
     return this._dateCreated;
   }
 
-  public set dateCreated(newDateCreated: Date) {
+  public set dateCreated(newDateCreated: string) {
     this._dateCreated = newDateCreated;
   }
 }
