@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Modal,ScrollView } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import { ScreenStyles } from './Screen'
 import DrawerButton from '../navigation/CustomDrawerButton'
@@ -299,6 +299,7 @@ const CreateSurvey = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#7f92f0" }}>
+             <ScrollView style={{ flexGrow: 1, width:"100%",}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center', width:"100%" }}>
 
             <DrawerButton />
 
@@ -378,7 +379,7 @@ const CreateSurvey = ({ navigation }) => {
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
 
                         {currentSurveyIndex > 0 &&
-                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
                                 onPress={() => switchQuestion(-1)}>
                                 <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"<-"} </Text>
                             </TouchableOpacity>
@@ -386,7 +387,7 @@ const CreateSurvey = ({ navigation }) => {
                     </View>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
-                        <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                        <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
                             onPress={() => addNewQuestion()}>
                             <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>+</Text>
                         </TouchableOpacity>
@@ -394,7 +395,7 @@ const CreateSurvey = ({ navigation }) => {
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
 
                         {currentSurveyIndex < surveyQuestions.length - 1 &&
-                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
+                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
                                 onPress={() => switchQuestion(1)}>
                                 <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"->"}</Text>
                             </TouchableOpacity>
@@ -456,6 +457,7 @@ const CreateSurvey = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+      </ScrollView>
         </View>
     )
 }
