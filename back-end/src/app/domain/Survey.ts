@@ -1,29 +1,25 @@
-import { SurveyQuestion } from "./SurveyQuestion";
-
 export class Survey {
-  private readonly _surveyId: number;
-  private readonly _questions: SurveyQuestion[]; 
-  private _dueDate: Date;
+  private _surveyName: string;
+  private _dateCreated: Date;
 
-  public constructor(surveyId: number, questions: SurveyQuestion[], dueDate: Date) {
-    this._surveyId = surveyId;
-    this._questions = questions;
-    this._dueDate = dueDate;
+  public constructor(surveyName: string, dateCreated: Date) {
+    this._surveyName = surveyName;
+    this._dateCreated = dateCreated;
   }
 
-  public get surveyId(): number {
-    return this._surveyId;
+  public get surveyName(): string {
+    return this._surveyName;
   }
 
-  public get questions(): SurveyQuestion[] {
-    return this._questions;
+  public set surveyName(newSurveyName: string) {
+    this._surveyName = newSurveyName;
   }
 
-  public get dueDate(): Date {
-    return this._dueDate;
+  public get dateCreated(): Date {
+    return this._dateCreated;
   }
 
-  public set dueDate(newDate: Date) {
-    this._dueDate = newDate;
+  public set dateCreated(newDateCreated: Date) {
+    this._dateCreated = newDateCreated;
   }
 }

@@ -1,32 +1,51 @@
-import { SurveyAnswer } from "./SurveyAnswer";
-
 export class SurveyQuestion {
   private readonly _id: number;
-  private readonly _question: string;
-  private readonly _answer: SurveyAnswer;
-  private readonly _childQuestions: SurveyQuestion[];
-    
-  public constructor(id: number, question: string, childQuestions: SurveyQuestion[], answer?: SurveyAnswer);
-  public constructor(id: number, question: string, childQuestions: SurveyQuestion[], answer: SurveyAnswer) {
+  private _surveyId: number;
+  private _question: string;
+  private _standard: boolean;
+  private _type: string;
+
+  public constructor(id: number, surveyId: number, question: string, standard: boolean, type: string) {
     this._id = id;
+    this._surveyId = surveyId;
     this._question = question;
-    this._childQuestions = childQuestions;
-    this._answer = answer ?? null;
+    this._standard = standard;
+    this._type = type;
   }
-    
+
   public get id(): number {
     return this._id;
+  }
+
+  public get surveyId(): number {
+    return this._surveyId;
+  }
+
+  public set surveyId(newSurveyId: number) {
+    this._surveyId = newSurveyId;
   }
 
   public get question(): string {
     return this._question;
   }
 
-  public get childQuestions(): SurveyQuestion[] {
-    return this._childQuestions;
+  public set question(newQuestion: string) {
+    this._question = newQuestion;
   }
 
-  public get answer(): SurveyAnswer {
-    return this._answer;
+  public get standard(): boolean {
+    return this._standard;
+  }
+
+  public set standard(isStandard: boolean) {
+    this._standard = isStandard;
+  }
+
+  public get type(): string {
+    return this._type;
+  }
+
+  public set type(newType: string) {
+    this._type = newType;
   }
 }
