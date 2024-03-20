@@ -6,9 +6,9 @@ import { ADMIN, USER, authenticate, nullOrUndefined, randomAlphanumString } from
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
-import { MockUserRepository } from "./mocked_repository/MockUserRepository";
+import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import jwt from "jsonwebtoken";
-import { flushPromises } from "./common_test_code/util_test";
+import { flushPromises } from "../common_test_code/util_test";
 import { User } from "@app/domain/User";
 
 describe("util functions test", () => {
@@ -77,7 +77,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId: "FakeUserId" };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(null);
+      jest.spyOn(mockUserRepo, "get").mockResolvedValue(null);
       
 
       // Action
@@ -101,7 +101,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, true));
+      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -124,7 +124,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, true));
+      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -148,7 +148,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
+      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action
@@ -172,7 +172,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
+      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action
@@ -195,7 +195,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "getById").mockRejectedValue("db error");
+      jest.spyOn(mockUserRepo, "get").mockRejectedValue("db error");
       
 
       // Action

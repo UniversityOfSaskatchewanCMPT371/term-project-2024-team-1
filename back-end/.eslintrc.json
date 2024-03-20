@@ -10,7 +10,7 @@
     },
     "rules": {
       "semi": ["error", "always"],
-      "quotes": ["error", "double"],
+      "quotes": ["error", "double", { "allowTemplateLiterals": true }],
       "padded-blocks": "off",
       "no-trailing-spaces": "off",
       "no-multiple-empty-lines": "off",

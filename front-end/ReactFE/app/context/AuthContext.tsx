@@ -6,13 +6,13 @@ import * as SecureStore from 'expo-secure-store';
 
 interface AuthProps {
     authState?: {userId: string | null, role: string | null, token: string | null};
-    onLogin?: (userId: string, password: string) => Promise<any>;
+    onLogin?: (userIdEmail: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
 
 const TOKEN_KEY = 'casi-jwt';
-const IPV4_ADDRESS = "10.0.0.15";
-export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
+const IPV4_ADDRESS = "10.237.243.118";
+// export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -47,20 +47,22 @@ export const AuthProvider = ({children}: any) =>{
         loadToken();
     }, [])
 
-    const login = async (userId: string, password: string) => {
+    const login = async (userIdEmail: string, password: string) => {
         try{
-            axios.post(API_URL, {userId, password})
+            axios.post(`http://${IPV4_ADDRESS}:3000/api/login`, {userIdEmail, password})
             .then(async (response) => {
-                const result = response.data;
-                if(result.accessToken){
-                    setAuthState({
-                        userId: result.userId,
-                        role: result.role,
-                        token: result.accessToken
-                    });
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
-                    await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, role: result.role, userId: result.userId }));
-                    return result;
+                if(response){ 
+                    const result = response.data;
+                    if(result.accessToken){
+                        setAuthState({
+                            userId: result.userId,
+                            role: result.role,
+                            token: result.accessToken
+                        });
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${result.accessToken}`;
+                        await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify({ accessToken: result.accessToken, role: result.role, userId: result.userId }));
+                        return result;
+                    }
                 }
             })
             .catch(error => {
@@ -83,10 +85,37 @@ export const AuthProvider = ({children}: any) =>{
         });
     };
 
+    const signUp = async (email, password, clinic, agreeToEthics) => {
+        try {
+          const response = await fetch(`http://${IPV4_ADDRESS}:3000/request/signup`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+              clinic,
+              agreeToEthics,
+            }),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Registration failed: ${response.statusText}`);
+          }
+      
+          const data = await response.json();
+          return data; // use this to return success,jwt,or failure 
+        } catch (error) {
+          throw new Error(`Network error: ${error.message}`);
+        }
+      };
+
 
     const value = {
         onLogin: login,
         onLogout: logout, 
+        onSignup: signUp,
         authState
     };
 

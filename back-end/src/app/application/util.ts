@@ -45,7 +45,7 @@ export function authenticate(role: string) {
         assert(!nullOrUndefined(result.userId), "UserId should not be null or undefined if we've successfully decrypted the payload");
         const callerUserId: string = result.userId;
         
-        userService.getById(callerUserId).then(user => {
+        userService.get(callerUserId).then(user => {
           if (nullOrUndefined(user)) {
             return res.status(404).send("UserID not found");
           } else {
@@ -63,6 +63,7 @@ export function authenticate(role: string) {
         });
 
       } catch (e) {
+        console.log(e);
         return res.status(401).send("Invalid authorization, please log in!");
       }
     } else {
@@ -70,3 +71,16 @@ export function authenticate(role: string) {
     }
   };
 }
+
+
+export function formatDateForSQL(date: Date): string {
+  const year: string = date.getUTCFullYear().toString();
+  const month: string = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+  const day: string = date.getUTCDate().toString().padStart(2, "0");
+  const hours: string = date.getUTCHours().toString().padStart(2, "0");
+  const minutes: string = date.getUTCMinutes().toString().padStart(2, "0");
+  const seconds: string = date.getUTCSeconds().toString().padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
