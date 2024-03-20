@@ -1,11 +1,11 @@
 import { ADMIN, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
-import { container, injectable } from "tsyringe";
-import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
-import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
+import { injectable } from "tsyringe";
+import { CreateUserHandler } from "./Handlers/CreateUserHandler";
 import { LoginAuthHandler } from "./Handlers/LoginAuthHandler";
 import { SignUpHandler } from "./Handlers/SignUpHandler";
-import { CreateUserHandler } from "./Handlers/CreateUserHandler";
+import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
+import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
 
 
 @injectable()
@@ -30,7 +30,7 @@ export class UserController {
       this._userDeleteHandler.handle(req, res);
     });
       
-    this._router.post("/signup", authenticate(ADMIN), (req: Request, res: Response) => {
+    this._router.patch("/user/request/:requestId", authenticate(ADMIN), (req: Request, res: Response) => {
       this._createUserHandler.handle(req, res);
     });
       
