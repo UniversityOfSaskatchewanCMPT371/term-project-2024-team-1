@@ -1,6 +1,7 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { Survey } from "@app/domain/Survey";
 import { SurveySQLRepository } from "../../../app/adapter/SQLRepositories/Survey/SurveySQLRespository";
+import { formatDateForSQL } from "@app/application/util";
 /* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
@@ -17,8 +18,8 @@ describe("SurveySQLRepository", () => {
 
   describe("getAll", () => {
     const mockSurveys = [
-      new Survey("Survey 1", new Date()),
-      new Survey("Survey 2", new Date())
+      new Survey("Survey 1", formatDateForSQL(new Date())),
+      new Survey("Survey 2", formatDateForSQL(new Date()))
     ];
 
     it("should return an array of Survey objects", async () => {
@@ -35,7 +36,7 @@ describe("SurveySQLRepository", () => {
   });
 
   describe("getSurvey", () => {
-    const mockSurvey = new Survey("Survey 1", new Date());
+    const mockSurvey = new Survey("Survey 1", formatDateForSQL(new Date()));
 
     it("should return a Survey object when found", async () => {
       (query as jest.Mock).mockResolvedValueOnce([[mockSurvey], undefined]);
@@ -52,7 +53,7 @@ describe("SurveySQLRepository", () => {
   });
 
   describe("createSurvey", () => {
-    const newSurvey = new Survey("New Survey", new Date());
+    const newSurvey = new Survey("New Survey", formatDateForSQL(new Date()));
 
     it("should return true on successful creation", async () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
