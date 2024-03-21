@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 import Survey from "./Survey";
 import { ScrollView } from "react-native-gesture-handler";
 
-const SurveyCompleted = () => {
-  const navigation = useNavigation();
+const LandingPage = ({navigation}) => {
+  
 
   const handleTakeSurvey = () => {
     
@@ -77,4 +77,5 @@ const style = StyleSheet.create({
     textDecorationLine: 'underline',
   }
 });
-export default SurveyCompleted;
+
+export default LandingPage;
