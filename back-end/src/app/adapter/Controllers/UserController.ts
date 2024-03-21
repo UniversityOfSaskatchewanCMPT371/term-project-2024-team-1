@@ -24,7 +24,7 @@ router.delete("/user/:userId", authenticate(ADMIN), (req: Request, res: Response
   userDeleteHandler.handle(req, res);
 });
 
-router.post("/signup", authenticate(ADMIN), (req: Request, res: Response) => {
+router.post("/user/request", authenticate(ADMIN), (req: Request, res: Response) => {
   createUserHandler.handle(req, res);
 });
 
