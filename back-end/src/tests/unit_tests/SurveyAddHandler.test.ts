@@ -8,6 +8,11 @@
 // import { container } from "tsyringe";
 // import { surveyRepoToken } from "@app/adapter/DependencyInjections";
 
+describe("Fake test", () => {
+  it("fake test...", () => {
+
+  });
+});
 // describe("SurveyAddHandler Tests", () => {
 //   beforeEach(() => {
 //     container.clearInstances();
