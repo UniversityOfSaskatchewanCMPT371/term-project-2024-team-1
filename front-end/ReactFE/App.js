@@ -13,7 +13,7 @@ const App = () => {
     <Index id={'welcome'}/>
     </SafeAreaView>
     <StatusBar style="default"  hidden={false} translucent={false}showHideTransition={false} barStyle={"rgba(127, 17, 224, 1)"} />
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
+
   </AuthProvider>;
 };
 

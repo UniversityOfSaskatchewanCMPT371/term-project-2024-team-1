@@ -1,7 +1,7 @@
 import { View, Text, Button, TouchableOpacity } from "react-native";
 import React from "react";
 import { ScreenStyles } from "./Screen";
-import DrawerButton from "../components/navigation/CustomDrawerButton";
+import DrawerButton from "../navigation/CustomDrawerButton";
 
 import axios from "axios"; // Add this line to import axios
 import { useAuth } from "../context/AuthContext";

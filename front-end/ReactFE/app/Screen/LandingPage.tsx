@@ -4,6 +4,7 @@ import { ScreenStyles } from "./Screen";
 import DrawerButton from "../navigation/CustomDrawerButton";
 import { useNavigation } from "@react-navigation/native";
 import Survey from "./Survey";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SurveyCompleted = () => {
   const navigation = useNavigation();
@@ -13,17 +14,23 @@ const SurveyCompleted = () => {
   };
 
   return (
-    <View style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
+      <View style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
+         
       <DrawerButton />
       <Text style={style.title}>CASI</Text>
       <Text style={style.paragraph}>
-        Welcome to the western Canadian specific Companion Animal Surveillance Initiative. We greatly appreciate your participation! This initiative recognizes the importance of understanding current zoonotic disease occurrence in animals that share our homes, our food/water and our beds. Surveillance of selected companion animal diseases will provide baseline information upon which to evaluate changes over time, specifically those driven by external forces (i.e. climate-driven diseases, or even social contexts).
+              Welcome to the western Canadian specific Companion Animal Surveillance Initiative.
+              We greatly appreciate your participation!
+              {"\n"}
+              This initiative recognizes the importance of understanding current zoonotic disease occurrence in animals that share our homes, our food/water and our beds.
+              {"\n"}
+              Surveillance of selected companion animal diseases will provide baseline information upon which to evaluate changes over time, specifically those driven by external forces (i.e. climate-driven diseases, or even social contexts).
         {"\n\n"}
               Thank you for your cooperation.
               {"\n\n"}
           </Text>
         <Text style={style.about}>
-          About <Text style={style.aboutLink}>More info in About.</Text>
+          More info in <Text style={style.aboutLink}>About.</Text>
         </Text>
       <TouchableOpacity
         testID="takeSurveyButton"
@@ -31,7 +38,8 @@ const SurveyCompleted = () => {
         onPress={handleTakeSurvey}
       >
         <Text style={style.takeSurveyButtonText}>Take Survey</Text>
-      </TouchableOpacity>
+          </TouchableOpacity>
+          
     </View>
   );
 };
@@ -45,7 +53,8 @@ const style = StyleSheet.create({
   paragraph: {
     fontSize: 14,
     color: "#ffffff",
-    textAlign: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   takeSurveyButton: {
     backgroundColor: "blue", 
