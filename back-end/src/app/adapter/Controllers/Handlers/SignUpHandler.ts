@@ -1,19 +1,22 @@
-import { container, injectable } from "tsyringe";
-import { Request, Response } from "express";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { UserRequest } from "@app/domain/UserRequest";
+import { Request, Response } from "express";
+import { injectable } from "tsyringe";
+
 import bcrypt from "bcrypt";
+
+import { nullOrUndefined } from "@app/application/util";
+import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
-import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
-import { nullOrUndefined } from "@app/application/util";
 
 @injectable()
 export class SignUpHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SignUpHandler.name);
 
+  // constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService) {
   constructor(private readonly _userRequestService: UserRequestService) {
     // this._userRequestService = container.resolve(UserRequestService);
   }

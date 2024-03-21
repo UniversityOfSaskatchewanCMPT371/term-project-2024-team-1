@@ -1,17 +1,17 @@
 import { UserService } from "@app/application/UserService";
-import { User } from "@app/domain/User";
 import { nullOrUndefined } from "@app/application/util";
-import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
-import { configure } from "log4js";
-import log4jsConfig from "@resources/log4js-config.json";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET } from "@resources/config";
-import assert from "assert";
-import { ILogger } from "@app/domain/interfaces/ILogger";
+import { User } from "@app/domain/User";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import { ACCESS_TOKEN_SECRET } from "@resources/config";
+import log4jsConfig from "@resources/log4js-config.json";
+import assert from "assert";
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { configure } from "log4js";
+import { injectable } from "tsyringe";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 
@@ -21,6 +21,7 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
   
   private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
 
+  // constructor(@inject(delay(() => UserService)) private readonly _userService: UserService) {
   constructor(private readonly _userService: UserService) {
     // this._userService = container.resolve(UserService);
   }

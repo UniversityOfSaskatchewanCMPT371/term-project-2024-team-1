@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { Lifecycle, container } from "tsyringe";
+import { Lifecycle, container, delay } from "tsyringe";
 import { UserSQLRepository } from "./SQLRepositories/User/UserSQLRepository";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Log4jsLogger } from "./Loggers/Log4jsLogger";
@@ -23,6 +23,15 @@ export function registerAllDependencies(): void {
   container.register<ISurveyRepository>(surveyRepoToken, { useClass: SurveySQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRequestRepository>(userReqRepoToken, { useClass: UserRequestSQLRepository }, { lifecycle: Lifecycle.Singleton });
+  // container.registerSingleton<IUserRepository>(
+  //   userRepoToken,
+  //   delay(() => UserSQLRepository)
+  // );
+  // container.registerSingleton<IUserRequestRepository>(
+  //   userReqRepoToken,
+  //   delay(() => UserRequestSQLRepository)
+  // );
+
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   console.log("Registered all dependencies");
 }
