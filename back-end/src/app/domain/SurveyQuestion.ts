@@ -1,15 +1,21 @@
 export class SurveyQuestion {
+  private readonly _id: number;
+  private _parentId: number;
   private _question: string;
   private _standard: boolean;
   private _type: string;
-  private _parentId: number;
 
-  public constructor(question: string, standard: boolean, type: string, parentId?: number);
-  public constructor(question: string, standard: boolean, type: string, parentId: number) {
+  public constructor(id: number, question: string, standard: boolean, type: string, parentId?: number)
+  public constructor(id: number, question: string, standard: boolean, type: string, parentId: number) {
+    this._id = id;
     this._question = question;
     this._standard = standard;
     this._type = type;
     this._parentId = parentId ?? null;
+  }
+
+  public get id(): number {
+    return this._id;
   }
 
   public get question(): string {
