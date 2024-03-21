@@ -72,7 +72,6 @@ export function authenticate(role: string) {
   };
 }
 
-
 export function formatDateForSQL(date: Date): string {
   const year: string = date.getUTCFullYear().toString();
   const month: string = (date.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -83,4 +82,3 @@ export function formatDateForSQL(date: Date): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
-
