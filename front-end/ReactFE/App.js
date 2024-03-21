@@ -9,10 +9,6 @@ import * as SplashScreen from 'expo-splash-screen';
 const App = () => {
   return <AuthProvider>
     
-<<<<<<< HEAD
-    <Index id={'welcome'}/>
-    <StatusBar style="light" hidden={false} translucent={false} />
-=======
     <SafeAreaView style={{flex:1}}>
     <Index id={'welcome'}/>
     </SafeAreaView>
