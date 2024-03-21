@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
 import { getLogger } from "log4js";
 import { Survey } from "@app/domain/Survey";
@@ -9,8 +9,8 @@ import { formatDateForSQL } from "@app/application/util";
 export class SurveyAddHandler {
   private readonly _logger = getLogger(SurveyAddHandler.name);
 
-  constructor(private readonly _surveyService: SurveyService) {
-    this._surveyService = container.resolve(SurveyService);
+  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
+    // this._surveyService = container.resolve(SurveyService);
   }
   
   public async handle(req: Request, res: Response): Promise<void> {

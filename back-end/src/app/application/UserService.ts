@@ -1,11 +1,12 @@
 import { userRepoToken } from "@app/adapter/DependencyInjections";
+import { UserSQLRepository } from "@app/adapter/SQLRepositories/User/UserSQLRepository";
 import { User } from "@app/domain/User";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { inject, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 
 @injectable()
 export class UserService {
-  constructor(@inject(userRepoToken) private readonly _userRepository: IUserRepository) {
+  constructor(@inject(delay(() => UserSQLRepository)) private readonly _userRepository: IUserRepository) {
 
   }
 

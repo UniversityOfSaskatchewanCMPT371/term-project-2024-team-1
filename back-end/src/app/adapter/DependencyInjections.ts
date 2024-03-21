@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { Lifecycle, container, delay } from "tsyringe";
+import { Lifecycle, container } from "tsyringe";
 import { UserSQLRepository } from "./SQLRepositories/User/UserSQLRepository";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Log4jsLogger } from "./Loggers/Log4jsLogger";

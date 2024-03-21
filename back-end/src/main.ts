@@ -1,9 +1,10 @@
+import { SurveyController } from "@app/adapter/Controllers/SurveyController";
 import { UserController } from "@app/adapter/Controllers/UserController";
 import { registerAllDependencies } from "@app/adapter/DependencyInjections";
 import { HOST, NODE_ENV, PORT } from "@resources/config";
 import log4jsConfig from "@resources/log4js-config.json";
 import cors from "cors";
-import express, { Express, Request, Response, Router } from "express";
+import express, { Express, Request, Response } from "express";
 import { Logger, configure, getLogger } from "log4js";
 import "reflect-metadata";
 import { container } from "tsyringe";
@@ -15,7 +16,7 @@ registerAllDependencies();
 export const app: Express = express();
 const logger: Logger = getLogger("info"); // logger for info
 
-const surveyRoute: Router = require("@app/adapter/Controllers/SurveyController");
+const surveyController: SurveyController = container.resolve(SurveyController);
 const userController: UserController = container.resolve(UserController);
 
 // const userRoute: Router = require("@app/adapter/Controllers/UserController");
@@ -24,7 +25,7 @@ console.log(`NODE_ENV=${NODE_ENV}`);
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", surveyRoute);
+app.use("/api", surveyController.getController());
 app.use("/api", userController.getController()); // confirm
 
 app.get("/", (req: Request, res: Response) => {
