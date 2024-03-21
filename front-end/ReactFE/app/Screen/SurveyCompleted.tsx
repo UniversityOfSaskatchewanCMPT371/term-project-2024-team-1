@@ -1,7 +1,7 @@
 import { View, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { ScreenStyles } from "./Screen";
-import DrawerButton from "../components/navigation/CustomDrawerButton";
+import DrawerButton from "../navigation/CustomDrawerButton";
 import { useNavigation } from "@react-navigation/native";
 import Survey from "./Survey";
 

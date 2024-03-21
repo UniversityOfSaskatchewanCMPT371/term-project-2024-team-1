@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { ScreenStyles } from "./Screen";
-import DrawerButton from "./navigation/CustomDrawerButton";
+import DrawerButton from "../navigation/CustomDrawerButton";
 export default function Profile(props) {
   console.log(props.testID);
   return (

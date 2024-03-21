@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 import { ScreenStyles } from "./Screen";
 import { useNavigation } from "@react-navigation/native";
-import Paginator from "./navigation/Paginator";
+import Paginator from "../navigation/Paginator";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
 

@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
-=======
 import { View, Text, TouchableOpacity, TextInput, Modal,ScrollView } from 'react-native'
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 import React, { useState, useRef, useEffect } from 'react'
 import { ScreenStyles } from './Screen'
-import DrawerButton from './navigation/CustomDrawerButton'
+import DrawerButton from '../navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
 import CreateSurveyQuestions from './CreateSurveyQuestions'
 import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
@@ -14,13 +10,8 @@ import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
 const CreateSurvey = ({ navigation }) => {
 
     const [surveyTitle, setSurveyTitle] = useState("")
-<<<<<<< HEAD
-
-
-=======
     const [modalText, setModalText] = useState("")
     const [modalVisible, setModalVisible] = useState(false);
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 
     const [surveyQuestions, setSurveysQuestions] = useState([{ "index": 0, "questionName": "", "type": "Written Answer", "derived": 0, "parentIndex": -1, "MC":[] }])
     const createQuestionRef = useRef(null);
@@ -30,17 +21,12 @@ const CreateSurvey = ({ navigation }) => {
 
 
     const triggerDone = () => {
-<<<<<<< HEAD
-        createQuestionRef.current.triggerDone();
-
-=======
 
       
         if(surveyTitle === "") { setModalText("Survey Title cant be empty"); setModalVisible(true);}
         else
         createQuestionRef.current.triggerDone();
        
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
     }
 
     const convertToNested = (questionInfo, index) => {
@@ -51,8 +37,6 @@ const CreateSurvey = ({ navigation }) => {
 
         currentQuestions[index] = questionInfo;
         currentQuestions.map(a => a["children"] = [])
-<<<<<<< HEAD
-=======
 
 
 
@@ -69,7 +53,6 @@ const CreateSurvey = ({ navigation }) => {
         setModalVisible(true);
         return
         }
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
         let questionConvert = []
 
 
@@ -93,10 +76,6 @@ const CreateSurvey = ({ navigation }) => {
             
             
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
             if (parent != -1) {
                 questionConvert[parent]["children"].unshift({ ...questionConvert[i] })
                 questionConvert.splice(i, 1)
@@ -287,11 +266,7 @@ const CreateSurvey = ({ navigation }) => {
         let currentQuestions = [...surveyQuestions]
 
      
-<<<<<<< HEAD
-
-=======
         console.log(index)
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
         for (let i = index + 1; i < currentQuestions.length; i++) {
             currentQuestions[i].index -= 1;
             if (currentQuestions[i].parentIndex != -1 && currentQuestions[i].parentIndex > index) {
@@ -305,11 +280,7 @@ const CreateSurvey = ({ navigation }) => {
         }
 
 
-<<<<<<< HEAD
-    
-=======
         currentQuestions.splice(index,1);
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 
         if (index > 0) {
             switchQuestion(-1);
@@ -327,10 +298,7 @@ const CreateSurvey = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#7f92f0" }}>
-<<<<<<< HEAD
-=======
              <ScrollView style={{ flexGrow: 1, width:"100%",}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center', width:"100%" }}>
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 
             <DrawerButton />
 
@@ -410,11 +378,7 @@ const CreateSurvey = ({ navigation }) => {
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
 
                         {currentSurveyIndex > 0 &&
-<<<<<<< HEAD
-                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-=======
                             <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
                                 onPress={() => switchQuestion(-1)}>
                                 <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"<-"} </Text>
                             </TouchableOpacity>
@@ -422,11 +386,7 @@ const CreateSurvey = ({ navigation }) => {
                     </View>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
-<<<<<<< HEAD
-                        <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-=======
                         <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
                             onPress={() => addNewQuestion()}>
                             <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>+</Text>
                         </TouchableOpacity>
@@ -434,11 +394,7 @@ const CreateSurvey = ({ navigation }) => {
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
 
                         {currentSurveyIndex < surveyQuestions.length - 1 &&
-<<<<<<< HEAD
-                            <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 20, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
-=======
                             <TouchableOpacity style={{ flex: 1, backgroundColor: "white", padding: 3, height: 50, width: 80, borderRadius: 10, borderWidth: 2, borderColor: "rgba(0,0,0, 0.4)", alignItems: "center", }}
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
                                 onPress={() => switchQuestion(1)}>
                                 <Text style={{ fontSize: 30, fontWeight: "bold", color: "black", textAlign: "center" }}>{"->"}</Text>
                             </TouchableOpacity>
@@ -478,8 +434,6 @@ const CreateSurvey = ({ navigation }) => {
 
                 </TouchableOpacity>
             </View>
-<<<<<<< HEAD
-=======
 
 
             <Modal
@@ -503,7 +457,6 @@ const CreateSurvey = ({ navigation }) => {
         </View>
       </Modal>
       </ScrollView>
->>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
         </View>
     )
 }

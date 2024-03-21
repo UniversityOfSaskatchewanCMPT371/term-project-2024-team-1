@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { ScreenStyles } from "./Screen";
-import DrawerButton from "./navigation/CustomDrawerButton";
+import DrawerButton from "../navigation/CustomDrawerButton";
 import SurveyModal from "./SurveyModal";
-import Paginator from "./navigation/Paginator";
+import Paginator from "../navigation/Paginator";
 
 export default function SurveyStartBoard({ navigation, route }) {
   const { width } = useWindowDimensions();
