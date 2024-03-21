@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, TextInput, Modal,ScrollView } from 'react
 >>>>>>> 2dd1da0c31869c81f2dca8c19ae5546781edf667
 import React, { useState, useRef, useEffect } from 'react'
 import { ScreenStyles } from './Screen'
-import DrawerButton from '../navigation/CustomDrawerButton'
+import DrawerButton from './navigation/CustomDrawerButton'
 import { Entypo } from '@expo/vector-icons'
 import CreateSurveyQuestions from './CreateSurveyQuestions'
 import KeyboardAvoidingContainer from './KeyboardAvoidContainer'
