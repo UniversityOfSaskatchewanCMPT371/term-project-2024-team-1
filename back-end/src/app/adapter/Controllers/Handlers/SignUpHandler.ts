@@ -40,7 +40,7 @@ export class SignUpHandler implements IRouteHandler<boolean> {
       });
     } else {
       this._logger.INFO("Failed to send signup request, does not meet signup credentials");
-      res.status(406).send("Signup requriemnts not met");
+      res.status(406).send("Signup requirements not met");
     }
   };
 
@@ -61,12 +61,12 @@ export class SignUpHandler implements IRouteHandler<boolean> {
     const email: string = request.body.email;
     const password: string = request.body.password;
     const clinic: string = request.body.clinic;
-    const isethics: boolean = request.body.agreedToEthics;
+    // const isethics: boolean = request.body.agreedToEthics;
 
     return !nullOrUndefined(request.body) && 
     !nullOrUndefined(request.body.email && 
       request.body.password && request.body.clinic) && 
-      (email !== "" && password !== "" && clinic !== "" && isethics) && 
+      (email !== "" && password !== "" && clinic !== "") && 
       (this.emailValidation(email) && this.passwordValidation(password));
   };
 
