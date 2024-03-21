@@ -4,10 +4,10 @@
     "prod": "set NODE_ENV=production&& node build/main.js",
     "test-app": "set NODE_ENV=test&& eslint ./src --ext .ts && nodemon -r tsconfig-paths/register src/main.ts -L",
     "test": "jest",
-    "unit-tests": "jest ./src/tests/unit_tests/CreateUserHandler.unit.test.ts",
+    "unit-tests": "jest ./src/tests/unit_tests/ --coverage",
     "integration-tests": "jest ./src/tests/integration_tests --coverage",
     "system-tests": "jest ./src/tests/system_tests --coverage",
-    "api-tests": "jest ./src/tests/api_tests/apiCreateUser.test.ts",
+    "api-tests": "jest ./src/tests/api_tests/ --coverage",
     "lint": "eslint ./src --ext .ts",
     "build": "tsc -p tsconfig.build.json && tsc-alias && cp ./src/resources/log4js-config.json ./build/resources"
   },

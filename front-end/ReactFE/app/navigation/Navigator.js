@@ -172,8 +172,6 @@ const MainStack = () => {
 
       {
 
-        runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
-
           authState?.token ? (
             authState?.role === "ADMIN" ? (
               <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
