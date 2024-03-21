@@ -24,8 +24,8 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(CreateUserHandler.name);
   private readonly USERID_LENGTH: number = 8; 
   constructor(private readonly _userRequestService: UserRequestService, private readonly _userService: UserService) {
-    this._userRequestService = container.resolve(UserRequestService);
-    this._userService = container.resolve(UserService);
+    // this._userRequestService = container.resolve(UserRequestService);
+    // this._userService = container.resolve(UserService);
   }
 
     

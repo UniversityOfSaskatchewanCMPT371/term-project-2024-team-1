@@ -15,7 +15,7 @@ export class SignUpHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SignUpHandler.name);
 
   constructor(private readonly _userRequestService: UserRequestService) {
-    this._userRequestService = container.resolve(UserRequestService);
+    // this._userRequestService = container.resolve(UserRequestService);
   }
 
   public handle(req: Request, res: Response): void {

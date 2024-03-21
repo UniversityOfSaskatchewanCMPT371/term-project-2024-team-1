@@ -15,7 +15,7 @@ export class UserGetAllHandler implements IRouteHandler<UserDTO[]> {
   private readonly _logger = getLogger(UserGetAllHandler.name);
   
   constructor(private readonly _userService: UserService) {
-    this._userService = container.resolve(UserService);
+    // this._userService = container.resolve(UserService);
   }
 
   public handle(req: Request, res: Response): void {

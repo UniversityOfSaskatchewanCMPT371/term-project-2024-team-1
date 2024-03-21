@@ -11,7 +11,7 @@ export class UserDeleteHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(UserDeleteHandler.name);
   
   constructor(private readonly _userService: UserService) {
-    this._userService = container.resolve(UserService);
+    // this._userService = container.resolve(UserService);
   }
 
   public handle(req: Request, res: Response): void {
