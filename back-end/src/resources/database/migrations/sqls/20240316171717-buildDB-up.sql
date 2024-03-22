@@ -66,7 +66,7 @@ CREATE TABLE SurveyQuestionMap (
   id INT AUTO_INCREMENT PRIMARY KEY,
   surveyId INT NOT NULL,
   questionId INT NOT NULL,
-  rank INT NOT NULL,
+  rankOrder INT NOT NULL,
   FOREIGN KEY (surveyId) REFERENCES Survey(id),
   FOREIGN KEY (questionId) REFERENCES Question(id)
 );
