@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 import Survey from "./Survey";
 import { ScrollView } from "react-native-gesture-handler";
 
-const LandingPage = ({navigation}) => {
-  
+const LandingPage = () => {
+  const navigation = useNavigation();
 
   const handleTakeSurvey = () => {
     
