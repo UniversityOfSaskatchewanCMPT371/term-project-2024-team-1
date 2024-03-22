@@ -29,8 +29,8 @@ describe("CreateUser and Modify Request", () => {
   const mockReq: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "$2a$10$jIRie1ZM8CVysp4olOIoqOviEcG.kPWQutEftr5897GD54Cr0uNcS", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
   
   const mockReq_not_SIGNUP: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
-  const mockReq_date_not_null: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
-  const mockReq_rejected: UserRequest = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
+  const mockReq_date_not_null: UserRequest = new UserRequest(2, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
+  const mockReq_rejected: UserRequest = new UserRequest(3, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -79,7 +79,24 @@ describe("CreateUser and Modify Request", () => {
       await flushPromises();
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.send).toHaveBeenCalledWith("Unable to retrieve the request! Try again");
+      expect(res.send).toHaveBeenCalledWith("Request not found");
+
+    });
+
+    it("should fail with the status code 500 if 'execute' throws an error in fetching the user request", async() => {
+      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
+      jest.spyOn(handler, "validation").mockReturnValue(true);
+      jest.spyOn(handler, "execute").mockReturnValue(Promise.reject(new Error("Error")));
+      jest.spyOn(handler, "update_req_execute").mockReturnValue(Promise.resolve(true));
+      jest.spyOn(handler, "create_user_execute").mockReturnValue(Promise.resolve(true));
+
+      // Call the handle method
+      handler.handle(req, res);
+      await flushPromises();
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("Server failed to process request, please try again");
 
     });
 
@@ -123,16 +140,16 @@ describe("CreateUser and Modify Request", () => {
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq));
-      jest.spyOn(handler, "update_req_execute").mockReturnValue(Promise.resolve(true));
+      jest.spyOn(handler, "update_req_execute").mockReturnValue(Promise.resolve(false));
       jest.spyOn(handler, "create_user_execute").mockReturnValue(Promise.resolve(true));
 
       handler.handle(req, res);
       await flushPromises();
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.send).toHaveBeenCalledWith("User successfully approved and created");
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("Server failed process request, please try again");
     });
 
-    it("should fail with the status code 403 if the request was not approved", async() => {
+    it("should succeed with the status code 200 if the rejected request was updated successfully", async() => {
       const req: Request = { body: { approved: false, requestId: mockReq.id } } as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
@@ -142,23 +159,24 @@ describe("CreateUser and Modify Request", () => {
 
       handler.handle(req, res);
       await flushPromises();
-      expect(res.status).toHaveBeenCalledWith(403);
-      expect(res.send).toHaveBeenCalledWith("Forbidden! User request has not been approved");
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith("Successfully updated user request status 3");
     });
 
-    it("should fail with the status code 500 if the user insertion was not successful", async() => {
+    it("should fail with the status code 500 if the user insertion was not successful and the rollback to request status was successful", async() => {
       const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       mockReq.status = RequestStatusEnum.AWAITING;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq));
       jest.spyOn(handler, "update_req_execute").mockReturnValue(Promise.resolve(true));
-      jest.spyOn(handler, "create_user_execute").mockReturnValue(Promise.reject(false));
+      jest.spyOn(handler, "create_user_execute").mockReturnValue(Promise.resolve(false));
 
       handler.handle(req, res);
       await flushPromises();
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("Unable to create the user. Please try again later");
+      expect(res.send).toHaveBeenCalledWith("Server failed process request, please try again");
+      expect(mockReq.status).toBe(RequestStatusEnum.AWAITING);
     });
   });
 

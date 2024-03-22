@@ -39,40 +39,51 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
             assert(nullOrUndefined(userRequest.decisionDate), "decision date field is expected to be null");
             assert(!nullOrUndefined(userRequest.status) && userRequest.status === RequestStatusEnum.AWAITING, "request status is expected to be AWAITING");
             userRequest.status = req.body.approved ? RequestStatusEnum.APPROVED : RequestStatusEnum.REJECTED;  
-            this.update_req_execute(userRequest).then(() => {
-              if (userRequest.status === RequestStatusEnum.APPROVED) {
-                this._logger.INFO("user request status updated to approved");
-                assert(userRequest.clinicName && userRequest.email && userRequest.password);
-                const userId: string = randomAlphanumString(this.USERID_LENGTH);
-                assert(userId.length === this.USERID_LENGTH, "userId must be eight characters long");
-                assert(this.isValidHashedPassword(userRequest.password), "Password is not hashed");
-                const newUser: User = new User(userRequest.clinicName, userId, userRequest.email, false, userRequest.password);
-                this.create_user_execute(newUser).then(() => {
-                  this._logger.INFO("user added successfully");
-                  res.status(200).send("User successfully approved and created");
-                }).catch(() => {
-                  this._logger.ERROR("unable to add the user");
-                  res.status(500).send("Unable to create the user. Please try again later");
-                });
-              } else { 
-                this._logger.INFO("user not approved");
-                res.status(403).send("Forbidden! User request has not been approved");
+            this.update_req_execute(userRequest).then((success) => {
+              if (success) {
+                if (userRequest.status === RequestStatusEnum.APPROVED) {
+                  this._logger.INFO("user request status updated to approved");
+                  assert(userRequest.clinicName && userRequest.email && userRequest.password);
+                  const userId: string = randomAlphanumString(this.USERID_LENGTH);
+                  assert(userId.length === this.USERID_LENGTH, "userId must be eight characters long");
+                  assert(this.isValidHashedPassword(userRequest.password), "Password is not hashed");
+                  const newUser: User = new User(userRequest.clinicName, userId, userRequest.email, false, userRequest.password);
+                  this.create_user_execute(newUser).then((success) => {
+                    if (success) {
+                      this._logger.INFO("user added successfully");
+                      res.status(200).send("User successfully approved and created");
+                    } else {
+                      this._logger.INFO(`Failed to add the user ${userId}`);
+                      this.rollBackChanges(res, userRequest);
+                    }
+                  }).catch((err): void => {
+                    this._logger.ERROR(`Failed to add the user ${userId}, error occured: ${err}`);
+                    this.rollBackChanges(res, userRequest);
+                  });
+                } else { 
+                  this._logger.INFO(`User request ${userRequest.id} status successfully updated`);
+                  res.status(200).send(`Successfully updated user request status ${userRequest.id}`);
+                }
+              } else {
+                this._logger.ERROR(`Failed to update the request ${userRequest.id}`);
+                res.status(500).send("Server failed process request, please try again");
               }
-            }).catch(() => {
-              this._logger.ERROR("unable to update the request");
-              res.status(500).send("Unable to update the request. Try again");
+              
+            }).catch((err) => {
+              this._logger.ERROR(`Failed to update the request ${userRequest.id}, error occured: ${err}`);
+              res.status(500).send("Server failed process request, please try again");
             });
           } else {
             this._logger.INFO("Bad request: The request does not meet the required criteria");
             res.status(400).send("Bad request: The request does not meet the required criteria");
           }
         } else {
-          this._logger.INFO("unable to fetch the request was found");
-          res.status(404).send("Unable to retrieve the request! Try again");
+          this._logger.INFO(`Failed to retrieve ${req.body.requestId}, reqeust doesn't exist`);
+          res.status(404).send("Request not found");
         }
-      }).catch(() => {
-        this._logger.ERROR("error executing request retrieval");
-        res.status(404).send("Unable to retrieve the request! Try again");
+      }).catch((err) => {
+        this._logger.ERROR(`Failed to retrieve ${req.body.requestId}, error occured: ${err}`);
+        res.status(500).send("Server failed to process request, please try again");
       });
     } else {
       this._logger.INFO("Validation of the request body failed. Request does not meet the required criteria");
@@ -88,7 +99,9 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   }
 
   public async update_req_execute(userRequest: UserRequest): Promise<boolean> { 
-    userRequest.decisionDate = new Date();
+    if (userRequest.status !== RequestStatusEnum.AWAITING) {
+      userRequest.decisionDate = new Date();
+    }
     const success: boolean = await this._userRequestService.update(userRequest);
     console.log("success: ", success);
     return success;
@@ -113,6 +126,23 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   private isValidHashedPassword(password: string): boolean {
     const regex: RegExp = /^\$2a\$10\$.{53}$/;
     return regex.test(password);
+  }
+
+  private rollBackChanges(res: Response, userRequest: UserRequest): void {
+    this._logger.INFO("Rolling back changes to the request status due to unsuccessful user creation.");
+    userRequest.status = RequestStatusEnum.AWAITING;
+    this.update_req_execute(userRequest).then((success) => {
+      if (success) {
+        this._logger.INFO("Rolled back changes to the request status due to unsuccessful user creation");
+        res.status(500).send(`Server failed process request, please try again`);
+      } else {
+        this._logger.INFO(`Failed to roll back changes to the request ${userRequest.id} status due to unsuccessful user creation`);
+        res.status(500).send("Server failed process request, please try again");
+      }
+    }).catch((err) => {
+      this._logger.ERROR(`Failed to roll back changes to the request status due to unsuccessful user creation, error occured: ${err}`);
+      res.status(500).send("Server failed process request, please try again");
+    });
   }
 
 }

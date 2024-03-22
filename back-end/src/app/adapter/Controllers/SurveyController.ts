@@ -8,7 +8,6 @@ const router: Router = express.Router();
 const surveyAddHandler: SurveyAddHandler = container.resolve(SurveyAddHandler);
 
 router.post("/survey", (req: Request, res: Response) => {
-  console.log
   surveyAddHandler.handle(req, res);
 });
 
