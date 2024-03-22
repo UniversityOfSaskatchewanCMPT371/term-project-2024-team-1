@@ -9,7 +9,7 @@ import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequ
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
 import { container } from "tsyringe";
 import { SignUpHandler } from "@app/adapter/Controllers/Handlers/SignUpHandler";
-import { loggerToken, userRepoToken } from "@app/adapter/DependencyInjections";
+import { loggerToken, userReqRepoToken } from "@app/adapter/DependencyInjections";
 import { UserRequest } from "@app/domain/UserRequest";
 import { flushPromises } from "../common_test_code/util_test";
 import { UserRequestService } from "@app/application/UserRequestService";
@@ -20,7 +20,7 @@ import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 
 describe("LoginAuthHandler", () => {
     const mockUserRepo: IUserRequestRepository = new MockUserRequestRepository();
-    container.register<IUserRequestRepository>(userRepoToken, { useValue: mockUserRepo });
+    container.register<IUserRequestRepository>(userReqRepoToken, { useValue: mockUserRepo });
     container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
     
     const handler: SignUpHandler = container.resolve(SignUpHandler);

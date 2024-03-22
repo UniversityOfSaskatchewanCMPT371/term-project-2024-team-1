@@ -69,15 +69,14 @@ export class UserRequestSQLRepository implements IUserRequestRepository {
   }
 
   public async update(request: UserRequest): Promise<boolean> {
-    // try {
-    //   const updateUser: Promise<boolean> = query(this._updateQuery,
-    //     [request.status, formatDateForSQL(new Date()), request.id.toString()]);
-    //   return updateUser;
-    // } catch (error) {
-    //   this._logger.ERROR(`Failed to update user request, error: ${error as string}`);
-    //   return Promise.reject(error);
-    // }
-    throw new Error();
+    try {
+      const updateUser: Promise<boolean> = query(this._updateQuery,
+        [request.status, formatDateForSQL(new Date()), request.id.toString()]);
+      return updateUser;
+    } catch (error) {
+      this._logger.ERROR(`Failed to update user request, error: ${error as string}`);
+      return Promise.reject(error);
+    }
   }
 
   public async delete(requestId: number): Promise<boolean> {
