@@ -1,62 +1,72 @@
 // /* eslint-disable */
 // import "reflect-metadata";
 // import { Request, Response } from "express";
-// import { Survey } from "@app/domain/Survey";
-// import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 // import { SurveyAddHandler } from "@app/adapter/Controllers/Handlers/SurveyAddHandler";
-// import { MockSurveyRepository } from "./mocked_repository/MockSurveyRepository";
-// import { container } from "tsyringe";
-// import { surveyRepoToken } from "@app/adapter/DependencyInjections";
+// import { SurveyService } from "@app/application/SurveyService";
+// import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
+// import { MockSurveyRepository } from "@tests/mocked_repository/MockSurveyRepository";
+// import { Survey } from "@app/domain/Survey";
+
+// // Assuming jest.mock is not necessary if you are instantiating directly in the test.
+// // jest.mock("@app/application/SurveyService");
 
 // describe("SurveyAddHandler Tests", () => {
-//   beforeEach(() => {
-//     container.clearInstances();
-//     container.register<ISurveyRepository>(surveyRepoToken, { useClass: MockSurveyRepository });
-//   });
+//   let surveyService: SurveyService;
+//   let surveyAddHandler: SurveyAddHandler;
 
+//   // Helper function to create a mock Response object
+//   // eslint-disable-next-line @typescript-eslint/typedef
 //   const mockResponse = (): Response => {
 //     const res: any = {};
 //     res.status = jest.fn().mockReturnValue(res);
-//     res.json = jest.fn().mockReturnValue(res);
 //     res.send = jest.fn().mockReturnValue(res);
+//     res.json = jest.fn().mockReturnValue(res);
 //     return res as Response;
 //   };
 
+//   beforeEach(() => {
+//     // Directly instantiate the surveyService with a mock repository
+//     const mockSurveyRepository: ISurveyRepository = new MockSurveyRepository();
+//     surveyService = new SurveyService(mockSurveyRepository);
+//     surveyAddHandler = new SurveyAddHandler(surveyService);
+//   });
+
 //   it("should successfully add a survey and return 200", async () => {
-//     const handler = container.resolve(SurveyAddHandler);
-//     const req = { body: { surveyName: "New Survey", dateCreated: new Date() } } as Request;
+//     const req: Request = { body: { surveyName: "New Survey" } } as Request;
 //     const res = mockResponse();
 
-//     await handler.handle(req, res);
+//     // Mock the createSurvey method to simulate a successful survey creation
+//     jest.spyOn(surveyService, 'createSurvey').mockResolvedValueOnce(true);
+
+//     await surveyAddHandler.handle(req, res);
 
 //     expect(res.status).toHaveBeenCalledWith(200);
-//     expect(res.json).toHaveBeenCalledWith({ message: "Survey added successfully." });
+//     expect(res.send).toHaveBeenCalledWith("Sample survey added successfully.");
 //   });
 
-//   it("should return 400 if the survey data is invalid", async () => {
-//     const handler = container.resolve(SurveyAddHandler);
-//     const req = { body: {} } as Request; // Invalid or missing data
+//   it("should return 400 if the survey creation fails", async () => {
+//     const req: Request = { body: { surveyName: "Incomplete Data" } } as Request;
 //     const res = mockResponse();
 
-//     await handler.handle(req, res);
+//     // Simulate survey creation failure
+//     jest.spyOn(surveyService, 'createSurvey').mockResolvedValueOnce(false);
+
+//     await surveyAddHandler.handle(req, res);
 
 //     expect(res.status).toHaveBeenCalledWith(400);
-//     expect(res.send).toHaveBeenCalled();
+//     expect(res.send).toHaveBeenCalledWith("Failed to add sample survey.");
 //   });
 
-//   it("should return 500 if there is an error adding the survey", async () => {
-//     const handler = container.resolve(SurveyAddHandler);
-//     const req = { body: { surveyName: "Survey with DB issue", dateCreated: new Date() } } as Request;
+//   it("should return 500 if an error occurs during survey creation", async () => {
+//     const req: Request = { body: { surveyName: "Error Prone Survey" } } as Request;
 //     const res = mockResponse();
 
-//     // Simulating a database error
-//     jest.spyOn(MockSurveyRepository.prototype, "createSurvey").mockImplementationOnce(async () => {
-//       throw new Error("Database error");
-//     });
+//     // Simulate an error during survey creation
+//     jest.spyOn(surveyService, 'createSurvey').mockRejectedValueOnce(new Error("Unexpected error"));
 
-//     await handler.handle(req, res);
+//     await surveyAddHandler.handle(req, res);
 
 //     expect(res.status).toHaveBeenCalledWith(500);
-//     expect(res.send).toHaveBeenCalledWith("Internal server error");
+//     expect(res.send).toHaveBeenCalledWith("Error occurred while adding sample survey.");
 //   });
 // });

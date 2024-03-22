@@ -17,18 +17,16 @@ const questionCreateHandler: QuestionCreateHandler = container.resolve(QuestionC
 //   surveyGetHandler.hand(req, res);
 // });
 
-router.post("/question", (req: Request, res: Response) => {
+router.get("/question", (req: Request, res: Response) => {
   void questionGetAllHandler.handle(req, res);
 });
 
-router.post("/question:question", (req: Request, res: Response) => {
+router.post("/question", (req: Request, res: Response) => {
   void questionCreateHandler.handle(req, res);
 });
 
 // router.delete("/surveys/:surveyName", (req: Request, res: Response) => {
 //   surveyDeleteHandler.handle(req, res);
 // });
-
-
 
 module.exports = router;

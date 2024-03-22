@@ -9,7 +9,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
 
   private readonly _getAllQuery: string = "SELECT * FROM Question";
   private readonly _getByQuestionIdQuery: string = "SELECT * FROM Question WHERE id = ?";
-  private readonly _getBySurveyQuery: string = "SELECT Q.* FROM Question Q INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId INNER JOIN Survey S ON SQM.surveyId = S.id WHERE S.surveyName = ?";
+  private readonly _getBySurveyQuery: string = "SELECT Q.* FROM Question Q INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId INNER JOIN Survey S ON SQM.surveyId = S.id WHERE S.id = ?";
   private readonly _createQuestionQuery: string = "INSERT INTO Question (question, standard, type, parentId) VALUES (?, ?, ?, ?)";
   private readonly _updateQuestionQuery: string = "UPDATE Question SET question = ?, standard = ?, type = ?, parentId = ? WHERE id = ?";
   private readonly _deleteQuestionQuery: string = "DELETE FROM Question WHERE id = ?";
@@ -25,16 +25,16 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
     }
   }
 
-  async getBySurvey(surveyName: string): Promise<SurveyQuestion[]> {
+  async getBySurvey(surveyId: number): Promise<SurveyQuestion[] | null> {
     try {
-      return query(this._getBySurveyQuery, [surveyName]).then((data: any) => {
+      return query(this._getBySurveyQuery, [surveyId.toString()]).then((data: any) => {
         if (data.length === 0) {
           return null;
         }
         return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined));
       });
     } catch (error) {
-      this._logger.error(`Failed to retrieve questions for survey named ${surveyName}: `, error);
+      this._logger.error(`Failed to retrieve questions for survey named ${surveyId}: `, error);
       throw error;
     }
   }
@@ -42,7 +42,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
   async create(question: SurveyQuestion): Promise<boolean> {
     try {
       const isQuestionCreated: Promise<boolean> = query(this._createQuestionQuery,
-        [question.question, (question.standard ? 1 : 0).toString(), question.type, question.parentId.toString()]);
+        [question.question, (question.standard ? 1 : 0).toString(), question.type, question.parentId?.toString() ?? null]);
       return isQuestionCreated;
     } catch (error) {
       this._logger.error(error);

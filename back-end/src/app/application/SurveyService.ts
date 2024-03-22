@@ -29,5 +29,8 @@ export class SurveyService {
     return this._surveyRepository.deleteSurvey(surveyName);
   };
 
+  public async addQuestionToSurvey(surveyId: number, questionId: number, rank: number): Promise<boolean> {
+    return this._surveyRepository.addQuestionToSurvey(surveyId, questionId, rank);
+  }
 }
 
