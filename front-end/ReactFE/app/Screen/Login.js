@@ -18,7 +18,7 @@ const Login = () => {
     const {onLogin} = useAuth();
 
     const login = async () => {
-        const result = await onLogin!(userIdEmail, password);
+        const result = await onLogin(userIdEmail, password);
         if(result && result.error){
           alert(result.msg)
         }
