@@ -1,14 +1,7 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Button,
-  View,
-  SafeAreaView,
-} from "react-native";
-import TestButton from "../testButton";
-import { useReducer } from "react";
-import { FontAwesome } from "@expo/vector-icons";
+
+import { StyleSheet,TouchableOpacity, Text, Button, View,SafeAreaView } from 'react-native';
+import { useReducer } from 'react';
+import {FontAwesome} from "@expo/vector-icons"
 
 const Screen = () => {
   //const router = userRouter();
@@ -33,10 +26,12 @@ const Screen = () => {
 export const ScreenStyles = StyleSheet.create({
   /* Colors */
 
-  container: {
-    flex: 1,
-  },
-  text: {
+container: {
+    flex:1,
+    justifyContent:"center",
+    alignItems:"center"
+},
+text:{
     color: "#161924",
     fontSize: 20,
     fontWeight: "500",
@@ -51,27 +46,28 @@ export const ScreenStyles = StyleSheet.create({
 
   CasiPurple: {
     backgroundColor: "#25177B",
-  },
-  CasiTeal: {
-    backgroundColor: "#1EC4B0",
-  },
-  button: {
-    color: "#ffffff",
-    borderRadius: 100,
-    margin: 20,
-    width: 200,
-  },
-  buttonText: {
-    fontSize: 20,
-    padding: 5,
-    color: "#ffffff",
-    textAlign: "center",
-  },
-  ScreenStyle: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#7f92f0",
-  },
+},
+button: {
+    fontSize:30,
+    color:"#ffffff",
+    padding:15,
+    borderRadius:30,
+},
+buttonText:{
+    color:"#ffffff",
+    fontSize:30,
+    padding:10,
+    borderRadius:30,
+},
+
+ScreenStyle:{
+    flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#7f92f0"},
+
+    modal: {
+        borderRadius:10,
+        backgroundColor:"#ffffff",
+        
+        
+    }
 });
 export default Screen;
