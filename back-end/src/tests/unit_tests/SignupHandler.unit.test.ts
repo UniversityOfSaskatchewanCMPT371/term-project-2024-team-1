@@ -48,7 +48,7 @@ describe("LoginAuthHandler", () => {
   
         // Assert
         expect(res.status).toHaveBeenCalledWith(406);
-        expect(res.send).toHaveBeenCalledWith("Signup requirements not met");
+        expect(res.send).toHaveBeenCalledWith("Signup requirements not met, please fill in the required fields");
   
       });
     });
@@ -66,10 +66,10 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.send).toHaveBeenCalledWith("Sign up request success!");
+        expect(res.send).toHaveBeenCalledWith("Successfully created and sent your signup request");
     });
 
-    it("should fail to create the user signup request with status 400 if signup requirements are not met", async() => {
+    it("should fail to create the user signup request with status 400 if email and password does not meet requirements", async() => {
         // Setup 
         const req: Request = { body: { email: mockFail.email, password: mockFail.password, clinic: mockFail.clinicName } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
@@ -82,15 +82,47 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith(`Failed to send signup request for user: [${mockFail.email}, ${mockFail.clinicName}], signup request not executed`);
+        expect(res.send).toHaveBeenCalledWith(`Invalid email and password, please try again`);
+    });
+
+    it("should fail to create the user signup request with status 400 if email does not meet requirements", async() => {
+        // Setup 
+        const req: Request = { body: { email: mockFail.email, password: mockPass.password, clinic: mockFail.clinicName } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(false);
+        
+        // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.send).toHaveBeenCalledWith(`Invalid email, please try again`);
+    });
+
+    it("should fail to create the user signup request with status 400 if password does not meet requirements", async() => {
+        // Setup 
+        const req: Request = { body: { email: mockPass.email, password: mockFail.password, clinic: mockFail.clinicName } } as any as Request;
+        const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
+        jest.spyOn(handler, "validation").mockReturnValue(true);
+        jest.spyOn(handler, "execute").mockResolvedValue(false);
+        
+        // Action
+        handler.handle(req, res);
+        await flushPromises();
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.send).toHaveBeenCalledWith(`Invalid password, please try again`);
     });
 
     it("Should fail with status 500 if there was an internal server error", async() => { 
         // Setup 
-        const req: Request = { body: { email: mockFail.email, password: mockFail.password, clinic: mockFail.clinicName } } as any as Request;
+        const req: Request = { body: { email: mockPass.email, password: mockPass.password, clinic: mockPass.clinicName } } as any as Request;
         const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn(), json: jest.fn() } as unknown as Response;
         jest.spyOn(handler, "validation").mockReturnValue(true);
-        jest.spyOn(handler, "execute").mockRejectedValue(false);
+        jest.spyOn(handler, "execute").mockResolvedValue(false);
         
         // Action
         handler.handle(req, res);
@@ -98,7 +130,7 @@ describe("LoginAuthHandler", () => {
 
         // Assert
         expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.send).toHaveBeenCalledWith("Server failed to process request, please try again");
+        expect(res.send).toHaveBeenCalledWith("Internal server error");
     });
 
     describe("validation", () => {
@@ -240,7 +272,7 @@ describe("LoginAuthHandler", () => {
             jest.spyOn(UserRequestService.prototype, "create").mockResolvedValue(false);
       
             // Action and Assert
-            await expect(handler.execute(req)).resolves.toEqual(true);
+            await expect(handler.execute(req)).resolves.toEqual(false);
           });
     });
 
