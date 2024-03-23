@@ -46,7 +46,6 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                   assert(userRequest.clinicName && userRequest.email && userRequest.password);
                   const userId: string = randomAlphanumString(this.USERID_LENGTH);
                   assert(userId.length === this.USERID_LENGTH, "userId must be eight characters long");
-                  assert(this.isValidHashedPassword(userRequest.password), "Password is not hashed");
                   const newUser: User = new User(userRequest.clinicName, userId, userRequest.email, false, userRequest.password);
                   this.create_user_execute(newUser).then((success) => {
                     if (success) {
@@ -123,10 +122,6 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     ); 
   };
 
-  private isValidHashedPassword(password: string): boolean {
-    const regex: RegExp = /^\$2a\$10\$.{53}$/;
-    return regex.test(password);
-  }
 
   private rollBackChanges(res: Response, userRequest: UserRequest): void {
     this._logger.INFO("Rolling back changes to the request status due to unsuccessful user creation.");

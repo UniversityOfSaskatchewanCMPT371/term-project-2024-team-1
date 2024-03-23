@@ -12,9 +12,9 @@ export class SurveyService {
     return this._surveyRepository.getAll();
   };
 
-  public async getSurvey(surveyName: string): Promise<Survey | null> {
+  public async getSurvey(surveyId: number): Promise<Survey | null> {
     try {
-      return this._surveyRepository.getSurvey(surveyName);
+      return this._surveyRepository.getSurvey(surveyId);
     } catch (error) {
       console.error("Failed to retrieve survey by name: ", error);
       throw error;
@@ -25,13 +25,22 @@ export class SurveyService {
     return this._surveyRepository.createSurvey(survey);
   };
 
-  public async deleteSurvey(surveyName: string): Promise<boolean> {
-    return this._surveyRepository.deleteSurvey(surveyName);
+  public async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
+    try {
+      return this._surveyRepository.getSurveySubmittedUsers(surveyId);
+    } catch (error) {
+      console.error("Failed to retrieve users who completed the survey by surveyId: ", error);
+      throw error;
+    };
+  }
+
+  public async deleteSurvey(surveyId: number): Promise<boolean> {
+    return this._surveyRepository.deleteSurvey(surveyId);
   };
 
   public async createFakeSurvey(): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/typedef
-    const fakeSurvey = new Survey("Fake Survey", new Date());
+    const fakeSurvey = new Survey(1, "Fake Survey", new Date());
     return this._surveyRepository.createSurvey(fakeSurvey);
   }
 }
