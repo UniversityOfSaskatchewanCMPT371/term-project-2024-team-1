@@ -8,55 +8,28 @@ import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRe
 import { MockSurveyRepository } from "@tests/mocked_repository/MockSurveyRepository";
 import { container } from "tsyringe";
 import { SurveyGetUsersSubmittedHandler } from "@app/adapter/Controllers/Handlers/SurveyGetUsersSubmittedHandler";
-import { loggerToken, surveyRepoToken, userRepoToken } from "@app/adapter/DependencyInjections";
-import bcrypt from "bcrypt";
+import { loggerToken, surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { flushPromises } from "@tests/common_test_code/util_test";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { ILogger } from "@app/domain/interfaces/ILogger";
-import { User } from "@app/domain/User";
 import { Survey } from "@app/domain/Survey";
 import { randomAlphanumString } from "@app/application/util";
 import { randomInt } from "crypto";
-import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
 import { SurveyService } from "@app/application/SurveyService";
 
 describe("SurveyGetUsersSubmittedHandler", () => {
   const mockSurveyRepo: ISurveyRepository = new MockSurveyRepository();
-  const mockUserRepo: IUserRepository = new MockUserRepository();
   container.register<ISurveyRepository>(surveyRepoToken, { useValue: mockSurveyRepo });
-  container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   const handler: SurveyGetUsersSubmittedHandler = container.resolve(SurveyGetUsersSubmittedHandler);
 
-  let user1: User; 
-  let user2: User; 
-  let user3: User; 
-
-  const user1pw: string = randomAlphanumString(6);
-  const user2pw: string = randomAlphanumString(6);
-  const user3pw: string = randomAlphanumString(6);
-
-  let user1pwH: string;
-  let user2pwH: string;
-  let user3pwH: string;
 
   const survey1: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date());
   const noSubmissionSurvey: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date());
 
   beforeEach(() => {
     jest.restoreAllMocks();
-    user1pwH = bcrypt.hashSync(user1pw, 5);
-    user1 = new User(randomAlphanumString(4), randomAlphanumString(8), "email1", false, user1pwH);
-    user2pwH = bcrypt.hashSync(user2pw, 5);
-    user2 = new User(randomAlphanumString(4), randomAlphanumString(8), "email2", false, user2pwH);
-    user3pwH = bcrypt.hashSync(user3pw, 5);
-    user3 = new User(randomAlphanumString(4), randomAlphanumString(8), "email3", false, user3pwH);
-    void mockUserRepo.create(user1);
-    void mockUserRepo.create(user2);
-    void mockUserRepo.create(user3);
-    
-    // Mock mapping survey to userId to mark completion of the survey
+    // Mocking the mapping of userId to surveyId to mark completion of the survey
     void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(1, survey1.surveyId);
     void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(2, survey1.surveyId);
     void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(3, survey1.surveyId);

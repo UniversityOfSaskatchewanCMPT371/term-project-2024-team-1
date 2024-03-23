@@ -17,8 +17,8 @@ describe("SurveySQLRepository", () => {
 
   describe("getAll", () => {
     const mockSurveys = [
-      new Survey("Survey 1", new Date()),
-      new Survey("Survey 2", new Date())
+      new Survey(1, "Survey 1", new Date()),
+      new Survey(2, "Survey 2", new Date())
     ];
 
     it("should return an array of Survey objects", async () => {
@@ -35,24 +35,24 @@ describe("SurveySQLRepository", () => {
   });
 
   describe("getSurvey", () => {
-    const mockSurvey = new Survey("Survey 1", new Date());
+    const mockSurvey = new Survey(1, "Survey 1", new Date());
 
     it("should return a Survey object when found", async () => {
       (query as jest.Mock).mockResolvedValueOnce([[mockSurvey], undefined]);
-      const survey = await repo.getSurvey("Survey 1");
+      const survey = await repo.getSurvey(1);
       expect(survey).toEqual(mockSurvey);
-      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey WHERE surveyName = ?", ["Survey 1"]);
+      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey WHERE id = ?", ["1"]);
     });
 
     it("should return null when not found", async () => {
       (query as jest.Mock).mockResolvedValueOnce([[], undefined]);
-      const survey = await repo.getSurvey("Nonexistent Survey");
+      const survey = await repo.getSurvey(5);
       expect(survey).toBeNull();
     });
   });
 
   describe("createSurvey", () => {
-    const newSurvey = new Survey("New Survey", new Date());
+    const newSurvey = new Survey(3, "New Survey", new Date());
 
     it("should return true on successful creation", async () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
@@ -71,14 +71,14 @@ describe("SurveySQLRepository", () => {
   describe("deleteSurvey", () => {
     it("should return true on successful deletion", async () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
-      const result = await repo.deleteSurvey("Survey 1");
+      const result = await repo.deleteSurvey(1);
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("DELETE FROM Survey WHERE surveyName = ?", ["Survey 1"]);
+      expect(query).toHaveBeenCalledWith("DELETE FROM Survey WHERE id = ?", ["1"]);
     });
 
     it("should return false when no rows are affected", async () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 0 }, undefined]);
-      const result = await repo.deleteSurvey("Nonexistent Survey");
+      const result = await repo.deleteSurvey(5);
       expect(result).toBe(false);
     });
   });
