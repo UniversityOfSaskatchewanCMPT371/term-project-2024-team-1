@@ -1,38 +1,50 @@
 import { ADMIN, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
-import { container } from "tsyringe";
-import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
-import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
+import { injectable } from "tsyringe";
+import { CreateUserHandler } from "./Handlers/CreateUserHandler";
 import { LoginAuthHandler } from "./Handlers/LoginAuthHandler";
 import { SignUpHandler } from "./Handlers/SignUpHandler";
-import { CreateUserHandler } from "./Handlers/CreateUserHandler";
+import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
+import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
 
 
-const userGetAllHandler: UserGetAllHandler = container.resolve(UserGetAllHandler);
-const userDeleteHandler: UserDeleteHandler = container.resolve(UserDeleteHandler);
-const loginAuthHandler: LoginAuthHandler = container.resolve(LoginAuthHandler);
-const signUpHandler: SignUpHandler = container.resolve(SignUpHandler);
-const createUserHandler: CreateUserHandler = container.resolve(CreateUserHandler);
-export const router: Router = express.Router();
+@injectable()
+export class UserController {
+  private readonly _router: Router = express.Router();
 
-router.get("/user", authenticate(ADMIN), (req: Request, res: Response) => {
-  userGetAllHandler.handle(req, res);
-});
+  public constructor(private readonly _userGetAllHandler: UserGetAllHandler,
+    private readonly _userDeleteHandler: UserDeleteHandler,
+    private readonly _loginAuthHandler: LoginAuthHandler,
+    private readonly _signUpHandler: SignUpHandler,
+    private readonly _createUserHandler: CreateUserHandler) {
 
-router.delete("/user/:userId", authenticate(ADMIN), (req: Request, res: Response) => {
-  userDeleteHandler.handle(req, res);
-});
+  }
 
-router.post("/signup", authenticate(ADMIN), (req: Request, res: Response) => {
-  createUserHandler.handle(req, res);
-});
+  public getController(): Router {
 
-router.post("/login", (req: Request, res: Response) => {
-  loginAuthHandler.handle(req, res);
-});
+    this._router.get("/user", authenticate(ADMIN), (req: Request, res: Response) => {
+      this._userGetAllHandler.handle(req, res);
+    });
+      
+    this._router.delete("/user/:userId", authenticate(ADMIN), (req: Request, res: Response) => {
+      this._userDeleteHandler.handle(req, res);
+    });
+      
+    this._router.patch("/user/request/:requestId", authenticate(ADMIN), (req: Request, res: Response) => {
+      this._createUserHandler.handle(req, res);
+    });
+      
+    this._router.post("/login", (req: Request, res: Response) => {
+      this._loginAuthHandler.handle(req, res);
+    });
+      
+    this._router.post("/signup", (req: Request, res: Response) => {
+      this._signUpHandler.handle(req, res);
+    });
 
-router.post("/signup", (req: Request, res: Response) => {
-  signUpHandler.handle(req, res);
-});
+    return this._router;
+  }
 
-module.exports = router;
+    
+}
+

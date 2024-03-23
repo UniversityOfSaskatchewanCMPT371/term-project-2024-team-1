@@ -1,32 +1,27 @@
+import "reflect-metadata";
 import express, { Request, Response, Router } from "express";
-import { container } from "tsyringe";
+import { injectable, container } from "tsyringe";
 import { QuestionGetAllHandler } from "@app/adapter/Controllers/Handlers/QuestionGetAllHandler";
 import { QuestionCreateHandler } from "@app/adapter/Controllers/Handlers/CreateQuestionHandler";
 
-const router: Router = express.Router();
+@injectable()
+export class QuestionController {
+  private readonly _router: Router = express.Router();
 
-const questionGetAllHandler: QuestionGetAllHandler = container.resolve(QuestionGetAllHandler);
-const questionCreateHandler: QuestionCreateHandler = container.resolve(QuestionCreateHandler);
+  public constructor(
+    private readonly _questionGetAllHandler: QuestionGetAllHandler = container.resolve(QuestionGetAllHandler),
+    private readonly _questionCreateHandler: QuestionCreateHandler = container.resolve(QuestionCreateHandler)
+  ) {}
 
+  public getController(): Router {
+    this._router.get("/question", (req: Request, res: Response) => {
+      void this._questionGetAllHandler.handle(req, res);
+    });
 
-// router.get("/surveys", (req: Request, res: Response) => {
-//   surveyGetAllHandler.hand(req, res);
-// });
-
-// router.get("/survey/:surveyName", (req: Request, res: Response) => {
-//   surveyGetHandler.hand(req, res);
-// });
-
-router.get("/question", (req: Request, res: Response) => {
-  void questionGetAllHandler.handle(req, res);
-});
-
-router.post("/question", (req: Request, res: Response) => {
-  void questionCreateHandler.handle(req, res);
-});
-
-// router.delete("/surveys/:surveyName", (req: Request, res: Response) => {
-//   surveyDeleteHandler.handle(req, res);
-// });
-
-module.exports = router;
+    this._router.post("/question", (req: Request, res: Response) => {
+      void this._questionCreateHandler.handle(req, res);
+    });
+    
+    return this._router;
+  }
+}

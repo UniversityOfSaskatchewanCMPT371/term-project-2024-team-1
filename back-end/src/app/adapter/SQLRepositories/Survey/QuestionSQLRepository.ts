@@ -31,7 +31,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
         if (data.length === 0) {
           return null;
         }
-        return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined));
+        return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined, data[0].id));
       });
     } catch (error) {
       this._logger.error(`Failed to retrieve questions for survey named ${surveyId}: `, error);

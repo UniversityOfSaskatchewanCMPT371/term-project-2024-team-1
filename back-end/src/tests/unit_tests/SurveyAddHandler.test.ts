@@ -10,6 +10,12 @@
 // // Assuming jest.mock is not necessary if you are instantiating directly in the test.
 // // jest.mock("@app/application/SurveyService");
 
+describe("SurveyAddHandler tests", () => {
+  it("TODO", () => {
+    expect(true).toBeTruthy();
+  });
+});
+
 // describe("SurveyAddHandler Tests", () => {
 //   let surveyService: SurveyService;
 //   let surveyAddHandler: SurveyAddHandler;

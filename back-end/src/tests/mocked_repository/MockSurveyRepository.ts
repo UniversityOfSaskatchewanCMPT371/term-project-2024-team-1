@@ -3,7 +3,7 @@ import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRe
 
 export class MockSurveyRepository implements ISurveyRepository {
   private readonly _fakeDb: Map<string, Survey>;
-  private readonly _questionMap: Map<number, Array<{ surveyId: number, questionId: number, rank: number }>>;
+  private readonly _questionMap: Map<number, Array<{ surveyId: number, questionId: number, rankOrder: number }>>;
 
   public constructor() {
     this._fakeDb = new Map();
@@ -28,10 +28,10 @@ export class MockSurveyRepository implements ISurveyRepository {
     return Promise.resolve(true);
   }
 
-  async addQuestionToSurvey(surveyId: number, questionId: number, rank: number): Promise<boolean> {
+  async addQuestionToSurvey(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/typedef
     const questionsForSurvey = this._questionMap.get(surveyId) ?? [];
-    questionsForSurvey.push({ surveyId, questionId, rank });
+    questionsForSurvey.push({ surveyId, questionId, rankOrder });
     this._questionMap.set(surveyId, questionsForSurvey);
     return Promise.resolve(true);
   }

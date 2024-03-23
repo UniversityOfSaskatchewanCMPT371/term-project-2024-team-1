@@ -44,6 +44,7 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
 
   public async execute(req: Request): Promise<boolean> {
     this._logger.INFO("user request status updated to approved");
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const question: SurveyQuestion = new SurveyQuestion(req.body.question, req.body.standard, req.body.type, req.body.parentId ?? null);
     return this._surveyService.create(question);

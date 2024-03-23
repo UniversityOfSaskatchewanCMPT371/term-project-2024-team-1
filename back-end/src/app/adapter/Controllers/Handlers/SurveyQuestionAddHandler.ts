@@ -13,9 +13,9 @@ export class SurveyQuestionAddHandler {
 
   public async handle(req: Request, res: Response): Promise<void> {
     try {
-      if (typeof (req.body.surveyId, req.body.questionId, req.body.rank) === "number") {
+      if (typeof (req.body.surveyId, req.body.questionId, req.body.rankOrder) === "number") {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (await this.execute(req.body.surveyId, req.body.questionId, req.body.rank)) {
+        if (await this.execute(req.body.surveyId, req.body.questionId, req.body.rankOrder)) {
           res.status(200).json({ message: "Question added to survey successfully." });
         } else {
           res.status(400).json({ message: "Failed to add question to survey." });
@@ -27,9 +27,9 @@ export class SurveyQuestionAddHandler {
     }
   }
 
-  private async execute(surveyId: number, questionId: number, rank: number): Promise<boolean> {
+  private async execute(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
     try {
-      return await this._surveyService.addQuestionToSurvey(surveyId, questionId, rank);
+      return await this._surveyService.addQuestionToSurvey(surveyId, questionId, rankOrder);
     } catch (error) {
       this._logger.error("Error adding question to survey:", error);
       throw error;

@@ -1,21 +1,24 @@
-import { container, injectable } from "tsyringe";
-import { Request, Response } from "express";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { UserRequest } from "@app/domain/UserRequest";
+import { Request, Response } from "express";
+import { injectable } from "tsyringe";
+
 import bcrypt from "bcrypt";
+
+import { nullOrUndefined } from "@app/application/util";
+import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
-import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
-import { nullOrUndefined } from "@app/application/util";
 
 @injectable()
 export class SignUpHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SignUpHandler.name);
 
+  // constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService) {
   constructor(private readonly _userRequestService: UserRequestService) {
-    this._userRequestService = container.resolve(UserRequestService);
+    // this._userRequestService = container.resolve(UserRequestService);
   }
 
   public handle(req: Request, res: Response): void {
@@ -37,7 +40,7 @@ export class SignUpHandler implements IRouteHandler<boolean> {
       });
     } else {
       this._logger.INFO("Failed to send signup request, does not meet signup credentials");
-      res.status(406).send("Signup requriemnts not met");
+      res.status(406).send("Signup requirements not met");
     }
   };
 
@@ -58,12 +61,12 @@ export class SignUpHandler implements IRouteHandler<boolean> {
     const email: string = request.body.email;
     const password: string = request.body.password;
     const clinic: string = request.body.clinic;
-    const isethics: boolean = request.body.agreedToEthics;
+    // const isethics: boolean = request.body.agreedToEthics;
 
     return !nullOrUndefined(request.body) && 
     !nullOrUndefined(request.body.email && 
       request.body.password && request.body.clinic) && 
-      (email !== "" && password !== "" && clinic !== "" && isethics) && 
+      (email !== "" && password !== "" && clinic !== "") && 
       (this.emailValidation(email) && this.passwordValidation(password));
   };
 
