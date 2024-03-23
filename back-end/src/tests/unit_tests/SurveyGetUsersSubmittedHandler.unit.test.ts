@@ -70,7 +70,7 @@ describe("SurveyGetUsersSubmittedHandler", () => {
       handler.handle(req, res);
       await flushPromises();
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.send).toHaveBeenCalledWith([]);
+      expect(res.send).toHaveBeenCalledWith("No users have completed the survey");
     });
 
     it("should fail with status 500 if execute was unsuccessful", async() => {

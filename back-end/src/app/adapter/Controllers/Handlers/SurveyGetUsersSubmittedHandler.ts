@@ -27,6 +27,10 @@ export class SurveyGetUsersSubmittedHandler implements IRouteHandler<string[] | 
       this.execute(req).then((userIds) => {
         this._logger.INFO("Execution of getting users is successful");
         assert(!nullOrUndefined(userIds), "array of userIds is null");
+        if (userIds.length === 0) {
+          this._logger.INFO(`Empty array returned. No users have completed the survey ${req.params.surveyId}`);
+          res.status(200).send("No users have completed the survey");
+        }
         this._logger.INFO("Retrieved all users");
         res.status(200).send(userIds);
       }).catch((error: any) => {
