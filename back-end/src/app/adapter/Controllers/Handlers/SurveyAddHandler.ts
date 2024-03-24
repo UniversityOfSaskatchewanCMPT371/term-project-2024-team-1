@@ -29,7 +29,8 @@ export class SurveyAddHandler {
     try {
       const surveyName: string = req.body.surveyName;
       const dateCreated: Date = new Date();
-      const newSurvey: Survey = new Survey(1, surveyName, dateCreated);
+      const dueDate: Date = new Date(); // fake due date 
+      const newSurvey: Survey = new Survey(1, surveyName, dateCreated, dueDate);
       return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
       this._logger.error("Error adding sample survey:", error);
