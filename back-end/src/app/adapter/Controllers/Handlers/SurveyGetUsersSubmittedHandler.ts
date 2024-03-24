@@ -30,6 +30,7 @@ export class SurveyGetUsersSubmittedHandler implements IRouteHandler<string[] | 
       if (userIds.length === 0) {
         this._logger.INFO(`Empty array returned. No users have completed the survey ${req.params.surveyId}`);
         res.status(200).send("No users have completed the survey");
+        return;
       }
       this._logger.INFO("Retrieved all users");
       res.status(200).send(userIds);
