@@ -1,27 +1,28 @@
-import { Request, Response } from "express";
-import { delay, inject, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
-import { getLogger } from "log4js";
 import { Survey } from "@app/domain/Survey";
+import { Request, Response } from "express";
+import { getLogger } from "log4js";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class SurveyAddHandler {
   private readonly _logger = getLogger(SurveyAddHandler.name);
 
-  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
-    // this._surveyService = container.resolve(SurveyService);
+  constructor(private readonly _surveyService: SurveyService) {
   }
   
   public async handle(req: Request, res: Response): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       if (await this.execute(req)) {
-        res.status(200).send("Sample survey added successfully.");
+        this._logger.info(`Successfully created new survey ${req.body.surveyName}`);
+        res.status(200).send("Survey added successfully.");
       } else {
-        res.status(400).send("Failed to add sample survey.");
+        this._logger.info("Failed to create new survey");
+        res.status(400).send("Failed to create survey.");
       }
     } catch (error) {
-      res.status(500).send("Error occurred while adding sample survey.");
+      this._logger.error("Error creating survey:", error);
+      res.status(500).send("Error occurred while creating survey.");
     }
   }
 
@@ -32,7 +33,7 @@ export class SurveyAddHandler {
       const newSurvey: Survey = new Survey(1, surveyName, dateCreated);
       return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
-      this._logger.error("Error adding sample survey:", error);
+      this._logger.error("Error creating survey:", error);
       throw error;
     }
   }

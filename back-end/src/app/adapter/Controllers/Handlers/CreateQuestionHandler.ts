@@ -1,11 +1,11 @@
+import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
+import { nullOrUndefined } from "@app/application/util";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import { SurveyQuestion } from "@app/domain/SurveyQuestion";
+import log4jsConfig from "@resources/log4js-config.json";
 import { Request, Response } from "express";
 import { configure, getLogger } from "log4js";
-import { container, injectable } from "tsyringe";
-import log4jsConfig from "@resources/log4js-config.json";
-import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
-import { SurveyQuestion } from "@app/domain/SurveyQuestion";
-import { nullOrUndefined } from "@app/application/util";
+import { injectable } from "tsyringe";
 configure(log4jsConfig);
 
 @injectable()
@@ -14,8 +14,6 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
   private readonly _logger = getLogger(QuestionCreateHandler.name);
 
   constructor(private readonly _surveyService: SurveyQuestionService) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    this._surveyService = container.resolve(SurveyQuestionService);
   }
 
   public handle(req: Request, res: Response): void {

@@ -14,7 +14,7 @@ import log4jsConfig from "@resources/log4js-config.json";
 import assert from "assert";
 import { Request, Response } from "express";
 import { configure } from "log4js";
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 
 configure(log4jsConfig);
 
@@ -23,7 +23,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     
   private readonly _logger: ILogger = LoggerFactory.getLogger(CreateUserHandler.name);
   private readonly USERID_LENGTH: number = 8; 
-  constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService, @inject(delay(() => UserService)) private readonly _userService: UserService) {
+  constructor(private readonly _userRequestService: UserRequestService, private readonly _userService: UserService) {
   }
 
     
