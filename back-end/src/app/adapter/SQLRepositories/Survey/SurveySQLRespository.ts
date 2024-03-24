@@ -40,7 +40,6 @@ export class SurveySQLRepository implements ISurveyRepository {
   async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
     try {
       return query(this._getAllSubmittedUsersQuery, [surveyId.toString()]).then((result: [string[]]) => {
-        console.log(result[0]);
         return result[0];
       });
     } catch (error) {

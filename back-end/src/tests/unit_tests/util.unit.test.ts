@@ -10,12 +10,13 @@ import { MockUserRepository } from "../mocked_repository/MockUserRepository";
 import jwt from "jsonwebtoken";
 import { flushPromises } from "../common_test_code/util_test";
 import { User } from "@app/domain/User";
+import { UserSQLRepository } from "@app/adapter/SQLRepositories/User/UserSQLRepository";
 
 describe("util functions test", () => {
   describe("authenticate", () => {
-    const mockUserRepo: IUserRepository = new MockUserRepository();
+    // const mockUserRepo: IUserRepository = new MockUserRepository();
 
-    container.register<IUserRepository>("UserRepo", { useValue: mockUserRepo });
+    // container.register<IUserRepository>("UserRepo", { useValue: mockUserRepo });
 
 
     beforeEach(() => {
@@ -77,7 +78,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId: "FakeUserId" };
       });
-      jest.spyOn(mockUserRepo, "get").mockResolvedValue(null);
+      jest.spyOn(UserSQLRepository.prototype, "get").mockResolvedValue(null);
       
 
       // Action
@@ -101,7 +102,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, true));
+      jest.spyOn(UserSQLRepository.prototype, "get").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -124,7 +125,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, true));
+      jest.spyOn(UserSQLRepository.prototype, "get").mockResolvedValue(new User(clinicName, userId, email, true));
       
 
       // Action
@@ -148,7 +149,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
+      jest.spyOn(UserSQLRepository.prototype, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action
@@ -172,7 +173,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
+      jest.spyOn(UserSQLRepository.prototype, "get").mockResolvedValue(new User(clinicName, userId, email, isAdmin));
       
 
       // Action
@@ -195,7 +196,7 @@ describe("util functions test", () => {
       jest.spyOn(jwt, "verify").mockImplementation(() => {
         return { userId };
       });
-      jest.spyOn(mockUserRepo, "get").mockRejectedValue("db error");
+      jest.spyOn(UserSQLRepository.prototype, "get").mockRejectedValue("db error");
       
 
       // Action

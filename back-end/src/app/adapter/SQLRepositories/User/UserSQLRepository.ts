@@ -43,7 +43,7 @@ export class UserSQLRepository implements IUserRepository {
   async create(user: User): Promise<boolean> {
     try {
       const isUserCreated: Promise<boolean> = query(this._createQuery,
-        [user.clinicName, user.userId, user.password, user.email, user.isAdmin.toString()]);
+        [user.clinicName, user.userId, user.password, user.email, (user.isAdmin ? 1 : 0).toString()]);
       return isUserCreated;
     } catch (error) {
       this._logger.error(error);

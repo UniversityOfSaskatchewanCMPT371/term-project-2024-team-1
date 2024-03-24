@@ -1,4 +1,4 @@
-import { surveyRepoToken } from "@app/adapter/DependencyInjections"; // Ensure you define this token
+import { surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { Survey } from "@app/domain/Survey";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { inject, injectable } from "tsyringe";
@@ -38,10 +38,5 @@ export class SurveyService {
     return this._surveyRepository.deleteSurvey(surveyId);
   };
 
-  public async createFakeSurvey(): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/typedef
-    const fakeSurvey = new Survey(1, "Fake Survey", new Date());
-    return this._surveyRepository.createSurvey(fakeSurvey);
-  }
 }
 

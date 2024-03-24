@@ -4,14 +4,15 @@ import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 
 @injectable()
 export class UserDeleteHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(UserDeleteHandler.name);
   
-  constructor(private readonly _userService: UserService) {
-    this._userService = container.resolve(UserService);
+  constructor(@inject(delay(() => UserService)) private readonly _userService: UserService) {
+  // constructor(private readonly _userService: UserService) {
+    // this._userService = container.resolve(UserService);
   }
 
   public handle(req: Request, res: Response): void {

@@ -1,19 +1,20 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable */
+
 import { UserRequestService } from "@app/application/UserRequestService";
 import { UserService } from "@app/application/UserService";
-import { UserRequest } from "@app/domain/UserRequest";
 import { nullOrUndefined, randomAlphanumString } from "@app/application/util";
-import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
-import { configure } from "log4js";
-import log4jsConfig from "@resources/log4js-config.json";
-import assert from "assert";
-import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
+import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { User } from "@app/domain/User";
+import { UserRequest } from "@app/domain/UserRequest";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
+import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import log4jsConfig from "@resources/log4js-config.json";
+import assert from "assert";
+import { Request, Response } from "express";
+import { configure } from "log4js";
+import { delay, inject, injectable } from "tsyringe";
 
 configure(log4jsConfig);
 
@@ -22,9 +23,9 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     
   private readonly _logger: ILogger = LoggerFactory.getLogger(CreateUserHandler.name);
   private readonly USERID_LENGTH: number = 8; 
-  constructor(private readonly _userRequestService: UserRequestService, private readonly _userService: UserService) {
-    this._userRequestService = container.resolve(UserRequestService);
-    this._userService = container.resolve(UserService);
+  constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService, @inject(delay(() => UserService)) private readonly _userService: UserService) {
+    // this._userRequestService = container.resolve(UserRequestService);
+    // this._userService = container.resolve(UserService);
   }
 
     
@@ -102,7 +103,6 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
       userRequest.decisionDate = new Date();
     }
     const success: boolean = await this._userRequestService.update(userRequest);
-    console.log("success: ", success);
     return success;
   }
 
