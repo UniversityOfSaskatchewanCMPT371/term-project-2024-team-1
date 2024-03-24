@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/typedef */
 import "reflect-metadata";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { Lifecycle, container } from "tsyringe";
@@ -21,19 +22,11 @@ export const surveyQuestionRepoToken: string = "SurveyQuestionRepo";
 export const loggerToken: string = "Logger";
 
 export function registerAllDependencies(): void {
-  // container.register<IUserRepository>(userRepoToken, { useClass: UserSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRepository>(userRepoToken, { useClass: userRepoToken }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyRepository>(surveyRepoToken, { useClass: SurveySQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRequestRepository>(userReqRepoToken, { useClass: userReqRepoToken }, { lifecycle: Lifecycle.Singleton });
-  // container.registerSingleton<IUserRepository>(
-  //   userRepoToken,
-  //   delay(() => UserSQLRepository)
-  // );
-  // container.registerSingleton<IUserRequestRepository>(
-  //   userReqRepoToken,
-  //   delay(() => UserRequestSQLRepository)
-  // );
+
 
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   console.log("Registered all dependencies");

@@ -29,7 +29,7 @@ container.register<IUserRepository>(userRepoToken, { useValue: mockUserRepo });
 const ADMIN_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MTA2Mzc5MTJ9.YSpO-XXbZdGZrZb7-MANJB1KKNwPOq5LTwwqrlAP5pY";
 const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MDk2NzIxODd9.MFSQJhBnwwB2rXGbUzmxycmUIdhMDFz4hhN4jBcJtFM";
 
-describe("Create User API Test /api/signup", () => {
+describe("Create User API Test /api/user/request", () => {
   let userReq: UserRequest;
   let notSignupUserReq: UserRequest;
   let decisionMadeUserReq: UserRequest;
@@ -38,8 +38,8 @@ describe("Create User API Test /api/signup", () => {
   
   beforeEach(() => {
     userReq = new UserRequest(1, "test@gmail.com", "testClinic", "$2a$10$jIRie1ZM8CVysp4olOIoqOviEcG.kPWQutEftr5897GD54Cr0uNcS", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.SIGNUP, null);
-    notSignupUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
-    decisionMadeUserReq = new UserRequest(1, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.APPROVED, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
+    notSignupUserReq = new UserRequest(2, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.AWAITING, new Date(), RequestTypeEnum.PASSWORD_RESET, null);
+    decisionMadeUserReq = new UserRequest(3, "user1@gmail.com", "clinic1", "password1", RequestStatusEnum.APPROVED, new Date(), RequestTypeEnum.PASSWORD_RESET, new Date());
 
     jest.spyOn(UserRequestSQLRepository.prototype, "get").mockImplementation(async (requestId) => mockUserReqRepo.get(requestId));
     jest.spyOn(UserService.prototype, "get").mockImplementation(async () => admin);
@@ -58,15 +58,15 @@ describe("Create User API Test /api/signup", () => {
     expect(response.text).toContain("User successfully approved and created");
   });
 
-  it("should fail to create the user if the request was rejected", async () => {
+  it("should successfully update the request if the request was rejected", async () => {
     await mockUserReqRepo.create(userReq);
     jest.spyOn(UserRequestSQLRepository.prototype, "update").mockImplementation(async (userReq) => mockUserReqRepo.update(userReq));
     jest.spyOn(UserRequestService.prototype, "get").mockImplementation(async () => userReq);
 
     const response = await request(app).patch(`/api/user/request/${userReq.id}`).send({ approved: false, requestId: userReq.id }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
-    expect(response.statusCode).toBe(403);
-    expect(response.text).toContain("Forbidden! User request has not been approved");
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toContain("Successfully updated user request status 1");
   });
 
   it("should fail to create the user if the request type was not SIGNUP", async () => {

@@ -3,7 +3,6 @@ import { delay, inject, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
 import { getLogger } from "log4js";
 import { Survey } from "@app/domain/Survey";
-import { formatDateForSQL } from "@app/application/util";
 
 @injectable()
 export class SurveyAddHandler {
@@ -29,8 +28,8 @@ export class SurveyAddHandler {
   private async execute(req: Request): Promise<boolean> {
     try {
       const surveyName: string = req.body.surveyName;
-      const dateCreated: string = formatDateForSQL(new Date());
-      const newSurvey: Survey = new Survey(surveyName, dateCreated);
+      const dateCreated: Date = new Date();
+      const newSurvey: Survey = new Survey(1, surveyName, dateCreated);
       return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
       this._logger.error("Error adding sample survey:", error);

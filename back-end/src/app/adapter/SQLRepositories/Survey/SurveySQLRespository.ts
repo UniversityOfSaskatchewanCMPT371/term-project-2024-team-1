@@ -9,30 +9,42 @@ export class SurveySQLRepository implements ISurveyRepository {
   private readonly _logger = getLogger(SurveySQLRepository.name);
 
   private readonly _getAllQuery: string = "SELECT * FROM Survey";
-  private readonly _getSurveyQuery: string = "SELECT * FROM Survey WHERE surveyName = ?";
+  private readonly _getSurveyQuery: string = "SELECT * FROM Survey WHERE id = ?";
   private readonly _createSurveyQuery: string = "INSERT INTO Survey (surveyName, dateCreated) VALUES (?, NOW())";
-  private readonly _deleteSurveyQuery: string = "DELETE FROM Survey WHERE surveyName = ?";
+  private readonly _deleteSurveyQuery: string = "DELETE FROM Survey WHERE id = ?";
+  private readonly _getAllSubmittedUsersQuery: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?";
 
   async getAll(): Promise<Survey[]> {
     try {
       const [data] = await query(this._getAllQuery);
       return data;
     } catch (error) {
-      this._logger.error(error);
-      throw error;
+      return Promise.reject(error);
+      
     }
   }
 
-  async getSurvey(surveyName: string): Promise<Survey | null> {
+  async getSurvey(surveyId: number): Promise<Survey | null> {
     try {
-      const [data] = await query(this._getSurveyQuery, [surveyName]);
+      const [data] = await query(this._getSurveyQuery, [surveyId.toString()]);
       if (data.length === 0) {
         return null;
       }
-      return data[0];
+      return data[0]; 
     } catch (error) {
       this._logger.error(error);
-      throw error;
+      return Promise.reject(error);
+    }
+  }
+
+  async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
+    try {
+      return query(this._getAllSubmittedUsersQuery, [surveyId.toString()]).then((result: [string[]]) => {
+        return result[0];
+      });
+    } catch (error) {
+      this._logger.error(error);
+      return Promise.reject(error);
     }
   }
 
@@ -42,18 +54,18 @@ export class SurveySQLRepository implements ISurveyRepository {
       return result.affectedRows > 0;
     } catch (error) {
       this._logger.error(error);
-      throw error;
+      return Promise.reject(error);
     }
   }
 
 
-  async deleteSurvey(surveyName: string): Promise<boolean> {
+  async deleteSurvey(surveyId: number): Promise<boolean> {
     try {
-      const [result] = await query(this._deleteSurveyQuery, [surveyName]);
+      const [result] = await query(this._deleteSurveyQuery, [surveyId.toString()]);
       return result.affectedRows > 0;
     } catch (error) {
       this._logger.error(error);
-      throw error;
+      return Promise.reject(error);
     }
   }  
 }
