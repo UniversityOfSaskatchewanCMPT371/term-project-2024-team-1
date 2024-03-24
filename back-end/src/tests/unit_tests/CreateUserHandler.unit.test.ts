@@ -50,7 +50,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should succeed with the status code 200 if the user insertion was successful", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq));
@@ -67,7 +67,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 404 if 'execute' was not successful in fetching the user request", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(null));
@@ -84,7 +84,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 500 if 'execute' throws an error in fetching the user request", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.reject(new Error("Error")));
@@ -101,7 +101,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 400 if request type was not SIGNUP", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq_not_SIGNUP.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq_not_SIGNUP.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true); 
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq_not_SIGNUP));
@@ -118,7 +118,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 400 if decision date was not null", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq_date_not_null.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq_date_not_null.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true); 
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq_date_not_null));
@@ -135,7 +135,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 500 if the request was not updated", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq.id } } as unknown as Request;
       mockReq.status = RequestStatusEnum.AWAITING;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
@@ -150,7 +150,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should succeed with the status code 200 if the rejected request was updated successfully", async() => {
-      const req: Request = { body: { approved: false, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: false }, params: { requestId: mockReq_date_not_null.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(mockReq_rejected));
@@ -164,7 +164,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should fail with the status code 500 if the user insertion was not successful and the rollback to request status was successful", async() => {
-      const req: Request = { body: { approved: true, requestId: mockReq.id } } as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: mockReq.id } } as unknown as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       mockReq.status = RequestStatusEnum.AWAITING;
       jest.spyOn(handler, "validation").mockReturnValue(true);
@@ -182,67 +182,67 @@ describe("CreateUser and Modify Request", () => {
 
   describe("validation", () => {
     it("should return true if true approved status and an integer requestId is provided", () => {
-      const req: Request = { body: { approved: true, requestId: 12 } } as any as Request;
+      const req: Request = { body: { approved: true }, params: { requestId: 12 } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeTruthy();
     });
 
     it("should return true if false approved status and an integer requestId is provided", () => {
-      const req: Request = { body: { approved: false, requestId: 112 } } as any as Request;
+      const req: Request = { body: { approved: false }, params: { requestId: 102 } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeTruthy();
     });
 
     it("should return false if null approved status and an integer requestId is provided", () => {
-      const req: Request = { body: { approved: null, requestId: 12 } } as any as Request;
+      const req: Request = { body: { approved: null }, params: { requestId: 1212 } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if undefined approved status and an integer requestId is provided", () => {
-      const req: Request = { body: { approved: undefined, requestId: 12 } } as any as Request;
+      const req: Request = { body: { approved: undefined }, params: { requestId: 102 } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if boolean approved status and a non-int requestId is provided", () => {
-      const req: Request = { body: { approved: false, requestId: "NaN" } } as any as Request;
+      const req: Request = { body: { approved: false }, params: { requestId: "NaN" } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if boolean approved status and a null requestId is provided", () => {
-      const req: Request = { body: { approved: false, requestId: null } } as any as Request;
+      const req: Request = { body: { approved: false }, params: { requestId: null } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if boolean approved status and a undefined requestId is provided", () => {
-      const req: Request = { body: { approved: false, requestId: undefined } } as any as Request;
+      const req: Request = { body: { approved: false }, params: { requestId: undefined } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if null approved status and a null requestId is provided", () => {
-      const req: Request = { body: { approved: null, requestId: null } } as any as Request;
+      const req: Request = { body: { approved: null }, params: { requestId: null } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
     it("should return false if undefined approved status and a undefined requestId is provided", () => {
-      const req: Request = { body: { approved: undefined, requestId: undefined } } as any as Request;
+      const req: Request = { body: { approved: undefined }, params: { requestId: undefined } } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
-    it("should return false if undefined body is provided", () => {
-      const req: Request = { body: undefined } as any as Request;
+    it("should return false if undefined body and param is provided", () => {
+      const req: Request = { body: undefined, params: undefined } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });
 
-    it("should return false if null body is provided", () => {
-      const req: Request = { body: null } as any as Request;
+    it("should return false if null body and param is provided", () => {
+      const req: Request = { body: null, params: null } as unknown as Request;
       const result: boolean = handler.validation(req);
       expect(result).toBeFalsy();
     });

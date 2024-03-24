@@ -24,8 +24,6 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(CreateUserHandler.name);
   private readonly USERID_LENGTH: number = 8; 
   constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService, @inject(delay(() => UserService)) private readonly _userService: UserService) {
-    // this._userRequestService = container.resolve(UserRequestService);
-    // this._userService = container.resolve(UserService);
   }
 
     
@@ -78,11 +76,11 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
             res.status(400).send("Bad request: The request does not meet the required criteria");
           }
         } else {
-          this._logger.INFO(`Failed to retrieve ${req.body.requestId}, reqeust doesn't exist`);
+          this._logger.INFO(`Failed to retrieve ${req.params.requestId}, reqeust doesn't exist`);
           res.status(404).send("Request not found");
         }
       }).catch((err) => {
-        this._logger.ERROR(`Failed to retrieve ${req.body.requestId}, error occured: ${err}`);
+        this._logger.ERROR(`Failed to retrieve ${req.params.requestId}, error occured: ${err}`);
         res.status(500).send("Server failed to process request, please try again");
       });
     } else {
@@ -93,7 +91,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
   }
 
   public async execute(req: Request): Promise<UserRequest | null> {
-    const requestId: number = Number(req.body.requestId); 
+    const requestId: number = Number(req.params.requestId); 
     const userRequest: Promise<UserRequest | null> = this._userRequestService.get(requestId); 
     return userRequest;
   }
@@ -115,10 +113,11 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
     const request: Request = args[0];
     return (
       !nullOrUndefined(request.body) && 
+      !nullOrUndefined(request.params) &&
     !nullOrUndefined(request.body.approved) && 
-    !nullOrUndefined(request.body.requestId) &&
+    !nullOrUndefined(request.params.requestId) &&
     (typeof request.body.approved === "boolean" || request.body.approved === "true" || request.body.approved === "false") &&
-    !isNaN(Number(request.body.requestId))
+    !isNaN(Number(request.params.requestId))
     ); 
   };
 
