@@ -13,7 +13,7 @@ import Admin from "../Screen/Admin"
 import LandingPage from "../Screen/LandingPage"
 import SurveyList from "../Screen/SurveyList"
 import Notifications from "../Screen/Notifications"
-import About from "../Screen/About"
+import About from "../Screen/ContactUs"
 import ContactUs from "../Screen/ContactUs"
 import Logout from "../Screen/Logout"
 
@@ -139,7 +139,6 @@ const MainDrawer = () => {
       <Drawer.Screen name="Home" testID={"Home"} component={LandingPage} />
       <Drawer.Screen name="Surveys" testID={"Surveys"} component={SurveyList} />
       <Drawer.Screen name="Notifications" testID={"Notifications"} component={Notifications} />
-      <Drawer.Screen name="About" testID={"About"} component={About} />
       <Drawer.Screen name="Contact Us" testID={"ContactUs"} component={ContactUs} />
       <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
 

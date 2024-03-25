@@ -8,26 +8,27 @@ import Survey from "./Survey";
 const ContactUs = () => {
   const navigation = useNavigation();
 
-  const handleReturn = () => {
-    
-  };
+  const handleReturn = () => {};
 
   return (
     <View style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
       <DrawerButton />
-      <Text style={style.title}>Survey Completed</Text>
+      <Text style={style.title}>Contact Us</Text>
       <Text style={style.paragraph}>
-        The Survey for this quarter has been submitted.
-        {"\n\n"}
-        Thank you for your cooperation.
+        Thank you again for your participation. Communications regarding the
+        Surveillance initiative, including reports, infographics and highlights,
+        will be communicated through the WeCAHN website. The next survey which
+        you can complete, which will focus on specific disease diagnoses, will
+        be made available in month 20xx (see notifications tab for reporting
+        time periods). Should you have any questions,
+        {"\n\n"} Should you have any questions, you can email the Surveillance
+        lead:
+        {"\n"}
+        Dr.Tasha Epp:
       </Text>
-      <TouchableOpacity
-        testID="returnButton"
-        style={style.returnButton}
-        onPress={handleReturn}
-      >
-        <Text style={style.returnButtonText}>Return</Text>
-      </TouchableOpacity>
+      <Text style={style.emailLink}>tasha.epp@usask.ca</Text>
+      <Text style={style.paragraph}>{"\n\n"}The Surveillance Initiative:</Text>
+      <Text style={style.emailLink}>compan.surv@usask.ca</Text>
     </View>
   );
 };
@@ -42,18 +43,11 @@ const style = StyleSheet.create({
     fontSize: 14,
     color: "#ffffff",
     textAlign: "center",
-  },
-  returnButton: {
-    backgroundColor: "blue", // CasiDarkBlue
-    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 16,
   },
-  returnButtonText: {
-    color: "#ffffff", // white text color
-    fontSize: 18,
-    fontWeight: "bold",
+  emailLink: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });
 export default ContactUs;
