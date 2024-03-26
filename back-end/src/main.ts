@@ -1,3 +1,4 @@
+import { AnswerController } from "@app/adapter/Controllers/AnswerController";
 import { SurveyController } from "@app/adapter/Controllers/SurveyController";
 import { UserController } from "@app/adapter/Controllers/UserController";
 import { registerAllDependencies } from "@app/adapter/DependencyInjections";
@@ -18,6 +19,7 @@ const logger: Logger = getLogger("info"); // logger for info
 
 const surveyController: SurveyController = container.resolve(SurveyController);
 const userController: UserController = container.resolve(UserController);
+const answerController: AnswerController = container.resolve(AnswerController);
 
 // const userRoute: Router = require("@app/adapter/Controllers/UserController");
 
@@ -27,6 +29,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api", surveyController.getController());
 app.use("/api", userController.getController()); // confirm
+app.use("/api", answerController.getController());
 
 app.get("/", (req: Request, res: Response) => {
   logger.info("GET request received");

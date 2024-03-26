@@ -30,7 +30,7 @@ export class SurveyAddHandler {
     try {
       const surveyName: string = req.body.surveyName;
       const dateCreated: string = formatDateForSQL(new Date());
-      const newSurvey: Survey = new Survey(surveyName, dateCreated);
+      const newSurvey: Survey = new Survey(surveyName, dateCreated, 0, dateCreated);
       return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
       this._logger.error("Error adding sample survey:", error);

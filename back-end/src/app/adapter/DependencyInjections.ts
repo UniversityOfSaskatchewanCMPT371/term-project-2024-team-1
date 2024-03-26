@@ -10,11 +10,14 @@ import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUse
 import { UserRequestSQLRepository } from "./SQLRepositories/UserRequest/UserRequestSQLRepository";
 import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
 import { QuestionSQLRepository } from "./SQLRepositories/Survey/QuestionSQLRepository";
+import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
+import { AnswerSQLRepository } from "./SQLRepositories/Survey/AnswerSQLRepository";
 
 export const userRepoToken: string = "UserRepo";
 export const userReqRepoToken: string = "UserReqRepo";
 export const surveyRepoToken: string = "SurveyRepo";
 export const surveyQuestionRepoToken: string = "SurveyQuestionRepo";
+export const surveyAnswerRepoToken: string = "SurveyAnswerRepo";
 
 export const loggerToken: string = "Logger";
 
@@ -23,6 +26,7 @@ export function registerAllDependencies(): void {
   container.register<ISurveyRepository>(surveyRepoToken, { useClass: SurveySQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRequestRepository>(userReqRepoToken, { useClass: UserRequestSQLRepository }, { lifecycle: Lifecycle.Singleton });
+  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: AnswerSQLRepository }, { lifecycle: Lifecycle.Singleton });
   // container.registerSingleton<IUserRepository>(
   //   userRepoToken,
   //   delay(() => UserSQLRepository)
