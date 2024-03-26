@@ -42,7 +42,7 @@ export class MockSurveyRepository implements ISurveyRepository {
   }
 
   async createSurvey(survey: Survey): Promise<boolean> {
-    const surveyId: number = survey.surveyId;
+    const surveyId: number = survey.id;
     this._fakeDb.set(surveyId, survey);
     return Promise.resolve(true);
   }

@@ -29,8 +29,8 @@ export class SurveyAddHandler {
   private async execute(req: Request): Promise<boolean> {
     try {
       const surveyName: string = req.body.surveyName;
-      const dateCreated: Date = new Date();
-      const newSurvey: Survey = new Survey(1, surveyName, dateCreated);
+      const dueDate: Date = new Date(req.body.dueDate as string);
+      const newSurvey: Survey = new Survey(1, surveyName, dueDate);
       return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
       this._logger.error("Error creating survey:", error);
