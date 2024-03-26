@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var dbm;
-var type;
-var seed;
-var fs = require('fs');
-var path = require('path');
-var Promise;
+let dbm;
+let type;
+let seed;
+const fs = require("fs");
+const path = require("path");
+let Promise;
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -19,35 +19,35 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  var filePath = path.join(__dirname, 'sqls', '20240322171931-surveyCompletionMapTable-up.sql');
-  return new Promise( function( resolve, reject ) {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+  const filePath = path.join(__dirname, "sqls", "20240322171931-surveyCompletionMapTable-up.sql");
+  return new Promise(function(resolve, reject) {
+    fs.readFile(filePath, { encoding: "utf-8" }, function(err, data) {
       if (err) return reject(err);
-      console.log('received data: ' + data);
+      console.log("received data: " + data);
 
       resolve(data);
     });
   })
-  .then(function(data) {
-    return db.runSql(data);
-  });
+    .then(function(data) {
+      return db.runSql(data);
+    });
 };
 
 exports.down = function(db) {
-  var filePath = path.join(__dirname, 'sqls', '20240322171931-surveyCompletionMapTable-down.sql');
-  return new Promise( function( resolve, reject ) {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+  const filePath = path.join(__dirname, "sqls", "20240322171931-surveyCompletionMapTable-down.sql");
+  return new Promise(function(resolve, reject) {
+    fs.readFile(filePath, { encoding: "utf-8" }, function(err, data) {
       if (err) return reject(err);
-      console.log('received data: ' + data);
+      console.log("received data: " + data);
 
       resolve(data);
     });
   })
-  .then(function(data) {
-    return db.runSql(data);
-  });
+    .then(function(data) {
+      return db.runSql(data);
+    });
 };
 
 exports._meta = {
-  "version": 1
+  version: 1
 };
