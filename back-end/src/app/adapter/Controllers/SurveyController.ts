@@ -1,15 +1,28 @@
-/* eslint-disable */
+import "reflect-metadata";
 import express, { Request, Response, Router } from "express";
-import { container } from "tsyringe";
+import { injectable } from "tsyringe";
 import { SurveyAddHandler } from "./Handlers/SurveyAddHandler";
+import { SurveyGetUsersSubmittedHandler } from "./Handlers/SurveyGetUsersSubmittedHandler";
+import { authenticate, ADMIN } from "@app/application/util";
 
-const router: Router = express.Router();
 
-const surveyAddHandler: SurveyAddHandler = container.resolve(SurveyAddHandler);
 
-router.post("/survey", (req: Request, res: Response) => {
-  console.log
-  surveyAddHandler.handle(req, res);
-});
+@injectable()
+export class SurveyController {
+  private readonly _router: Router = express.Router();
 
-module.exports = router;
+  public constructor(private readonly _surveyAddHandler: SurveyAddHandler,
+    private readonly _surveyGetUsersSubmittedHandler: SurveyGetUsersSubmittedHandler) { }
+
+  public getController(): Router {
+    this._router.post("/survey", (req: Request, res: Response) => {
+      void this._surveyAddHandler.handle(req, res);
+    });
+
+    this._router.get("/survey/:surveyId/user", authenticate(ADMIN), (req: Request, res: Response) => {
+      this._surveyGetUsersSubmittedHandler.handle(req, res);
+    });
+
+    return this._router;
+  }
+}
