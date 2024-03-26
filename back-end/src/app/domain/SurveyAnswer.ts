@@ -26,7 +26,7 @@ export class SurveyAnswer {
     this._answer = newAnswer;
   }
 
-  public get question(): number {
+  public get questionId(): number {
     return this._questionId;
   }
   
