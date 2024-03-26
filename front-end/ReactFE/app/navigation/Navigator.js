@@ -12,6 +12,7 @@ import CreateSurvey from "../Screen/CreateSurvey";
 import Admin from "../Screen/Admin";
 import LandingPage from "../Screen/LandingPage";
 import SurveyList from "../Screen/SurveyList";
+import TakeSurvey from "../Screen/TakeSurvey"
 import Notifications from "../Screen/Notifications";
 import About from "../Screen/ContactUs";
 import ContactUs from "../Screen/ContactUs";
@@ -128,6 +129,7 @@ const MainDrawer = () => {
     >
       <Drawer.Screen name="Home" testID={"Home"} component={LandingPage} />
       <Drawer.Screen name="Surveys" testID={"Surveys"} component={SurveyList} />
+       <Drawer.Screen name="TakeSurvey" testID={"TakeSurvey"} component={TakeSurvey} options={{drawerLabel: ()=> null}} />
       <Drawer.Screen
         name="Notifications"
         testID={"Notifications"}
