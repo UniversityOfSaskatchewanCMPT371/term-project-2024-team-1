@@ -11,7 +11,7 @@ const LandingPage = () => {
   const navigation = useNavigation();
 
   const handleTakeSurvey = () => {
-    navigation.navigate("SurveyList");
+    navigation.navigate("Surveys");
   };
 
   return (

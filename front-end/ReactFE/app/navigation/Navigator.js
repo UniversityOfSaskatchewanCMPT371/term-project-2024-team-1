@@ -89,6 +89,8 @@ const AdminMainDrawer = () => {
         testID={"createsurvey"}
         component={CreateSurvey}
       />
+
+      
     </Drawer.Navigator>
   );
 };
@@ -187,8 +189,7 @@ const MainStack = () => {
       initialRouteName="Home"
     >
       <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
-      <AppMainStack.Screen name="LandingPage" component={LandingPage} />
-      <AppMainStack.Screen name="SurveyList" component={SurveyList} />
+      
       {/* {
 
         runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :

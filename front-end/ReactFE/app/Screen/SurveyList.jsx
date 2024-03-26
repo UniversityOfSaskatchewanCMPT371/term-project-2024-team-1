@@ -28,6 +28,7 @@ const SurveyList = () => {
           <View key={quarter} style={styles.box}>
             <Text style={styles.boxText}>Quarter {quarter}</Text>
             <TouchableOpacity
+              testID={"surveyQuarter"+String(quarter)+"ID"}
               style={styles.takeSurveyButton}
               onPress={handleTakeSurvey}
             >
