@@ -26,7 +26,30 @@ export default function Admin({navigation}) {
         <View style={{marginTop:"50%"}} >
 
             <Text style={{color:"#fff", fontWeight:"bold", fontSize:30, marginBottom:30}}>user is admin</Text> 
-            
+            <TouchableOpacity
+          style={[ScreenStyles.CasiTeal, ScreenStyles.button]}
+          onPress={() => {
+            console.log("Create Survey Pressed");
+          }}
+        >
+          <Text style={ScreenStyles.buttonText}>+ Create Survey</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[ScreenStyles.CasiPurple, ScreenStyles.button]}
+          onPress={() => {
+            console.log("Download Results Pressed");
+          }}
+        >
+          <Text style={ScreenStyles.buttonText}>Download Results</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[ScreenStyles.CasiPurple, ScreenStyles.button]}
+          onPress={() => {
+            console.log("ID Requests Pressed");
+          }}
+        >
+          <Text style={ScreenStyles.buttonText}>ID Requests</Text>
+        </TouchableOpacity>
             <Button
                     color="#ff0000"
                     title="Logout"
