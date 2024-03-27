@@ -7,7 +7,7 @@ import { ResultSetHeader } from "mysql2";
 export class AnswerSQLRepository implements ISurveyAnswerRepository {
   private readonly _logger: ILogger = LoggerFactory.getLogger(AnswerSQLRepository.name);
 
-  private readonly _updateQuery: string = `UPDATE Answer SET answer=?, note=? WHERE id=?;`;
+  private readonly _updateQuery: string = `UPDATE Answer SET answer=?, note=? WHERE id=? AND userId=?;`;
 
   public async getAnswers(userId: string): Promise<SurveyAnswer[]> {
     throw new Error("unimplemented");
@@ -23,7 +23,7 @@ export class AnswerSQLRepository implements ISurveyAnswerRepository {
 
   public async update(answers: SurveyAnswer[]): Promise<boolean> {
 
-    const answerFields: string[][] = answers.map(answer => [answer.answer, answer.note, answer.id.toString()]);
+    const answerFields: string[][] = answers.map(answer => [answer.answer, answer.note, answer.id.toString(), answer.userId]);
     const bulkUpdateQuery: string = constructBulkQuery(this._updateQuery, answerFields);
 
     const updatedAnswers: Promise<boolean> = query(bulkUpdateQuery)
