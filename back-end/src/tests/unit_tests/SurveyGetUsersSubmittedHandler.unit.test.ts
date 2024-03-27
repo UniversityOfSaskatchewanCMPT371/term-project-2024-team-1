@@ -24,8 +24,8 @@ describe("SurveyGetUsersSubmittedHandler", () => {
   const handler: SurveyGetUsersSubmittedHandler = container.resolve(SurveyGetUsersSubmittedHandler);
 
 
-  const survey1: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date());
-  const noSubmissionSurvey: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date());
+  const survey1: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date(), new Date());
+  const noSubmissionSurvey: Survey = new Survey(randomInt(1000), randomAlphanumString(8), new Date(), new Date());
 
   beforeEach(() => {
     jest.restoreAllMocks();

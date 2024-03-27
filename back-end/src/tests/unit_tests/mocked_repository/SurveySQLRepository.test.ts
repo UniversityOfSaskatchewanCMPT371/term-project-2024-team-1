@@ -1,6 +1,7 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { Survey } from "@app/domain/Survey";
 import { SurveySQLRepository } from "../../../app/adapter/SQLRepositories/Survey/SurveySQLRespository";
+import { formatDateForSQL } from "@app/application/util";
 /* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
@@ -17,8 +18,8 @@ describe("SurveySQLRepository", () => {
 
   describe("getAll", () => {
     const mockSurveys = [
-      new Survey(1, "Survey 1", new Date()),
-      new Survey(2, "Survey 2", new Date())
+      new Survey(1, "Survey 1", new Date(), new Date()),
+      new Survey(2, "Survey 2", new Date(), new Date())
     ];
 
     it("should return an array of Survey objects", async () => {
@@ -35,7 +36,7 @@ describe("SurveySQLRepository", () => {
   });
 
   describe("getSurvey", () => {
-    const mockSurvey = new Survey(1, "Survey 1", new Date());
+    const mockSurvey = new Survey(1, "Survey 1", new Date(), new Date());
 
     it("should return a Survey object when found", async () => {
       (query as jest.Mock).mockResolvedValueOnce([[mockSurvey], undefined]);
@@ -52,13 +53,14 @@ describe("SurveySQLRepository", () => {
   });
 
   describe("createSurvey", () => {
-    const newSurvey = new Survey(3, "New Survey", new Date());
+    const newSurvey = new Survey(3, "New Survey", new Date(), new Date());
 
     it("should return true on successful creation", async () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
       const result = await repo.createSurvey(newSurvey);
+      const dueDate: string = formatDateForSQL(new Date());
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated) VALUES (?, NOW())", ["New Survey"]);
+      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)", ["New Survey", dueDate]);
     });
 
     it("should return false when creation fails", async () => {

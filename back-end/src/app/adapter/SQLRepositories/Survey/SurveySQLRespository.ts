@@ -13,6 +13,7 @@ export class SurveySQLRepository implements ISurveyRepository {
   private readonly _getSurveyQuery: string = "SELECT * FROM Survey WHERE id = ?";
   private readonly _createSurveyQuery: string = "INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)";
   private readonly _deleteSurveyQuery: string = "DELETE FROM Survey WHERE id = ?";
+  private readonly _addQuestionToSurveyQuery: string = "INSERT INTO SurveyQuestionMap (surveyId, questionId, rankOrder) VALUES (?, ?, ?)";
   private readonly _getAllSubmittedUsersQuery: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?";
 
   async getAll(): Promise<Survey[]> {
@@ -60,6 +61,15 @@ export class SurveySQLRepository implements ISurveyRepository {
     }
   }
 
+  async addQuestionToSurvey(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
+    try {
+      const [result] = await query(this._addQuestionToSurveyQuery, [surveyId.toString(), questionId.toString(), rankOrder.toString()]);
+      return result.affectedRows > 0;
+    } catch (error) {
+      this._logger.error(`Failed to add question ${questionId} to survey ${surveyId}:`, error);
+      return Promise.reject(error);
+    }
+  }
 
   async deleteSurvey(surveyId: number): Promise<boolean> {
     try {

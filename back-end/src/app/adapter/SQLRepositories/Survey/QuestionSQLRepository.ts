@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import "reflect-metadata";
-import { getLogger } from "log4js";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
+import { ILogger } from "@app/domain/interfaces/ILogger";
 import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
 
 export class QuestionSQLRepository implements ISurveyQuestionRepository {
-  private readonly _logger = getLogger(QuestionSQLRepository.name);
+  private readonly _logger: ILogger = LoggerFactory.getLogger(QuestionSQLRepository.name);
 
   private readonly _getAllQuery: string = "SELECT * FROM Question";
   private readonly _getByQuestionIdQuery: string = "SELECT * FROM Question WHERE id = ?";
@@ -20,7 +22,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
         return data[0];
       });
     } catch (error) {
-      this._logger.error("Failed to retrieve all questions: ", error);
+      this._logger.ERROR(`Failed to retrieve all questions: ${error}`);
       throw error;
     }
   }
@@ -34,18 +36,19 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
         return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].id, data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined));
       });
     } catch (error) {
-      this._logger.error(`Failed to retrieve questions for survey named ${surveyName}: `, error);
+      this._logger.ERROR(`Failed to retrieve questions for survey named ${surveyName}: error: ${error}`);
       throw error;
     }
   }
 
   async create(question: SurveyQuestion): Promise<boolean> {
-    try {
+    try { 
+      const parentId: string | null = question.parentId !== null ? question.parentId.toString() : null; 
       const isQuestionCreated: Promise<boolean> = query(this._createQuestionQuery,
-        [question.question, (question.standard ? 1 : 0).toString(), question.type, question.parentId.toString()]);
+        [question.question, (question.standard ? 1 : 0).toString(), question.type, parentId]);
       return isQuestionCreated;
     } catch (error) {
-      this._logger.error(error);
+      this._logger.ERROR(`Error: ${error}`);
       return Promise.reject(error);
     }
   }

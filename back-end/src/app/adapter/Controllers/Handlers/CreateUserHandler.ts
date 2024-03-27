@@ -10,13 +10,11 @@ import { UserRequest } from "@app/domain/UserRequest";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import log4jsConfig from "@resources/log4js-config.json";
 import assert from "assert";
 import { Request, Response } from "express";
 import { configure } from "log4js";
 import { delay, inject, injectable } from "tsyringe";
 
-configure(log4jsConfig);
 
 @injectable()
 export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
@@ -49,7 +47,7 @@ export class CreateUserHandler implements IRouteHandler<UserRequest | null> {
                   this.create_user_execute(newUser).then((success) => {
                     if (success) {
                       this._logger.INFO("user added successfully");
-                      res.status(200).send("User successfully approved and created");
+                      res.status(201).send("User successfully approved and created");
                     } else {
                       this._logger.INFO(`Failed to add the user ${userId}`);
                       this.rollBackChanges(res, userRequest);

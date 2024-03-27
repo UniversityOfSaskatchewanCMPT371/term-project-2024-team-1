@@ -34,9 +34,14 @@ export class SurveyService {
     };
   }
 
+  public async addQuestionToSurvey(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
+    return this._surveyRepository.addQuestionToSurvey(surveyId, questionId, rankOrder);
+  }
+
   public async deleteSurvey(surveyId: number): Promise<boolean> {
     return this._surveyRepository.deleteSurvey(surveyId);
   };
+
 
 }
 

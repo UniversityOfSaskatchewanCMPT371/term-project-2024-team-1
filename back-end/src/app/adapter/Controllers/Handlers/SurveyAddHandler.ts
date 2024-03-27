@@ -1,40 +1,59 @@
 import { Request, Response } from "express";
 import { delay, inject, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
-import { getLogger } from "log4js";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
+import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Survey } from "@app/domain/Survey";
+import { nullOrUndefined } from "@app/application/util";
+import { isDate } from "util/types";
 
 @injectable()
 export class SurveyAddHandler {
-  private readonly _logger = getLogger(SurveyAddHandler.name);
+  private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyAddHandler.name);
 
   constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
-    // this._surveyService = container.resolve(SurveyService);
   }
   
   public async handle(req: Request, res: Response): Promise<void> {
-    try {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      if (await this.execute(req)) {
-        res.status(200).send("Sample survey added successfully.");
-      } else {
-        res.status(400).send("Failed to add sample survey.");
-      }
-    } catch (error) {
-      res.status(500).send("Error occurred while adding sample survey.");
+    if (!this.validation(req)) {
+      this._logger.INFO("Failed to validate survey request");
+      res.send(422).status(422).send("Survey is required");
+      return;
     }
+    this._logger.INFO("Successfully validated survey request");
+    this.execute(req).then((success) => {
+      if (success) {
+        this._logger.INFO("Successfully created survey");
+        res.status(201).send("Successfully created survey");
+      } else {
+        this._logger.INFO("Failed to create survey");
+        res.status(400).send("Failed to create survey");
+      }
+    }).catch((error: any) => {
+      this._logger.ERROR(`Failed to create survey, error occured: ${error}`);
+      res.status(500).send("Server failed to process request, please try again");
+    });
+
   }
 
   private async execute(req: Request): Promise<boolean> {
-    try {
-      const surveyName: string = req.body.surveyName;
-      const dateCreated: Date = new Date();
-      const dueDate: Date = new Date(); // fake due date 
-      const newSurvey: Survey = new Survey(1, surveyName, dateCreated, dueDate);
-      return await this._surveyService.createSurvey(newSurvey);
-    } catch (error) {
-      this._logger.error("Error adding sample survey:", error);
-      throw error;
-    }
+    const surveyName: string = req.body.surveyName;
+    const dateCreated: Date = req.body.dateCreated;
+    const dueDate: Date = req.body.dueDate; 
+    const surveyId: number = -1;
+    const newSurvey: Survey = new Survey(surveyId, surveyName, dateCreated, dueDate);
+    return this._surveyService.createSurvey(newSurvey);
   }
+
+  public validation(...args: any[]): boolean {
+    const request: Request = args[0];
+    return (
+      !nullOrUndefined(request.body) && 
+      !nullOrUndefined(request.body.surveyName) && 
+      !nullOrUndefined(request.body.dateCreated) && 
+      !nullOrUndefined(request.body.dueDate) &&
+      isDate(request.body.dateCreated) &&
+      isDate(request.body.dueDate));
+  };
+  
 }

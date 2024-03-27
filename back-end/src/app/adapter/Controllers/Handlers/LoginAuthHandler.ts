@@ -22,8 +22,6 @@ export class LoginAuthHandler implements IRouteHandler<User | null> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
 
   constructor(@inject(delay(() => UserService)) private readonly _userService: UserService) {
-  // constructor(private readonly _userService: UserService) {
-    // this._userService = container.resolve(UserService);
   }
 
   public handle(req: Request, res: Response): void {

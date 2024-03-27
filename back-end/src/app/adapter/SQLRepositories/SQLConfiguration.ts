@@ -10,7 +10,7 @@ export const sqlPool: mysql.Pool = mysql.createPool({
   database: DB_DATABASE
 });
 
-export async function query(sql: string, fields?: string[]): Promise<any> {
+export async function query(sql: string, fields?: any[]): Promise<any> {
   const preparedSQL: string = fields != null && fields !== undefined ? mysql.format(sql, fields) : sql;
 
   const connection: mysql.PoolConnection = await sqlPool.getConnection();
