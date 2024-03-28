@@ -22,11 +22,11 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
     }
     this.execute(req).then((success) => {
       if (success) {
-        this._logger.INFO("Successfully created survey question");
-        res.status(201).send("Successfully created survey question");
+        this._logger.INFO("Successfully created survey questions");
+        res.status(201).send("Successfully created survey questions");
       } else {
-        this._logger.INFO("Failed to create survey question");
-        res.status(400).send("Failed to create survey question");
+        this._logger.INFO("Failed to create survey questions");
+        res.status(400).send("Failed to create survey questions");
       }
     }).catch(err => {
       this._logger.ERROR(`Failed to create survey question, error occured: ${err}`);

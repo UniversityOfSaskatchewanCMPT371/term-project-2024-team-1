@@ -52,7 +52,7 @@ export class SurveySQLRepository implements ISurveyRepository {
 
   async createSurvey(survey: Survey): Promise<boolean> {
     try {
-      const dueDate: string = formatDateForSQL(survey.dueDate);
+      const dueDate: string = formatDateForSQL(new Date(survey.dueDate));
       const [result] = await query(this._createSurveyQuery, [survey.surveyName, dueDate]);
       return result.affectedRows > 0;
     } catch (error) {

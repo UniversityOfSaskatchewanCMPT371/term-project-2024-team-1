@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { SurveyService } from "@app/application/SurveyService";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Request, Response } from "express";
 import { Survey } from "@app/domain/Survey";
 import { nullOrUndefined } from "@app/application/util";
-import { isDate } from "util/types";
 import { delay, inject, injectable } from "tsyringe";
 
 @injectable()
@@ -15,12 +15,9 @@ export class SurveyAddHandler {
   }
   
   public async handle(req: Request, res: Response): Promise<void> {
-    if (!this.validation(req)) {
-      this._logger.INFO("Failed to validate survey request");
-      res.send(422).status(422).send("Survey is required");
+    if (!this.validation(req, res)) {
       return;
     }
-    this._logger.INFO("Successfully validated survey request");
     this.execute(req).then((success) => {
       if (success) {
         this._logger.INFO("Successfully created survey");
@@ -38,22 +35,33 @@ export class SurveyAddHandler {
 
   private async execute(req: Request): Promise<boolean> {
     const surveyName: string = req.body.surveyName;
-    const dateCreated: Date = req.body.dateCreated;
     const dueDate: Date = req.body.dueDate; 
     const surveyId: number = -1;
-    const newSurvey: Survey = new Survey(surveyId, surveyName, dateCreated, dueDate);
+    const newSurvey: Survey = new Survey(surveyId, surveyName, dueDate);
     return this._surveyService.createSurvey(newSurvey);
   }
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    return (
+    const response: Response = args[1];
+    if (
       !nullOrUndefined(request.body) && 
       !nullOrUndefined(request.body.surveyName) && 
-      !nullOrUndefined(request.body.dateCreated) && 
-      !nullOrUndefined(request.body.dueDate) &&
-      isDate(request.body.dateCreated) &&
-      isDate(request.body.dueDate));
+      !nullOrUndefined(request.body.dueDate)) {
+      
+      const dateObject: Date = new Date(request.body.dueDate);
+      if (!isNaN(dateObject.getTime())) {
+        this._logger.INFO("Successfully validated survey request");
+        return true;
+      } else {
+        this._logger.INFO(`Due date not formatted properly, ${request.body.dueDate}`);
+        response.status(422).send("Incorrect survey format, please try again!");
+        return false;
+      }
+    } else {
+      response.status(422).send("Incorrect survey format, please try again!");
+      return false;
+    }
   };
   
 }

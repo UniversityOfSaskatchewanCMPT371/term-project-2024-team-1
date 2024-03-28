@@ -16,10 +16,13 @@ export class QuestionGetAllHandler implements IRouteHandler<SurveyQuestion[]> {
   }
 
   public handle(req: Request, res: Response): void {
-    this.execute(req).then((questions) => { res.json(questions); })
+    this.execute(req).then((questions: SurveyQuestion[]) => {
+      this._logger.INFO("Successfully retrieved all questions");
+      res.status(200).send(questions); 
+    })
       .catch(err => {
         this._logger.ERROR(`Failed to retrieve all survey questions: ${err}`);
-        res.status(500).send("Server failed to retrieve survey questions, please try again");
+        res.status(500).send("Server failed process request, please try again");
       });
   }
 
