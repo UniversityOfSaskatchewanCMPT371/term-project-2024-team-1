@@ -1,3 +1,13 @@
+// Preconditions:
+// - Ensure that "react", "react-native", "react-navigation/native", and any other required modules are properly installed and available.
+// - Make sure that the ScreenStyles.CasiBlue style is defined in the Screen module and properly exported.
+// - Confirm that the "TakeSurvey" screen is correctly configured and exists within the navigation stack.
+
+// Postconditions:
+// - After rendering, the SurveyList component displays a scrollable list of quarters with a "Take Survey" button for each quarter.
+// - Upon clicking the "Take Survey" button, the user is navigated to the "TakeSurvey" screen.
+// - The styling of the SurveyList component adheres to the defined styles, including the title, box layout, and button appearance.
+
 import React from "react";
 import {
   View,
@@ -13,9 +23,15 @@ import { useNavigation } from "@react-navigation/native";
 const SurveyList = () => {
   const navigation = useNavigation();
 
+  // Precondition:
+  // - useNavigation hook from "@react-navigation/native" is used to access the navigation object.
+
   const handleTakeSurvey = () => {
-    // Handle the action when "Take Survey" button is pressed
+    navigation.navigate("TakeSurvey");
   };
+
+  // Precondition:
+  // - handleTakeSurvey function is defined to navigate to the "TakeSurvey" screen upon button press.
 
   return (
     <ScrollView
@@ -28,6 +44,7 @@ const SurveyList = () => {
           <View key={quarter} style={styles.box}>
             <Text style={styles.boxText}>Quarter {quarter}</Text>
             <TouchableOpacity
+              testID={"surveyQuarter"+String(quarter)+"ID"}
               style={styles.takeSurveyButton}
               onPress={handleTakeSurvey}
             >
@@ -91,3 +108,6 @@ const styles = StyleSheet.create({
 });
 
 export default SurveyList;
+
+// Postcondition:
+// - SurveyList component is exported as the default export for use in other parts of the application.
