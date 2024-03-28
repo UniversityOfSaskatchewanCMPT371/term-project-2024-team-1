@@ -20,6 +20,8 @@ export const userRepoToken = UserSQLRepository;
 export const userReqRepoToken = UserRequestSQLRepository;
 export const surveyRepoToken = SurveySQLRepository;
 export const surveyQuestionRepoToken = QuestionSQLRepository;
+export const surveyAnswerRepoToken = AnswerSQLRepository;
+export const surveyResponseByUserRepoToken = SurveyResponseByUserSQLRepository;
 
 export const loggerToken: string = "Logger";
 
@@ -28,7 +30,8 @@ export function registerAllDependencies(): void {
   container.register<ISurveyRepository>(surveyRepoToken, { useClass: SurveySQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRequestRepository>(userReqRepoToken, { useClass: userReqRepoToken }, { lifecycle: Lifecycle.Singleton });
-
+  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: AnswerSQLRepository }, { lifecycle: Lifecycle.Singleton });
+  container.register<ISurveyResponseByUserRepository>(surveyResponseByUserRepoToken, { useClass: SurveyResponseByUserSQLRepository }, { lifecycle: Lifecycle.Singleton });
 
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   console.log("Registered all dependencies");
