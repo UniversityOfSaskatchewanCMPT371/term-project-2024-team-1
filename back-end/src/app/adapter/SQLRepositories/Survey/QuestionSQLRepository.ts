@@ -3,13 +3,18 @@ import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import "reflect-metadata";
 import { getLogger } from "log4js";
 import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
+import { QuestionTypeEnum, questionTypeEnumValueToKey } from "@app/domain/QuestionTypeEnum";
 
 export class QuestionSQLRepository implements ISurveyQuestionRepository {
   private readonly _logger = getLogger(QuestionSQLRepository.name);
 
   private readonly _getAllQuery: string = "SELECT * FROM Question";
   private readonly _getByQuestionIdQuery: string = "SELECT * FROM Question WHERE id = ?";
-  private readonly _getBySurveyQuery: string = "SELECT Q.* FROM Question Q INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId INNER JOIN Survey S ON SQM.surveyId = S.id WHERE S.surveyName = ?";
+  private readonly _getBySurveyQuery: string = `SELECT Q.* FROM Question Q 
+                                                  INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId 
+                                                  INNER JOIN Survey S ON SQM.surveyId = S.id 
+                                                  WHERE S.id = ?`;
+
   private readonly _createQuestionQuery: string = "INSERT INTO Question (question, standard, type, parentId) VALUES (?, ?, ?, ?)";
   private readonly _updateQuestionQuery: string = "UPDATE Question SET question = ?, standard = ?, type = ?, parentId = ? WHERE id = ?";
   private readonly _deleteQuestionQuery: string = "DELETE FROM Question WHERE id = ?";
@@ -25,16 +30,17 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
     }
   }
 
-  async getBySurvey(surveyName: string): Promise<SurveyQuestion[]> {
+  async getBySurvey(surveyId: number): Promise<SurveyQuestion[]> {
     try {
-      return query(this._getBySurveyQuery, [surveyName]).then((data: any) => {
-        if (data.length === 0) {
-          return null;
+      return query(this._getBySurveyQuery, [surveyId.toString()]).then((data: [SurveyQuestion[]]) => {
+        const surveyQuestions: SurveyQuestion[] = data[0];
+        if (surveyQuestions.length === 0) {
+          return [];
         }
-        return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].id, data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined));
+        return surveyQuestions;
       });
     } catch (error) {
-      this._logger.error(`Failed to retrieve questions for survey named ${surveyName}: `, error);
+      this._logger.error(`Failed to retrieve questions for survey ${surveyId}: `, error);
       throw error;
     }
   }

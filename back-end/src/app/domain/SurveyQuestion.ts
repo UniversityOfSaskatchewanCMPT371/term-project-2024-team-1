@@ -1,17 +1,22 @@
+import { QuestionTypeEnum } from "./QuestionTypeEnum";
+import { SurveyAnswer } from "./SurveyAnswer";
+
 export class SurveyQuestion {
   private readonly _id: number;
   private _parentId: number;
   private _question: string;
   private _standard: boolean;
-  private _type: string;
+  private _type: QuestionTypeEnum;
+  private _answer: SurveyAnswer;
 
-  public constructor(id: number, question: string, standard: boolean, type: string, parentId?: number)
-  public constructor(id: number, question: string, standard: boolean, type: string, parentId: number) {
+  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, parentId?: number, answer?: SurveyAnswer)
+  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, parentId: number, answer: SurveyAnswer) {
     this._id = id;
     this._question = question;
     this._standard = standard;
     this._type = type;
     this._parentId = parentId ?? null;
+    this._answer = answer ?? null;
   }
 
   public get id(): number {
@@ -38,7 +43,7 @@ export class SurveyQuestion {
     return this._type;
   }
 
-  public set type(newType: string) {
+  public set type(newType: QuestionTypeEnum) {
     this._type = newType;
   }
 
@@ -48,5 +53,13 @@ export class SurveyQuestion {
 
   public set parentId(addParentById: number) {
     this._parentId = addParentById;
+  }
+
+  public get answer(): SurveyAnswer {
+    return this._answer;
+  }
+
+  public set answer(newAnswer: SurveyAnswer) {
+    this._answer = newAnswer;
   }
 }
