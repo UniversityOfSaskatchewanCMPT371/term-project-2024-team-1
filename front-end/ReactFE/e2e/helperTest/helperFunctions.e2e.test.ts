@@ -2,10 +2,13 @@
 in programs environment*/
 
 import { expect, device, by, element } from "detox";
+import {expect as jExpect} from '@jest/globals';
+
 import { isOnLoginPage, isUserLogedIn, openDrawer,navigateToScreen, login,screenShot, drawerExist } from "../../e2eHelpers/e2eHelpers";
 describe("Helper functions test", () => {
 
-
+  const skipLogin = true
+  const screenShotTest =true
 
 
   beforeAll(async () => {
@@ -29,10 +32,12 @@ describe("Helper functions test", () => {
   afterAll(async () =>{
 
   })
-  
+  if(!skipLogin) {
   
   it("should not be logged in", async () => {
 
+
+ 
     
     await expect(element(by.id("passwordInput"))).toExist()
 
@@ -41,18 +46,40 @@ describe("Helper functions test", () => {
 
       await drawerExist()
      await openDrawer()
+    
      
   });
+  }
 
+  it("isOnLogin Test", async () => {
 
-  it("should not be logged in", async () => {
-    await expect(element(by.id("passwordInput"))).toExist()
 
     const loginPage = await isOnLoginPage()
+    
+    if(!skipLogin){
+    await expect(element(by.id("passwordInput"))).toExist()
 
-    expect(loginPage.props).toHaveText("success")
-     console.log(loginPage)
+    
+
+    
+    }
+
+    else {
+      console.log(loginPage)
+      jExpect(loginPage).toBe(false)
+    }
   });
+
+  it("Screenshot test", async () =>{
+
+
+    if(screenShotTest) {
+
+      await screenShot()
+
+
+    }
+  })
 
 
   

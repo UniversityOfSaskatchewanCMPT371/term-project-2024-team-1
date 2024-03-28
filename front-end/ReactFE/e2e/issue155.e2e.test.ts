@@ -1,74 +1,81 @@
-import { expect, device, by, element } from "detox";
+import {expect, device, by, element} from "detox";
 import {expect as jestExpect, jest, test} from '@jest/globals';
 
-import { isOnLoginPage, isUserLogedIn, openDrawer, drawerExist ,navigateToScreen, login,screenShot } from "../e2eHelpers/e2eHelpers"
+import {
+    isOnLoginPage,
+    isUserLogedIn,
+    openDrawer,
+    drawerExist,
+    navigateToScreen,
+    login,
+    screenShot
+} from "../e2eHelpers/e2eHelpers"
+import {error} from "console";
 describe("issue 155 UI testing with logout", () => {
 
+    let testSummary;
 
+    beforeAll(async() => {
+        await device.launchApp();
 
+    });
 
-  beforeAll(async () => {
-    await device.launchApp();
+    /*Test hook starting the login */
+    beforeEach(async() => {
+        await device.reloadReactNative();
+    });
 
-
-   
-    
-  });
-
-
-  /*Test hook starting the login */
-  beforeEach(async () => {
-    await device.reloadReactNative();
-  });
-
-  /* testing hook for logout
+    /* testing hook for taking screenshot if triggered
   */
-  afterEach(async () =>{
+    afterEach(async() => {
 
-  })
+        testSummary.status = jestExpect
+            .getState()
+            .suppressedErrors
 
-  
-  
-  it("should have Navigation Button", async () => {
-    const hasDrawer = await drawerExist()
-    await jestExpect(hasDrawer).toEqual(true)
-  });
+        console.log(testSummary.status)
 
+    })
 
+    it("should have Navigation Button", async() => {
+        const hasDrawer = await drawerExist()
+        await jestExpect(hasDrawer).toEqual(true)
+    });
 
+    it("Home page has Take survey button", async() => {
+        await navigateToScreen("Home")
 
-  it("Home page has Take survey button", async () => {
-    await navigateToScreen("Home")
+        await expect(element(by.id("takeSurveyButton"))).toExist()
+        await element(by.id("takeSurveyButton")).tap()
+    });
 
-    await expect(element(by.id("takeSurveyButton"))).toExist()
-    await element(by.id("takeSurveyButton")).tap()
-  });
+    it('Surveys page has 4 quarters', async() => {
+        await navigateToScreen("Surveys")
 
-  it('Surveys page has 4 quarters', async () => {
-    await navigateToScreen("Surveys")
+        await expect(element(by.text("Quarter 1"))).toExist()
+        await expect(element(by.text("Quarter 2"))).toExist()
+        await expect(element(by.id("surveyQuarter3ID"))).toExist()
+        await expect(element(by.id("surveyQuarter3ID"))).toExist()
 
+        await element(by.id("surveyQuarter3ID")).tap()
+    });
 
-    await expect(element(by.text("Quarter 1"))).toExist()
-    await expect(element(by.text("Quarter 2"))).toExist()
-    await expect(element(by.id("surveyQuarter3ID"))).toExist()
-    await expect(element(by.id("surveyQuarter3ID"))).toExist()
+    it('Notification screen functnality', async() => {
+        await navigateToScreen("Notifications")
 
-    await element(by.id("surveyQuarter3ID")).tap()
-  });
+        await expect(element(by.text("Survey Completed"))).toExist()
 
+        await expect(element(by.id("returnButton"))).toExist()
 
+        await element(by.id("returnButton")).tap()
+    });
 
-  it('Notification screen functnality', async () => {
-    await navigateToScreen("Notifications")
+    it('Contact us screen test', async() => {
+        await navigateToScreen("Notifications")
+        await expect(element(by.text("Contact Us"))).toExist()
+        await expect(element(by.text("Contact Us"))).toExist()
+    });
 
-
-    await expect(element(by.text("Survey Completed"))).toExist()
-   
-    await expect(element(by.id("returnButton"))).toExist()
-
-    await element(by.id("returnButton")).tap()
-  });
-
-
+    it('')
 
 });

@@ -129,7 +129,7 @@ const MainDrawer = () => {
     >
       <Drawer.Screen name="Home" testID={"Home"} component={LandingPage} />
       <Drawer.Screen name="Surveys" testID={"Surveys"} component={SurveyList} />
-       <Drawer.Screen name="TakeSurvey" testID={"TakeSurvey"} component={TakeSurvey} options={{drawerLabel: ()=> null}} />
+       {/*<Drawer.Screen name="TakeSurvey" testID={"TakeSurvey"} component={TakeSurvey} options={{drawerLabel: ()=> null}} />*/}
       <Drawer.Screen
         name="Notifications"
         testID={"Notifications"}
