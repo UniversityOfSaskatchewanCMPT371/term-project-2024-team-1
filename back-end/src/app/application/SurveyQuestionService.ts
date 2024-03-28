@@ -12,9 +12,9 @@ export class SurveyQuestionService {
     return this._surveyQuestionRepository.getAll();
   };
 
-  public async getBySurvey(surveyName: string): Promise<SurveyQuestion[] | null> {
+  public async getBySurvey(surveyId: number): Promise<SurveyQuestion[] | null> {
     try {
-      return this._surveyQuestionRepository.getBySurvey(surveyName);
+      return this._surveyQuestionRepository.getBySurvey(surveyId);
     } catch (error) {
       console.error("Failed to retrieve question by survey: ", error);
       throw error;
