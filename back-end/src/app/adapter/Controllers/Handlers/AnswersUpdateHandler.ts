@@ -15,7 +15,6 @@ export class AnswerUpdateHandler implements IRouteHandler<boolean> {
   public constructor(private readonly _surveyAnswerService: SurveyAnswerService) { }
 
   public handle(req: Request, res: Response): void {
-    req = req as AuthenticatedRequest;
     if (!this.validation(req, res)) {
       return;
     }
