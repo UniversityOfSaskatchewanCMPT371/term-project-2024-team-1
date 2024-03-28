@@ -11,6 +11,8 @@ import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUse
 import { UserRequestSQLRepository } from "./SQLRepositories/UserRequest/UserRequestSQLRepository";
 import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
 import { QuestionSQLRepository } from "./SQLRepositories/Survey/QuestionSQLRepository";
+import { AnswerSQLRepository } from "./SQLRepositories/Survey/AnswerSQLRepository";
+import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 import { ISurveyResponseByUserRepository } from "@app/domain/interfaces/repositories/ISurveyResponseByUserRepository";
 import { SurveyResponseByUserSQLRepository } from "./SQLRepositories/Survey/SurveyResponseByUserSQLRepository";
 
@@ -18,7 +20,6 @@ export const userRepoToken = UserSQLRepository;
 export const userReqRepoToken = UserRequestSQLRepository;
 export const surveyRepoToken = SurveySQLRepository;
 export const surveyQuestionRepoToken = QuestionSQLRepository;
-export const surveyResponseByUserRepoToken = SurveyResponseByUserSQLRepository;
 
 export const loggerToken: string = "Logger";
 
@@ -27,7 +28,7 @@ export function registerAllDependencies(): void {
   container.register<ISurveyRepository>(surveyRepoToken, { useClass: SurveySQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<IUserRequestRepository>(userReqRepoToken, { useClass: userReqRepoToken }, { lifecycle: Lifecycle.Singleton });
-  container.register<ISurveyResponseByUserRepository>(surveyResponseByUserRepoToken, { useClass: SurveyResponseByUserSQLRepository }, { lifecycle: Lifecycle.Singleton });
+
 
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   console.log("Registered all dependencies");

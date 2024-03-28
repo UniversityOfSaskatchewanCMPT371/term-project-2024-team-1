@@ -41,13 +41,6 @@
           "format": ["camelCase", "UPPER_CASE"]
         },
         {
-          "selector": "variable",
-          "types": ["boolean"],
-          "format": ["camelCase", "UPPER_CASE"],
-          "prefix": ["is", "should", "has", "can", "did", "will"]
-
-        },
-        {
           "selector": ["memberLike"],
           "modifiers": ["private"],
           "format": ["camelCase"],

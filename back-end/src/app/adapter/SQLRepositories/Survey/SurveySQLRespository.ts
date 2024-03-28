@@ -3,6 +3,7 @@ import { Survey } from "@app/domain/Survey";
 import "reflect-metadata";
 import { getLogger } from "log4js";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
+import { formatDateForSQL } from "@app/application/util";
 
 export class SurveySQLRepository implements ISurveyRepository {
 
@@ -10,7 +11,7 @@ export class SurveySQLRepository implements ISurveyRepository {
 
   private readonly _getAllQuery: string = "SELECT * FROM Survey";
   private readonly _getSurveyQuery: string = "SELECT * FROM Survey WHERE id = ?";
-  private readonly _createSurveyQuery: string = "INSERT INTO Survey (surveyName, dateCreated) VALUES (?, NOW())";
+  private readonly _createSurveyQuery: string = "INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)";
   private readonly _deleteSurveyQuery: string = "DELETE FROM Survey WHERE id = ?";
   private readonly _getAllSubmittedUsersQuery: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?";
 
@@ -50,7 +51,7 @@ export class SurveySQLRepository implements ISurveyRepository {
 
   async createSurvey(survey: Survey): Promise<boolean> {
     try {
-      const [result] = await query(this._createSurveyQuery, [survey.surveyName]);
+      const [result] = await query(this._createSurveyQuery, [survey.surveyName, formatDateForSQL(survey.dueDate)]);
       return result.affectedRows > 0;
     } catch (error) {
       this._logger.error(error);

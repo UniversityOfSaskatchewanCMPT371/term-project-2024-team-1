@@ -1,18 +1,17 @@
 export class Survey {
-  private readonly _surveyId: number;
+  private readonly _id: number;
   private _surveyName: string;
   private _dateCreated: Date;
+  private _dueDate: Date;
 
-  public constructor(surveyId: number, surveyName: string, dateCreated: Date) {
-    this._surveyId = surveyId;
+  public constructor(id: number, surveyName: string, dueDate: Date, dateCreated?: Date)
+  public constructor(id: number, surveyName: string, dueDate: Date, dateCreated: Date) {
     this._surveyName = surveyName;
-    this._dateCreated = dateCreated;
+    this._dateCreated = dateCreated ?? null;
+    this._id = id;
+    this._dueDate = dueDate;
   }
 
-  public get surveyId(): number {
-    return this._surveyId;
-  }
-  
   public get surveyName(): string {
     return this._surveyName;
   }
@@ -27,5 +26,17 @@ export class Survey {
 
   public set dateCreated(newDateCreated: Date) {
     this._dateCreated = newDateCreated;
+  }
+
+  public get id(): number {
+    return this._id;
+  }
+
+  public get dueDate(): Date {
+    return this._dueDate;
+  }
+
+  public set dueDate(value: Date) {
+    this._dueDate = value;
   }
 }

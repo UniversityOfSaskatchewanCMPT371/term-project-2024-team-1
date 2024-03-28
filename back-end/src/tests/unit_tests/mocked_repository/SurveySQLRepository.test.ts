@@ -1,6 +1,7 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { Survey } from "@app/domain/Survey";
 import { SurveySQLRepository } from "../../../app/adapter/SQLRepositories/Survey/SurveySQLRespository";
+import { formatDateForSQL } from "@app/application/util";
 /* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
@@ -58,7 +59,7 @@ describe("SurveySQLRepository", () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
       const result = await repo.createSurvey(newSurvey);
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated) VALUES (?, NOW())", ["New Survey"]);
+      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)", ["New Survey", formatDateForSQL(newSurvey.dueDate)]);
     });
 
     it("should return false when creation fails", async () => {
