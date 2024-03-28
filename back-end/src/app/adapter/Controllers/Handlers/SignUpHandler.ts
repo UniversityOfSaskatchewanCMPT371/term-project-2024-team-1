@@ -16,9 +16,7 @@ import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 export class SignUpHandler implements IRouteHandler<boolean> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SignUpHandler.name);
 
-  // constructor(@inject(delay(() => UserRequestService)) private readonly _userRequestService: UserRequestService) {
   constructor(private readonly _userRequestService: UserRequestService) {
-    // this._userRequestService = container.resolve(UserRequestService);
   }
 
   public handle(req: Request, res: Response): void {

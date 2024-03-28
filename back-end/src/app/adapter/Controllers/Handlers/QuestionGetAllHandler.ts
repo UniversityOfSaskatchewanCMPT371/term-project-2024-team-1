@@ -1,8 +1,8 @@
+import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { Request, Response } from "express";
 import { injectable, delay, inject } from "tsyringe";
-import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
-import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 

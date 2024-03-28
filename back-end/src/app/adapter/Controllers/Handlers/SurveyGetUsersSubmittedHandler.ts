@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { SurveyService } from "@app/application/SurveyService";
 import { nullOrUndefined } from "@app/application/util";
-import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
-import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
-import assert from "assert";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
+import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import assert from "assert";
+import { Request, Response } from "express";
+import { injectable } from "tsyringe";
 
 
 
@@ -14,7 +14,6 @@ import { ILogger } from "@app/domain/interfaces/ILogger";
 export class SurveyGetUsersSubmittedHandler implements IRouteHandler<string[] | null> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyGetUsersSubmittedHandler.name);
   constructor(private readonly _surveyService: SurveyService) {
-    this._surveyService = container.resolve(SurveyService);
   }
 
   public handle(req: Request, res: Response): void {
@@ -30,6 +29,7 @@ export class SurveyGetUsersSubmittedHandler implements IRouteHandler<string[] | 
       if (userIds.length === 0) {
         this._logger.INFO(`Empty array returned. No users have completed the survey ${req.params.surveyId}`);
         res.status(200).send("No users have completed the survey");
+        return;
       }
       this._logger.INFO("Retrieved all users");
       res.status(200).send(userIds);

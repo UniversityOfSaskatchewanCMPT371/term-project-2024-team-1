@@ -42,7 +42,7 @@ export class MockSurveyRepository implements ISurveyRepository {
   }
 
   async createSurvey(survey: Survey): Promise<boolean> {
-    const surveyId: number = survey.surveyId;
+    const surveyId: number = survey.id;
     this._fakeDb.set(surveyId, survey);
     return Promise.resolve(true);
   }
@@ -50,4 +50,8 @@ export class MockSurveyRepository implements ISurveyRepository {
   async deleteSurvey(surveyId: number): Promise<boolean> {
     return Promise.resolve(this._fakeDb.delete(surveyId));
   }
+
+  async addQuestionToSurvey (surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
+    return Promise.resolve(true);
+  }; 
 }

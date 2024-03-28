@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { configure } from "log4js";
-import { delay, inject, injectable } from "tsyringe";
+import { inject, delay, injectable } from "tsyringe";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 

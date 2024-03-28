@@ -1,11 +1,11 @@
 import { surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { Survey } from "@app/domain/Survey";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
-import { inject, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 
 @injectable()
 export class SurveyService {
-  constructor(@inject(surveyRepoToken) private readonly _surveyRepository: ISurveyRepository) {
+  constructor(@inject(delay(() => surveyRepoToken)) private readonly _surveyRepository: ISurveyRepository) {
   }
 
   public async getAll(): Promise<Survey[]> {

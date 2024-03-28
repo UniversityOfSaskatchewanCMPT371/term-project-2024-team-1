@@ -30,9 +30,9 @@ describe("SurveyGetUsersSubmittedHandler", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     // Mocking the mapping of userId to surveyId to mark completion of the survey
-    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(1, survey1.surveyId);
-    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(2, survey1.surveyId);
-    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(3, survey1.surveyId);
+    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(1, survey1.id);
+    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(2, survey1.id);
+    void (mockSurveyRepo as MockSurveyRepository).mapSurveyUser(3, survey1.id);
 
 
     void flushPromises();
@@ -50,10 +50,10 @@ describe("SurveyGetUsersSubmittedHandler", () => {
     });
 
     it("should succeed with status 200 and return a list of users if all the users who submitted the survey were fetched successfully", async() => {
-      const req: Request = { params: { surveyId: survey1.surveyId } } as any as Request;
+      const req: Request = { params: { surveyId: survey1.id } } as any as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
-      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(survey1.surveyId)));
+      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(survey1.id)));
       // Call the handle method
       handler.handle(req, res);
       await flushPromises();
@@ -62,10 +62,10 @@ describe("SurveyGetUsersSubmittedHandler", () => {
     });
 
     it("should succeed with status 200 and return empty list if no users submitted the survey", async() => {
-      const req: Request = { params: { surveyId: noSubmissionSurvey.surveyId } } as any as Request;
+      const req: Request = { params: { surveyId: noSubmissionSurvey.id } } as any as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
-      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(noSubmissionSurvey.surveyId)));
+      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(noSubmissionSurvey.id)));
       // Call the handle method
       handler.handle(req, res);
       await flushPromises();
@@ -74,7 +74,7 @@ describe("SurveyGetUsersSubmittedHandler", () => {
     });
 
     it("should fail with status 500 if execute was unsuccessful", async() => {
-      const req: Request = { params: { surveyId: noSubmissionSurvey.surveyId } } as any as Request;
+      const req: Request = { params: { surveyId: noSubmissionSurvey.id } } as any as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.reject("Error"));
@@ -86,7 +86,7 @@ describe("SurveyGetUsersSubmittedHandler", () => {
     });
 
     it("should fail with status 500 if execute returns null", async() => {
-      const req: Request = { params: { surveyId: noSubmissionSurvey.surveyId } } as any as Request;
+      const req: Request = { params: { surveyId: noSubmissionSurvey.id } } as any as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
       jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve(null));
@@ -101,16 +101,16 @@ describe("SurveyGetUsersSubmittedHandler", () => {
 
   describe("execute", () => {
     it("should return the list of users who have submitted the survey", async () => {
-      const req: Request = { params: { surveyId: survey1.surveyId } } as any as Request;
-      jest.spyOn(SurveyService.prototype, "getSurveySubmittedUsers").mockResolvedValue((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(survey1.surveyId));
+      const req: Request = { params: { surveyId: survey1.id } } as any as Request;
+      jest.spyOn(SurveyService.prototype, "getSurveySubmittedUsers").mockResolvedValue((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(survey1.id));
       
       await expect(handler.execute(req)).resolves.toEqual(["1", "2", "3"]);
 
     });
 
     it("should return empty list if no user has submitted the survey", async () => {
-      const req: Request = { params: { surveyId: noSubmissionSurvey.surveyId } } as any as Request;
-      jest.spyOn(SurveyService.prototype, "getSurveySubmittedUsers").mockResolvedValue((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(noSubmissionSurvey.surveyId));
+      const req: Request = { params: { surveyId: noSubmissionSurvey.id } } as any as Request;
+      jest.spyOn(SurveyService.prototype, "getSurveySubmittedUsers").mockResolvedValue((mockSurveyRepo as MockSurveyRepository).getSurveySubmittedUsers(noSubmissionSurvey.id));
         
       await expect(handler.execute(req)).resolves.toEqual([]);
         
@@ -119,7 +119,7 @@ describe("SurveyGetUsersSubmittedHandler", () => {
 
   describe("validation", () => {
     it("should return true if surveyId is provided", () => {
-      const req: Request = { params: { surveyId: survey1.surveyId } } as any as Request; 
+      const req: Request = { params: { surveyId: survey1.id } } as any as Request; 
       const result: boolean = handler.validation(req);
       expect(result).toBeTruthy();
     });

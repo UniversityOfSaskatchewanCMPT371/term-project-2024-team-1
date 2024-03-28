@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
+import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { Request, Response } from "express";
 import { delay, inject, injectable } from "tsyringe";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
-import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { nullOrUndefined } from "@app/application/util";
 
 @injectable()
@@ -17,12 +17,9 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
   }
 
   public handle(req: Request, res: Response): void {
-    if (!this.validation(req)) {
-      this._logger.INFO("Failed to validate survey question request");
-      res.status(422).send("Survey question is required");
-      return;
+    if (!this.validation(req, res)) {
+      return; 
     }
-    this._logger.INFO("Successfully validated survey question request");
     this.execute(req).then((success) => {
       if (success) {
         this._logger.INFO("Successfully created survey question");
@@ -38,26 +35,36 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
   }
 
   public async execute(req: Request): Promise<boolean> {
-    const id: number = -1;
-    const standard: boolean = Boolean(req.body.standard);
-    const question: string = req.body.question;
-    const type: string = req.body.type;
-    const surveyQuestion: SurveyQuestion = new SurveyQuestion(id, question, standard, type);
-    return this._surveyQuestionService.create(surveyQuestion);
+    const questions: SurveyQuestion[] = req.body;
+    questions.forEach((question) => { question.parentId = question.parentId ?? null; });
+    return this._surveyQuestionService.create(questions);
   }
 
   public validation(...args: any[]): boolean {
     const request: Request = args[0];
-    const isValid: boolean = 
-    !nullOrUndefined(request.body) && 
-    !nullOrUndefined(request.body.question) && 
-    !nullOrUndefined(request.body.standard) && 
-    !nullOrUndefined(request.body.type) && 
-    (typeof request.body.standard === "boolean" || request.body.standard === "true" || request.body.standard === "false");
-    if (request.body.parantId !== null && request.body.parantId !== undefined) {
-      return (
-        isValid &&
-        !isNaN(Number(request.body.parentId)));
+    const res: Response = args[1];
+    const questions: SurveyQuestion[] = request.body;
+    if (questions.length <= 0) {
+      this._logger.ERROR("No questions were provided to the API");
+      res.status(422).send("You must provide questions to create");
+      return false;
+    };
+    const isValid: boolean = questions.every((question: SurveyQuestion) => {
+      if (
+        nullOrUndefined(question) ||
+        nullOrUndefined(question.question) ||
+        nullOrUndefined(question.standard) ||
+        nullOrUndefined(question.type) ||
+        (typeof question.standard !== "boolean" && question.standard !== "true" && question.standard !== "false") ||
+        (question.parentId !== null && question.parentId !== undefined && isNaN(Number(question.parentId)))
+      ) { return false; } 
+      return true;
+    });
+    if (isValid) {
+      this._logger.INFO("Successfully validated all the survey questions");
+    } else {
+      this._logger.ERROR("Invalid question provided to the API");
+      res.status(422).send("Invalid question provided to the API");
     }
     return isValid;
 

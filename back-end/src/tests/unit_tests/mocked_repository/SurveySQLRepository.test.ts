@@ -60,7 +60,7 @@ describe("SurveySQLRepository", () => {
       const result = await repo.createSurvey(newSurvey);
       const dueDate: string = formatDateForSQL(new Date());
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)", ["New Survey", dueDate]);
+      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)", ["New Survey", formatDateForSQL(newSurvey.dueDate)]);
     });
 
     it("should return false when creation fails", async () => {
