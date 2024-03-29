@@ -14,7 +14,10 @@ export class SurveySQLRepository implements ISurveyRepository {
   private readonly _createSurveyQuery: string = "INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)";
   private readonly _deleteSurveyQuery: string = "DELETE FROM Survey WHERE id = ?";
   private readonly _addQuestionToSurveyQuery: string = "INSERT INTO SurveyQuestionMap (surveyId, questionId, rankOrder) VALUES (?, ?, ?)";
-  private readonly _getAllSubmittedUsersQuery: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?";
+  private readonly _getUsersCompletedSurvey: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?";
+  private readonly _getUsersNotCompletedSurvey: string = "SELECT User.userId FROM User WHERE NOT EXISTS ( SELECT * FROM SurveyCompletionMap WHERE SurveyCompletionMap.userId = User.userId AND SurveyCompletionMap.surveyId = ?);";
+
+
 
   async getAll(): Promise<Survey[]> {
     try {
@@ -39,9 +42,22 @@ export class SurveySQLRepository implements ISurveyRepository {
     }
   }
 
-  async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
+  async getUsersCompletedSurvey(surveyId: number): Promise<string[] | null> {
     try {
-      return query(this._getAllSubmittedUsersQuery, [surveyId.toString()]).then((result: [string[]]) => {
+      return query(this._getUsersCompletedSurvey, [surveyId.toString()]).then((result: [string[]]) => {
+        return result[0];
+      }).catch((error) => {
+        throw error;
+      });
+    } catch (error) {
+      this._logger.error(error);
+      return Promise.reject(error);
+    }
+  }
+
+  async getUsersNotCompletedSurvey(surveyId: number): Promise<string[] | null> { 
+    try {
+      return query(this._getUsersNotCompletedSurvey, [surveyId.toString()]).then((result: [string[]]) => {
         return result[0];
       });
     } catch (error) {

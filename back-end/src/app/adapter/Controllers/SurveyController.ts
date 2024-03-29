@@ -3,8 +3,9 @@ import express, { Request, Response, Router } from "express";
 import { injectable } from "tsyringe";
 import { SurveyAddHandler } from "./Handlers/SurveyAddHandler";
 import { SurveyGetUsersSubmittedHandler } from "./Handlers/SurveyGetUsersSubmittedHandler";
-import { authenticate, ADMIN } from "@app/application/util";
+// import { authenticate, ADMIN } from "@app/application/util";
 import { SurveyGetAllHandler } from "./Handlers/SurveyGetAllHandler";
+import { ADMIN, authenticate } from "@app/application/util";
 
 
 
@@ -26,7 +27,7 @@ export class SurveyController {
     });
 
     this._router.get("/survey/:surveyId/user", authenticate(ADMIN), (req: Request, res: Response) => {
-      this._surveyGetUsersSubmittedHandler.handle(req, res);
+      void this._surveyGetUsersSubmittedHandler.handle(req, res);
     });
 
     return this._router;
