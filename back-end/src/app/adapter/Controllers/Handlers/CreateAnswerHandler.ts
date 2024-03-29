@@ -2,7 +2,7 @@ import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
 import { nullOrUndefined, AuthenticatedRequest } from "@app/application/util";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Request, Response } from "express";
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
@@ -14,7 +14,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
   
   private readonly _logger: ILogger = LoggerFactory.getLogger(CreateAnswerHandler.name);
   
-  constructor(@inject(delay(() => SurveyAnswerService)) private readonly _surveyAnswerService: SurveyAnswerService) {
+  constructor(private readonly _surveyAnswerService: SurveyAnswerService) {
 
   }
 

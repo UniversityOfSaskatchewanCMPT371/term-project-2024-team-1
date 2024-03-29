@@ -16,7 +16,7 @@ export class AnswerController {
       this._answerUpdateHandler.handle(req, res);
     });
 
-    this._router.post("/survey/answer", authenticate(USER), (req: Request, res: Response) => {
+    this._router.post("/answer", authenticate(USER), (req: Request, res: Response) => {
       void this._createAnswerHandler.handle(req, res);
     });
 

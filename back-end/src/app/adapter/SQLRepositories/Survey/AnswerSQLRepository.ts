@@ -25,7 +25,7 @@ export class AnswerSQLRepository implements ISurveyAnswerRepository {
       const resultSetHeaders: ResultSetHeader = result[0];
       return resultSetHeaders.insertId;
     } catch (error) {
-      this._logger.ERROR(`Failed to add answers.`);
+      this._logger.ERROR(`Failed to add answers. \nError: ` + String(error));
       return Promise.reject(error);
     }
   }
