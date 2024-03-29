@@ -3,14 +3,13 @@ import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import "reflect-metadata";
 import { getLogger } from "log4js";
 import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
-import { QuestionTypeEnum, questionTypeEnumValueToKey } from "@app/domain/QuestionTypeEnum";
 
 export class QuestionSQLRepository implements ISurveyQuestionRepository {
   private readonly _logger = getLogger(QuestionSQLRepository.name);
 
   private readonly _getAllQuery: string = "SELECT * FROM Question";
   private readonly _getByQuestionIdQuery: string = "SELECT * FROM Question WHERE id = ?";
-  private readonly _getBySurveyQuery: string = `SELECT Q.* FROM Question Q 
+  private readonly _getBySurveyQuery: string = `SELECT Q.*, SQM.rankOrder FROM Question Q 
                                                   INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId 
                                                   INNER JOIN Survey S ON SQM.surveyId = S.id 
                                                   WHERE S.id = ?`;
