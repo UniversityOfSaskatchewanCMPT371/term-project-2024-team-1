@@ -85,7 +85,7 @@ describe("CreateUser and Modify Request", () => {
 
   describe("validation", () => {
     it("should return true if request body is defined, request body contains SurveyAnswer() and SurveyAnswer.userId is same as auth.userId", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: 1, questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeTruthy();
     });
@@ -109,43 +109,43 @@ describe("CreateUser and Modify Request", () => {
     // });
 
     it("should return false if userId in auth does not match that of SurveyAnswer", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testfakeUserId", answer: "testAnswer" }, auth: { userId: "testUserId" } } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: 1, questionId: 1, userId: "testfakeUserId", answer: "testAnswer" }, auth: { userId: "testUserId" } } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has undefined answerId field", () => {
-      const req: Request = { body: { SurveyAnswer: {questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has negative answerId field", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: -1, questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: -1, questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has undefined questionId field", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: -1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: -1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has negative questionId field", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: -1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: 1, questionId: -1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has undefined userId field", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: -1, answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: 1, questionId: -1, answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
 
     it("should return false if request body's SurveyAnswer has undefined answer field", () => {
-      const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testUserId" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { SurveyAnswer: { answerId: 1, questionId: 1, userId: "testUserId" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
