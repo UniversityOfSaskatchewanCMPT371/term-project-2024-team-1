@@ -40,7 +40,7 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
 
   public async execute(req: Request): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const question: SurveyQuestion = new SurveyQuestion(req.body.question, req.body.standard, req.body.type, req.body.parentId ?? null);
+    const question: SurveyQuestion = new SurveyQuestion(-1, req.body.question, req.body.standard, req.body.type, req.body.rankOrder, req.body.parentId ?? null);
     return this._surveyService.create(question);
   }
 
