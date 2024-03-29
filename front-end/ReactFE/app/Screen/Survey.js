@@ -63,39 +63,7 @@ export default function Survey({ navigation }) {
     },
   ];
 
-  const { onLogout, authState } = useAuth();
 
-  const IPV4_ADDRESS = "10.0.0.15";
-  const API_URL = `http://${IPV4_ADDRESS}:3000/api/users`;
-
-  const handleLogout = async () => {
-    try {
-      await onLogout();
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
-
-  // TEST FUNCTION TO TEST INVALIDITY OF A TOKEN
-  const handleGetAll = async () => {
-    try {
-      axios
-        .get(API_URL)
-        .then(async (response) => {
-          const result = response.data;
-          console.log(result);
-        })
-        .catch(async (error) => {
-          alert(error.response.data);
-          console.error(error.response.status + ": " + error.response.data);
-          if (error.response.status == 401) {
-            await onLogout();
-          }
-        });
-    } catch {
-      console.log("ERROR");
-    }
-  };
 
   return (
     <View

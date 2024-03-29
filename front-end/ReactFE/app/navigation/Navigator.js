@@ -12,7 +12,7 @@ import CreateSurvey from "../Screen/CreateSurvey";
 import Admin from "../Screen/Admin";
 import LandingPage from "../Screen/LandingPage";
 import SurveyList from "../Screen/SurveyList";
-import TakeSurvey from "../Screen/TakeSurvey"
+import TakeSurvey from "../Screen/TakeSurvey";
 import Notifications from "../Screen/Notifications";
 import About from "../Screen/ContactUs";
 import ContactUs from "../Screen/ContactUs";
@@ -37,17 +37,16 @@ const SurveyStack = () => {
       }}
       initialRouteName="Survey"
     >
-      <AppSurveyStack.Screen name="SurveyScreen" component={Survey} />
-      <AppSurveyStack.Screen name="SurveyBoard" component={SurveyBoard} />
-      <AppSurveyStack.Screen
+      <AppSurveyStack.Screen name="TakeSurvey" component={TakeSurvey} />
+      {/* <AppSurveyStack.Screen name="SurveyScreen" component={Survey} /> */}
+      {/* <AppSurveyStack.Screen
         name="SurveyStartBoard"
         component={SurveyStartBoard}
       />
+      <AppSurveyStack.Screen name="SurveyBoard" component={SurveyBoard} /> */}
     </AppSurveyStack.Navigator>
   );
 };
-
-const UserStack = () => {};
 
 const AdminMainDrawer = () => {
   return (
@@ -90,8 +89,6 @@ const AdminMainDrawer = () => {
         testID={"createsurvey"}
         component={CreateSurvey}
       />
-
-      
     </Drawer.Navigator>
   );
 };
@@ -129,18 +126,22 @@ const MainDrawer = () => {
     >
       <Drawer.Screen name="Home" testID={"Home"} component={LandingPage} />
       <Drawer.Screen name="Surveys" testID={"Surveys"} component={SurveyList} />
-       <Drawer.Screen name="TakeSurvey" testID={"TakeSurvey"} component={TakeSurvey} options={{drawerLabel: ()=> null}} />
-      <Drawer.Screen
-        name="Notifications"
-        testID={"Notifications"}
-        component={Notifications}
-      />
       <Drawer.Screen
         name="Contact Us"
         testID={"ContactUs"}
         component={ContactUs}
       />
       <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
+      <Drawer.Screen
+        name="SurveyStack"
+        component={SurveyStack}
+        options={{
+          drawerItemStyle: { height: 0 },
+          drawerLabel: () => null,
+          title: null,
+          drawerIcon: null,
+        }}
+      />
     </Drawer.Navigator>
   );
 };
@@ -191,7 +192,7 @@ const MainStack = () => {
       initialRouteName="Home"
     >
       <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
-      
+
       {/* {
 
         runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
