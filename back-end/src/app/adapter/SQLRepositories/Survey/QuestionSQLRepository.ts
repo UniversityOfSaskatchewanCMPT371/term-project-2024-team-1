@@ -12,7 +12,8 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
   private readonly _getBySurveyQuery: string = `SELECT Q.*, SQM.rankOrder FROM Question Q 
                                                   INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId 
                                                   INNER JOIN Survey S ON SQM.surveyId = S.id 
-                                                  WHERE S.id = ?`;
+                                                  WHERE S.id = ? 
+                                                  ORDER BY rankOrder;`;
 
   private readonly _createQuestionQuery: string = "INSERT INTO Question (question, standard, type, parentId) VALUES (?, ?, ?, ?)";
   private readonly _updateQuestionQuery: string = "UPDATE Question SET question = ?, standard = ?, type = ?, parentId = ? WHERE id = ?";
