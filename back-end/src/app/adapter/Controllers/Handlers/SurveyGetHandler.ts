@@ -49,19 +49,16 @@ export class SurveyGetHandler implements IRouteHandler<SurveyQuestion[]> {
 
   public validation(...args: any[]): boolean {
     const req: AuthenticatedRequest = args[0];
-    const res: Response = args[0];
+    const res: Response = args[1];
 
     if (nullOrUndefined(req.auth) || nullOrUndefined(req.auth.userId)) {
       res.status(401).send("User id not found, please try re-logging back in");
       return false;
     }
 
-    if (nullOrUndefined(req.params.surveyId)) {
-      res.status(400).send("Survey id is required");
-      return false;
-    }
-    if (isNaN(parseInt(req.params.surveyId))) {
-      res.status(400).send("Survey id must be an integer");
+
+    if (nullOrUndefined(req.params) || nullOrUndefined(req.params.surveyId) || isNaN(parseInt(req.params.surveyId))) {
+      res.status(400).send("You must provide an integer survey id");
       return false;
     }
 
