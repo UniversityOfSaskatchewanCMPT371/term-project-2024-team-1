@@ -8,15 +8,17 @@ export class SurveyQuestion {
   private _standard: boolean;
   private _type: QuestionTypeEnum;
   private _answer: SurveyAnswer;
+  private _rankOrder: number;
 
-  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, parentId?: number, answer?: SurveyAnswer)
-  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, parentId: number, answer: SurveyAnswer) {
+  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, rankOrder: number, parentId?: number, answer?: SurveyAnswer)
+  public constructor(id: number, question: string, standard: boolean, type: QuestionTypeEnum, rankOrder: number, parentId: number, answer: SurveyAnswer) {
     this._id = id;
     this._question = question;
     this._standard = standard;
     this._type = type;
     this._parentId = parentId ?? null;
     this._answer = answer ?? null;
+    this._rankOrder = rankOrder;
   }
 
   public get id(): number {
@@ -39,7 +41,7 @@ export class SurveyQuestion {
     this._standard = isStandard;
   }
 
-  public get type(): string {
+  public get type(): QuestionTypeEnum {
     return this._type;
   }
 
@@ -61,5 +63,13 @@ export class SurveyQuestion {
 
   public set answer(newAnswer: SurveyAnswer) {
     this._answer = newAnswer;
+  }
+
+  public get rankOrder(): number {
+    return this._rankOrder;
+  }
+
+  public set rankOrder(newRankOrder: number) {
+    this._rankOrder = newRankOrder;
   }
 }
