@@ -85,11 +85,7 @@ describe("CreateUser and Modify Request", () => {
 
   describe("validation", () => {
     it("should return true if request body is defined, request body contains SurveyAnswer() and SurveyAnswer.userId is same as auth.userId", () => {
-<<<<<<< HEAD
       const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testUserId", answer: "testAnswer" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
-=======
-      const req: Request = { body: { SurveyAnswer: { userId: "testUserId" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
->>>>>>> 7e7f95fb (feat: wrote test and implementation for CreateAnswerHandler for POST /api/survey/answer route)
       const result: boolean = handler.validation(req, response);
       expect(result).toBeTruthy();
     });
@@ -100,11 +96,7 @@ describe("CreateUser and Modify Request", () => {
       expect(result).toBeFalsy();
     });
 
-<<<<<<< HEAD
     it("should return false if request body has no SurveyAnswer", () => {
-=======
-    it("should return false if request body has no surveyAnswer", () => {
->>>>>>> 7e7f95fb (feat: wrote test and implementation for CreateAnswerHandler for POST /api/survey/answer route)
       const req: Request = { body: { }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
@@ -117,7 +109,6 @@ describe("CreateUser and Modify Request", () => {
     // });
 
     it("should return false if userId in auth does not match that of SurveyAnswer", () => {
-<<<<<<< HEAD
       const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testfakeUserId", answer: "testAnswer" }, auth: { userId: "testUserId" } } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
@@ -155,9 +146,6 @@ describe("CreateUser and Modify Request", () => {
 
     it("should return false if request body's SurveyAnswer has undefined answer field", () => {
       const req: Request = { body: { SurveyAnswer: {answerId: 1, questionId: 1, userId: "testUserId" } }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
-=======
-      const req: Request = { body: { SurveyAnswer: { userId: "testUserIdfake" }, auth: { userId: "testUserId" } } } as unknown as AuthenticatedRequest;
->>>>>>> 7e7f95fb (feat: wrote test and implementation for CreateAnswerHandler for POST /api/survey/answer route)
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
