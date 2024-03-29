@@ -55,7 +55,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
       return false;
     } else if (nullOrUndefined(req.auth)) {
       return false;
-    } else if (nullOrUndefined(req.body.SurveyAnswer.answerId || req.body.SurveyAnswer.answerId < 0 || nullOrUndefined(req.body.SurveyAnswer.questionId) || req.body.SurveyAnswer.questionId < 0 || nullOrUndefined(req.body.SurveyAnswer.userId) || nullOrUndefined(req.body.SurveyAnswer.answer))) {
+    } else if (nullOrUndefined(req.body.SurveyAnswer.answerId) || req.body.SurveyAnswer.answerId < 0 || nullOrUndefined(req.body.SurveyAnswer.questionId) || req.body.SurveyAnswer.questionId < 0 || nullOrUndefined(req.body.SurveyAnswer.userId) || nullOrUndefined(req.body.SurveyAnswer.answer)) {
       return false;
     }
     const answer: SurveyAnswer = req.body.SurveyAnswer;
