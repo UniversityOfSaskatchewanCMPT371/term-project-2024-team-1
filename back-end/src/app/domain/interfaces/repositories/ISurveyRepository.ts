@@ -7,4 +7,5 @@ export interface ISurveyRepository {
   getSurveySubmittedUsers: (surveyId: number) => Promise<string[] | null>;
   createSurvey: (survey: Survey) => Promise<boolean>;
   deleteSurvey: (surveyId: number) => Promise<boolean>;
+  getAllResponses: (surveyId: number) => Promise<object[]>;
 }
