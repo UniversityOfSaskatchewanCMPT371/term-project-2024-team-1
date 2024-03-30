@@ -4,6 +4,7 @@ import { SurveyService } from "@app/application/SurveyService";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { nullOrUndefined } from "@app/application/util";
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 
 
 @injectable()
@@ -19,43 +20,52 @@ export class SurveyQuestionAddHandler {
     }
     this.execute(req).then((success) => {
       if (success) { 
-        this._logger.INFO(`Successfully added question ${req.body.questionId} to the survey ${req.body.surveyId}`);
-        res.status(200).send(`Successfully added question to the survey`);
+        this._logger.INFO(`Successfully added questions to survey ${req.body.surveyId}`);
+        res.status(200).send(`Successfully added questions to the survey`);
       } else {
-        this._logger.INFO(`Failed to add question ${req.body.questionId} to the survey ${req.body.surveyId}`);
-        res.status(400).send(`Failed to add question to the survey`);
+        this._logger.INFO(`Failed to add questions to survey ${req.body.surveyId}`);
+        res.status(400).send(`Failed to add questions to the survey`);
       }
     }).catch((err) => {
-      this._logger.ERROR(`Failed to add question ${req.body.questionId} to the survey ${req.body.surveyId}, error occured: ${err}`);
+      this._logger.ERROR(`Failed to add questions to the ${req.body.surveyId}, error occured: ${err}`);
       res.status(500).send("Server failed to process request, please try again");
     });
   }
 
   public async execute(req: Request): Promise<boolean> {
-    const questionId: number = Number(req.params.questionId);
-    const surveyId: number = Number(req.params.surveyId);
-    const rankOrder: number = Number(req.body.rankOrder);
-    return this._surveyService.addQuestionToSurvey(surveyId, questionId, rankOrder);
+    const questionsToAdd: QuestionToAddDTO[] = req.body;
+    return this._surveyService.addQuestionToSurvey(questionsToAdd);
   }
 
   public validation(...args: any[]): boolean { 
     const req: Request = args[0];
     const res: Response = args[1];
-    const isValid: boolean = 
-      !nullOrUndefined(req.params) &&
-      !nullOrUndefined(req.body) &&
-      !nullOrUndefined(req.params.surveyId) &&
-      !nullOrUndefined(req.params.questionId) &&
-      !nullOrUndefined(req.body.rankOrder) &&
-      !isNaN(Number(req.params.surveyId)) &&
-      !isNaN(Number(req.params.questionId)) &&
-      !isNaN(Number(req.body.rankOrder));
+    const questionsToAdd: any[] = req.body;
+    if (questionsToAdd.length <= 0) {
+      this._logger.ERROR("No questions provided to add to the survey.");
+      res.status(422).send("No questions provided to add to the survey.");
+      return false;
+    }
+
+    const isValid: boolean = questionsToAdd.every((question: any) => {
+      if (
+        nullOrUndefined(question) ||
+        nullOrUndefined(question.surveyId) ||
+        nullOrUndefined(question.questionId) ||
+        nullOrUndefined(question.rankOrder) ||
+        isNaN(Number(question.surveyId)) ||
+        isNaN(Number(question.questionId)) ||
+        isNaN(Number(question.rankOrder))
+      ) { return false; }
+      return true;
+    }); 
     if (isValid) {
       this._logger.INFO("validation of the request is successful");
-      return isValid;
+    } else {
+      this._logger.ERROR("Invalid format provided to the API");
+      res.status(422).send("Some required fields not provided in the correct format");
     }
-    this._logger.ERROR("Invalid format provided to the API");
-    res.send(422).send("Required fields not provided");
-    return isValid; 
+    return isValid;
+
   }
 }

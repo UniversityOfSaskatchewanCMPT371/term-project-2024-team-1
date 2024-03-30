@@ -53,10 +53,10 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
           // when creating single question
           const resultSetHeader: ResultSetHeader = results[0];
           if (resultSetHeader.affectedRows > 0) {
-            this._logger.INFO(`The question was created successfully`);
+            this._logger.INFO(`Successfully created the question`);
             return true;
           } 
-          this._logger.INFO(`The question was not created`);
+          this._logger.INFO(`Failed to create the question`);
           return false;
           
         }
@@ -72,7 +72,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
         return areAllQuestionsCreated;
         
         
-      }).catch(async (err) => {
+      }).catch((err) => {
         this._logger.ERROR(`Failed to create questions.\nError: ${err}`);
         throw err;
       });

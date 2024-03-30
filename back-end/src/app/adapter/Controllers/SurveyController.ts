@@ -6,6 +6,7 @@ import { SurveyGetUsersSubmittedHandler } from "./Handlers/SurveyGetUsersSubmitt
 // import { authenticate, ADMIN } from "@app/application/util";
 import { SurveyGetAllHandler } from "./Handlers/SurveyGetAllHandler";
 import { ADMIN, authenticate } from "@app/application/util";
+import { SurveyQuestionAddHandler } from "./Handlers/SurveyQuestionAddHandler";
 
 
 
@@ -15,7 +16,8 @@ export class SurveyController {
 
   public constructor(private readonly _surveyAddHandler: SurveyAddHandler,
     private readonly _surveyGetUsersSubmittedHandler: SurveyGetUsersSubmittedHandler,
-    private readonly _surveyGetAllHandler: SurveyGetAllHandler) { }
+    private readonly _surveyGetAllHandler: SurveyGetAllHandler, 
+    private readonly _surveyQuestionAddHandler: SurveyQuestionAddHandler) { }
 
   public getController(): Router {
     this._router.get("/survey", (req: Request, res: Response) => {
@@ -28,6 +30,10 @@ export class SurveyController {
 
     this._router.get("/survey/:surveyId/user", authenticate(ADMIN), (req: Request, res: Response) => {
       void this._surveyGetUsersSubmittedHandler.handle(req, res);
+    });
+
+    this._router.post("/survey/question", (req: Request, res: Response) => {
+      this._surveyQuestionAddHandler.handle(req, res);
     });
 
     return this._router;

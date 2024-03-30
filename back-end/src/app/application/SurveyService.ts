@@ -1,3 +1,4 @@
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { Survey } from "@app/domain/Survey";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
@@ -46,8 +47,8 @@ export class SurveyService {
     };
   }
 
-  public async addQuestionToSurvey(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
-    return this._surveyRepository.addQuestionToSurvey(surveyId, questionId, rankOrder);
+  public async addQuestionToSurvey(questionToAdd: QuestionToAddDTO[]): Promise<boolean> {
+    return this._surveyRepository.addQuestionToSurvey(questionToAdd);
   }
 
   public async deleteSurvey(surveyId: number): Promise<boolean> {
