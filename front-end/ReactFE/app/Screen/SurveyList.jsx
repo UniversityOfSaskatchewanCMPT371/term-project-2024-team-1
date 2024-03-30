@@ -34,7 +34,7 @@ const SurveyList = () => {
   // - handleTakeSurvey function is defined to navigate to the "TakeSurvey" screen upon button press.
 
   return (
-    <ScrollView
+    <ScrollView testID="SurveysID"
       contentContainerStyle={[ScreenStyles.CasiBlue, styles.container]}
     >
       <DrawerButton />

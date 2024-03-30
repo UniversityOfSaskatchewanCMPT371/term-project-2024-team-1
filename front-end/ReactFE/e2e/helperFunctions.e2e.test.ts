@@ -70,13 +70,18 @@ describe("Helper functions test", () => {
     }
   });
 
+
+
+
+  
   it("Screenshot test", async () =>{
 
 
     if(screenShotTest) {
+      await navigateToScreen("Surveys")
+      const result = await screenShot("SCREENSHOTTEST")
 
-      await screenShot()
-
+      await jExpect(result).toBe(true)
 
     }
   })

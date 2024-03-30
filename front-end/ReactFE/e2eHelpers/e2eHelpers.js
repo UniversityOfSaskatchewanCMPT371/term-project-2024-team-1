@@ -1,5 +1,6 @@
 
 import path from "path";
+import * as fs from "fs"
 /*
     Preconditions: on login page, backend is running
     PostCOndition: logs in with given credentials, screen changes to a landing page of either user or admin
@@ -63,7 +64,7 @@ export async function login(username, password) {
     console.log(passwordInputField)
 
     try {
-    const isOnLoginPage = await passwordInputField.exists();
+    const isOnLoginPage = await expect(passwordInputField).toBeVisible();
     return true
 
     }
@@ -88,12 +89,13 @@ export async function login(username, password) {
     const loginScreen = element(by.id('loginPage'));
   
     try {
-    const isOnLoginPage = await loginScreen.exists();
+    const isOnLoginPage = await expect(loginScreen).toBeVisible();
     return true
 
     }
 
     catch(e) {
+      throw e
       return false
     }
 
@@ -105,10 +107,25 @@ export async function login(username, password) {
     Makes a screenshot of the given screen
     PostConditions: a png file of the screenshot is saved to
   */
-  export async function screenShot(){
+  export async function screenShot(name = String(Date.now())){
     
-    const destinationPath = path.join(__dirname, 'screenshots', `${Date.now()}.png`);
+   
 
-    const screenshot = await device.takeScreenshot(destinationPath);
-    console.log(`Screenshot saved at: ${screenshot} ${destinationPath}`);
+    try {
+    const screenshot = await device.takeScreenshot(name);
+
+   
+    // Specify the destination directry for the screenshot
+    const destinationPath = path.join(__dirname, 'screenshots', `name.png`);
+
+
+    console.log(`Screenshot saved at: ${screenshot}`);
+
+      return true
+    }
+
+    catch(e) {
+      
+      return false
+    }
   }

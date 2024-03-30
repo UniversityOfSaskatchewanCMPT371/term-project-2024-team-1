@@ -15,7 +15,7 @@ const LandingPage = () => {
   };
 
   return (
-    <View style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
+    <View testID={"LandingPageID"} style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
       <DrawerButton />
       <Text style={style.title}>CASI</Text>
       <Text style={style.paragraph}>
