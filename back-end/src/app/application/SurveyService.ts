@@ -78,6 +78,10 @@ export class SurveyService {
   private setChildren(): void {
 
   };
+  
+  public async getAllResponses(surveyId: number): Promise<object[]> {
+    return this._surveyRepository.getAllResponses(surveyId);
+  }
 
 }
 

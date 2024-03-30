@@ -50,4 +50,8 @@ export class MockSurveyRepository implements ISurveyRepository {
   async deleteSurvey(surveyId: number): Promise<boolean> {
     return Promise.resolve(this._fakeDb.delete(surveyId));
   }
+
+  async getAllResponses(surveyId: number): Promise<object[]> {
+    return Promise.resolve([{ response: "fake survey response" }]);
+  }
 }
