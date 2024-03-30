@@ -5,7 +5,6 @@ import { SurveyAddHandler } from "./Handlers/SurveyAddHandler";
 import { SurveyGetUsersSubmittedHandler } from "./Handlers/SurveyGetUsersSubmittedHandler";
 import { authenticate, ADMIN, USER } from "@app/application/util";
 import { SurveyGetAllHandler } from "./Handlers/SurveyGetAllHandler";
-
 import { SurveyGetHandler } from "./Handlers/SurveyGetHandler";
 import { SurveyGetAllResponseHandler } from "./Handlers/SurveyGetAllResponseHandler";
 
