@@ -10,9 +10,11 @@ import { ResultSetHeader } from "mysql2";
 
 export class UserRequestSQLRepository implements IUserRequestRepository {
   private readonly _logger: ILogger = LoggerFactory.getLogger(UserRequestSQLRepository.name);
-  private readonly _getAllQuery: string = `SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
-                                           FROM Request 
-                                           WHERE requestType = ? OR requestStatus = ?;`;
+  private readonly _getAllQuery: string = `SET @reqType=?;
+                                           SET @reqStatus=?;
+                                            SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
+                                            FROM Request 
+                                            WHERE requestType=@reqType OR status=@reqStatus;`;
 
   private readonly _getQuery: string = `SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
                                         FROM Request
