@@ -1,3 +1,4 @@
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { Survey } from "@app/domain/Survey";
 
@@ -56,7 +57,7 @@ export class MockSurveyRepository implements ISurveyRepository {
     return Promise.resolve(this._fakeDb.delete(surveyId));
   }
 
-  async addQuestionToSurvey (surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
+  async addQuestionToSurvey (questionsToAdd: QuestionToAddDTO[]): Promise<boolean> {
     return Promise.resolve(true);
   }; 
 }
