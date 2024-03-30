@@ -22,7 +22,6 @@ export class SurveyController {
     private readonly _surveyGetHandler: SurveyGetHandler,
     private readonly _surveyGetAllResponseHandler: SurveyGetAllResponseHandler) { }
 
-
   public getController(): Router {
     this._router.get("/survey", authenticate(USER), (req: Request, res: Response) => {
       this._surveyGetAllHandler.handle(req, res);
