@@ -1,3 +1,4 @@
+import { RequestDTO } from "@app/adapter/DTOs/RequestDTO";
 import { UserRequestService } from "@app/application/UserRequestService";
 import { nullOrUndefined } from "@app/application/util";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
@@ -10,7 +11,7 @@ import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
 @injectable()
-export class RequestGetAllHandler implements IRouteHandler<UserRequest[]> {
+export class RequestGetAllHandler implements IRouteHandler<RequestDTO[]> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(RequestGetAllHandler.name);
 
   public constructor(private readonly _userRequestService: UserRequestService) { }
@@ -25,7 +26,7 @@ export class RequestGetAllHandler implements IRouteHandler<UserRequest[]> {
     const requestStatus: RequestStatusEnum | undefined = requestStatusValueToKey.get(requestStatusRaw);
     
     this.execute(req)
-      .then((requests: UserRequest[]) => {
+      .then((requests: RequestDTO[]) => {
         this._logger.INFO(`Successfully fetched all ${requestStatus ?? ""} ${requestType ?? ""} requests.`);
         res.status(200).send(requests);
       })
@@ -35,10 +36,11 @@ export class RequestGetAllHandler implements IRouteHandler<UserRequest[]> {
       });
   }
 
-  public async execute(req: Request): Promise<UserRequest[]> {    
+  public async execute(req: Request): Promise<RequestDTO[]> {
     const requestType: RequestTypeEnum = req.query.requestType as RequestTypeEnum;
     const requestStatus: RequestStatusEnum = req.query.requestStatus as RequestStatusEnum;
-    return this._userRequestService.getAll(requestType, requestStatus);
+    const requests: UserRequest[] = await this._userRequestService.getAll(requestType, requestStatus);
+    return requests.map((req: UserRequest) => new RequestDTO(req.id, req.email, req.clinicName, req.status, req.requestType, req.createdDate, req.decisionDate));
   };
 
   public validation(...args: any[]): boolean {
