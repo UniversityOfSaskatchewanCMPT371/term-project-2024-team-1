@@ -13,6 +13,7 @@ export class AnswerSQLRepository implements ISurveyAnswerRepository {
                                                         WHERE A.userId = ? AND S.id = ?`;
 
   private readonly _updateQuery: string = `UPDATE Answer SET answer=?, note=? WHERE id=? AND userId=?;`;
+  private readonly _createQuery: string = "INSERT INTO Answer (answer, questionId, note, userId) VALUES (?, ?, ?, ?);";
 
   public async getSurveyAnswers(userId: string, surveyId: number): Promise<SurveyAnswer[]> {
     return query(this._getSurveyAnswersQuery, [userId, surveyId.toString()])
@@ -30,8 +31,16 @@ export class AnswerSQLRepository implements ISurveyAnswerRepository {
     throw new Error("unimplemented");
   }
 
-  public async create(userId: string, answer: SurveyAnswer): Promise<boolean> {
-    throw new Error("unimplemented");
+  async create(userId: string, answer: SurveyAnswer): Promise<number> {
+    try {
+      const result: ResultSetHeader[] = await query(this._createQuery,
+        [answer.answer, answer.questionId.toString(), answer.note, userId]);
+      const resultSetHeaders: ResultSetHeader = result[0];
+      return resultSetHeaders.insertId;
+    } catch (error) {
+      this._logger.ERROR(`Failed to add answers. \nError: ` + String(error));
+      return Promise.reject(error);
+    }
   }
 
   public async update(answers: SurveyAnswer[]): Promise<boolean> {
