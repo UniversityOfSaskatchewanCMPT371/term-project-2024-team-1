@@ -1,5 +1,6 @@
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { Survey } from "@app/domain/Survey";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 
 export class MockSurveyRepository implements ISurveyRepository {
   private readonly _fakeDb: Map<number, Survey>; 
@@ -49,5 +50,9 @@ export class MockSurveyRepository implements ISurveyRepository {
 
   async deleteSurvey(surveyId: number): Promise<boolean> {
     return Promise.resolve(this._fakeDb.delete(surveyId));
+  }
+
+  async getAllResponses(surveyId: number): Promise<SurveyResponse[]> {
+    return Promise.resolve([new SurveyResponse("fakeId", "fakeQuestion", "fakeAnswer")]);
   }
 }

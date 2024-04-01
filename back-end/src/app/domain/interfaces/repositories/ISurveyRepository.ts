@@ -1,4 +1,5 @@
 import { Survey } from "@app/domain/Survey";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 // import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 
 export interface ISurveyRepository {
@@ -7,4 +8,5 @@ export interface ISurveyRepository {
   getSurveySubmittedUsers: (surveyId: number) => Promise<string[] | null>;
   createSurvey: (survey: Survey) => Promise<boolean>;
   deleteSurvey: (surveyId: number) => Promise<boolean>;
+  getAllResponses: (surveyId: number) => Promise<SurveyResponse[]>;
 }
