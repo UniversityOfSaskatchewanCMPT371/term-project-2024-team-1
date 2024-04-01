@@ -207,7 +207,7 @@ const TakeSurvey = ({ route }) => {
             <Text style={styles.questionText}>
               {questions[currentQuestionIndex].text}
             </Text>
-            {renderQuestionInput()}
+            {renderQuestionInput(questions[currentQuestionIndex])}
           </View>
         </View>
         {currentQuestionIndex > 0 && (

@@ -193,21 +193,21 @@ const MainStack = () => {
     >
       <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
 
-      {/* {
+      {
 
-        runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
+        // runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
 
-          authState?.token ? (
-            authState?.role === "ADMIN" ? (
-              <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
-            ) : (
-              <AppMainStack.Screen name="Home" component={MainDrawer} />
-            )
-          ) : (
-            <AppMainStack.Screen name="Login" component={Login} />
-          )
+        //   authState?.token ? (
+        //     authState?.role === "ADMIN" ? (
+        //       <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
+        //     ) : (
+        //       <AppMainStack.Screen name="Home" component={MainDrawer} />
+        //     )
+        //   ) : (
+        //     <AppMainStack.Screen name="Login" component={Login} />
+        //   )
 
-      } */}
+      }
     </AppMainStack.Navigator>
   );
 };
