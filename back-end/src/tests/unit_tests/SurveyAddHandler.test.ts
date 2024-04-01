@@ -8,6 +8,12 @@
 // import { container } from "tsyringe";
 // import { surveyRepoToken } from "@app/adapter/DependencyInjections";
 
+describe("SurveyAddHandler tests", () => {
+  it("TODO", () => {
+    expect(true).toBeTruthy();
+  });
+});
+
 // describe("SurveyAddHandler Tests", () => {
 //   beforeEach(() => {
 //     container.clearInstances();

@@ -11,8 +11,8 @@ interface AuthProps {
 }
 
 const TOKEN_KEY = 'casi-jwt';
-const IPV4_ADDRESS = "10.237.243.118";
-// export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
+const IPV4_ADDRESS = "10.237.186.201";
+export const API_URL = `http://${IPV4_ADDRESS}:3000/api/login`;
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {

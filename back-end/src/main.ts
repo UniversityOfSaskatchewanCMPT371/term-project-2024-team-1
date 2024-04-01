@@ -1,38 +1,54 @@
-/* eslint-disable @typescript-eslint/typedef */
 import "reflect-metadata";
-import express, { Router, Request, Response, Express } from "express";
-import { Logger, configure, getLogger } from "log4js";
-import { NODE_ENV, HOST, PORT } from "@resources/config";
-import log4jsConfig from "@resources/log4js-config.json";
+import { SurveyController } from "@app/adapter/Controllers/SurveyController";
+import { UserController } from "@app/adapter/Controllers/UserController";
 import { registerAllDependencies } from "@app/adapter/DependencyInjections";
+import { HOST, NODE_ENV, PORT } from "@resources/config";
 import cors from "cors";
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-configure(log4jsConfig);
+import express, { Express, Request, Response } from "express";
+import { container } from "tsyringe";
+import { AnswerSQLRepository } from "@app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
+import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
+import { SurveyAnswer } from "@app/domain/SurveyAnswer";
+import { AnswerController } from "@app/adapter/Controllers/AnswerController";
 
 registerAllDependencies();
 
 export const app: Express = express();
-const logger: Logger = getLogger("info"); // logger for info
 
-const userRoute: Router = require("@app/adapter/Controllers/UserController");
-const surveyRoute: Router = require("@app/adapter/Controllers/SurveyController");
+const surveyController: SurveyController = container.resolve(SurveyController);
+const answerController: AnswerController = container.resolve(AnswerController);
+const userController: UserController = container.resolve(UserController);
 
 console.log(`NODE_ENV=${NODE_ENV}`);
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoute);
-app.use("/api", surveyRoute);
+
+app.use("/api", surveyController.getController());
+app.use("/api", answerController.getController());
+app.use("/api", userController.getController());
 
 app.get("/", (req: Request, res: Response) => {
-  logger.info("GET request received");
   res.send("Service Active");
+});
+
+app.get("/temp", (req: Request, res: Response) => {
+  const answerRepo: ISurveyAnswerRepository = container.resolve(AnswerSQLRepository);
+  const answers: SurveyAnswer[] = [
+    new SurveyAnswer("abc", 2, "aaa", 1),
+    new SurveyAnswer("abc", 3, "bbb", 1)
+  ];
+  answerRepo.update(answers).then(result => {
+    console.log(result);
+    res.status(200).send(result);
+  }).catch(e => {
+    console.log(e);
+    res.status(500).send(e);
+  });
 });
 
 if (NODE_ENV !== "test") {
   app.listen(PORT, HOST, () => {
-    logger.error("Testing ERROR logs");
-    logger.debug("Testing DEBUG logs");
     console.log(`APP LISTENING ON http://${HOST}:${PORT}`); 
   });
 }

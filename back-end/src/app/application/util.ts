@@ -9,6 +9,12 @@ interface JwtPayload {
   userId: string
 }
 
+export interface AuthenticatedRequest extends Request {
+  auth: {
+    userId: string;
+  }
+}
+
 export const ADMIN: string = "ADMIN";
 export const USER: string = "USER";
 
@@ -49,10 +55,11 @@ export function authenticate(role: string) {
           if (nullOrUndefined(user)) {
             return res.status(404).send("UserID not found");
           } else {
+            (req as AuthenticatedRequest).auth = { userId: user.userId };
             if (user.isAdmin) {
-              next();
+              return next();
             } else if (role === USER) {
-              next();
+              return next();
             } else {
               return res.status(403).send("Unauthorized access, you do not have permissions!");            
             }
@@ -72,7 +79,6 @@ export function authenticate(role: string) {
   };
 }
 
-
 export function formatDateForSQL(date: Date): string {
   const year: string = date.getUTCFullYear().toString();
   const month: string = (date.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -83,4 +89,3 @@ export function formatDateForSQL(date: Date): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
-

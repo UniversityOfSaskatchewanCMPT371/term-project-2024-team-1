@@ -1,11 +1,11 @@
-import { userRepoToken } from "@app/adapter/DependencyInjections";
+import { userReqRepoToken } from "@app/adapter/DependencyInjections";
 import { UserRequest } from "@app/domain/UserRequest";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
-import { inject, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 
 @injectable()
 export class UserRequestService {  
-  constructor(@inject(userRepoToken) private readonly _userRequestRepository: IUserRequestRepository) {
+  constructor(@inject(delay(() => userReqRepoToken)) private readonly _userRequestRepository: IUserRequestRepository) {
 
   }
 

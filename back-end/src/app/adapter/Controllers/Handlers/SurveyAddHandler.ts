@@ -1,38 +1,40 @@
-import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
+import { Survey } from "@app/domain/Survey";
+import { Request, Response } from "express";
 import { getLogger } from "log4js";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class SurveyAddHandler {
   private readonly _logger = getLogger(SurveyAddHandler.name);
 
   constructor(private readonly _surveyService: SurveyService) {
-    this._surveyService = container.resolve(SurveyService);
   }
   
   public async handle(req: Request, res: Response): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const isSuccess: boolean = await this.execute(req);
-      if (isSuccess) {
-        res.status(200).send("Sample survey added successfully.");
+      if (await this.execute(req)) {
+        this._logger.info(`Successfully created new survey ${req.body.surveyName}`);
+        res.status(200).send("Survey added successfully.");
       } else {
-        res.status(400).send("Failed to add sample survey."); // Adjust based on your logic
+        this._logger.info("Failed to create new survey");
+        res.status(400).send("Failed to create survey.");
       }
     } catch (error) {
-      // Assuming all error handling is done within execute, this catch may be redundant
-      res.status(500).send("Error occurred while adding sample survey.");
+      this._logger.error("Error creating survey:", error);
+      res.status(500).send("Error occurred while creating survey.");
     }
   }
 
   private async execute(req: Request): Promise<boolean> {
     try {
-      // Directly return the result of createFakeSurvey, assuming it resolves to a boolean
-      return await this._surveyService.createFakeSurvey();
+      const surveyName: string = req.body.surveyName;
+      const dueDate: Date = new Date(req.body.dueDate as string);
+      const newSurvey: Survey = new Survey(1, surveyName, dueDate);
+      return await this._surveyService.createSurvey(newSurvey);
     } catch (error) {
-      this._logger.error("Error adding sample survey:", error);
-      throw error; // Rethrow the error to be handled in the calling method
+      this._logger.error("Error creating survey:", error);
+      throw error;
     }
   }
 }
