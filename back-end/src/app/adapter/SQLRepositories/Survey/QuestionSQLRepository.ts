@@ -12,8 +12,13 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
 
   private readonly _getAllQuery: string = "SELECT * FROM Question";
   private readonly _getByQuestionIdQuery: string = "SELECT * FROM Question WHERE id = ?";
-  private readonly _getBySurveyQuery: string = "SELECT Q.* FROM Question Q INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId INNER JOIN Survey S ON SQM.surveyId = S.id WHERE S.surveyName = ?";
-  private readonly _createQuestionQuery: string = "INSERT INTO Question (question, standard, type, parentId) VALUES (?, ?, ?, ?);";
+  private readonly _getBySurveyQuery: string = `SELECT Q.*, SQM.rankOrder FROM Question Q 
+                                                  INNER JOIN SurveyQuestionMap SQM ON Q.id = SQM.questionId 
+                                                  INNER JOIN Survey S ON SQM.surveyId = S.id 
+                                                  WHERE S.id = ? 
+                                                  ORDER BY rankOrder;`;
+
+  private readonly _createQuestionQuery: string = "INSERT INTO Question (question, standard, type, parentId) VALUES (?, ?, ?, ?)";
   private readonly _updateQuestionQuery: string = "UPDATE Question SET question = ?, standard = ?, type = ?, parentId = ? WHERE id = ?";
   private readonly _deleteQuestionQuery: string = "DELETE FROM Question WHERE id = ?";
 
@@ -28,16 +33,17 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
     }
   }
 
-  async getBySurvey(surveyName: string): Promise<SurveyQuestion[]> {
+  async getBySurvey(surveyId: number): Promise<SurveyQuestion[]> {
     try {
-      return query(this._getBySurveyQuery, [surveyName]).then((data: any) => {
-        if (data.length === 0) {
-          return null;
+      return query(this._getBySurveyQuery, [surveyId.toString()]).then((data: [SurveyQuestion[]]) => {
+        const surveyQuestions: SurveyQuestion[] = data[0];
+        if (surveyQuestions.length === 0) {
+          return [];
         }
-        return data.map((data: SurveyQuestion[]) => new SurveyQuestion(data[0].id, data[0].question, data[0].standard, data[0].type, data[0].parentId ?? undefined));
+        return surveyQuestions;
       });
     } catch (error) {
-      this._logger.ERROR(`Failed to retrieve questions for survey named ${surveyName}: error: ${error}`);
+      this._logger.ERROR(`Failed to retrieve questions for survey ${surveyId}: ${error}`);
       throw error;
     }
   }
@@ -53,10 +59,10 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
           // when creating single question
           const resultSetHeader: ResultSetHeader = results[0];
           if (resultSetHeader.affectedRows > 0) {
-            this._logger.INFO(`The question was created successfully`);
+            this._logger.INFO(`Successfully created the question`);
             return true;
           } 
-          this._logger.INFO(`The question was not created`);
+          this._logger.INFO(`Failed to create the question`);
           return false;
           
         }
@@ -72,7 +78,7 @@ export class QuestionSQLRepository implements ISurveyQuestionRepository {
         return areAllQuestionsCreated;
         
         
-      }).catch(async (err) => {
+      }).catch((err) => {
         this._logger.ERROR(`Failed to create questions.\nError: ${err}`);
         throw err;
       });

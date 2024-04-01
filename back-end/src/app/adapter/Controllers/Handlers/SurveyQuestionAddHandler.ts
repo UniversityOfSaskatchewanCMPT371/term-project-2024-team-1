@@ -1,38 +1,71 @@
 import { Request, Response } from "express";
-import { container, injectable } from "tsyringe";
+import { delay, inject, injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
-import { getLogger } from "log4js";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { nullOrUndefined } from "@app/application/util";
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
+
 
 @injectable()
 export class SurveyQuestionAddHandler {
-  private readonly _logger = getLogger(SurveyQuestionAddHandler.name);
+  private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyQuestionAddHandler.name);
 
-  constructor(private readonly _surveyService: SurveyService) {
-    this._surveyService = container.resolve(SurveyService);
+  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
   }
 
-  public async handle(req: Request, res: Response): Promise<void> {
-    try {
-      if (typeof (req.body.surveyId, req.body.questionId, req.body.rankOrder) === "number") {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (await this.execute(req.body.surveyId, req.body.questionId, req.body.rankOrder)) {
-          res.status(200).json({ message: "Question added to survey successfully." });
-        } else {
-          res.status(400).json({ message: "Failed to add question to survey." });
-        }
-      } 
-    } catch (error) {
-      this._logger.error("Error occurred while adding question to survey:", error);
-      res.status(500).json({ message: "Internal server error", error });
+  public handle(req: Request, res: Response): void {
+    if (!this.validation(req, res)) {
+      return; 
     }
+    this.execute(req).then((success) => {
+      if (success) { 
+        this._logger.INFO(`Successfully added questions to survey ${req.body.surveyId}`);
+        res.status(200).send(`Successfully added questions to the survey`);
+      } else {
+        this._logger.INFO(`Failed to add questions to survey ${req.body.surveyId}`);
+        res.status(400).send(`Failed to add questions to the survey`);
+      }
+    }).catch((err) => {
+      this._logger.ERROR(`Failed to add questions to the ${req.body.surveyId}, error occured: ${err}`);
+      res.status(500).send("Server failed to process request, please try again");
+    });
   }
 
-  private async execute(surveyId: number, questionId: number, rankOrder: number): Promise<boolean> {
-    try {
-      return await this._surveyService.addQuestionToSurvey(surveyId, questionId, rankOrder);
-    } catch (error) {
-      this._logger.error("Error adding question to survey:", error);
-      throw error;
+  public async execute(req: Request): Promise<boolean> {
+    const questionsToAdd: QuestionToAddDTO[] = req.body;
+    return this._surveyService.addQuestionToSurvey(questionsToAdd);
+  }
+
+  public validation(...args: any[]): boolean { 
+    const req: Request = args[0];
+    const res: Response = args[1];
+    const questionsToAdd: any[] = req.body;
+    if (questionsToAdd.length <= 0) {
+      this._logger.ERROR("No questions provided to add to the survey.");
+      res.status(422).send("No questions provided to add to the survey.");
+      return false;
     }
+
+    const isValid: boolean = questionsToAdd.every((question: any) => {
+      if (
+        nullOrUndefined(question) ||
+        nullOrUndefined(question.surveyId) ||
+        nullOrUndefined(question.questionId) ||
+        nullOrUndefined(question.rankOrder) ||
+        isNaN(Number(question.surveyId)) ||
+        isNaN(Number(question.questionId)) ||
+        isNaN(Number(question.rankOrder))
+      ) { return false; }
+      return true;
+    }); 
+    if (isValid) {
+      this._logger.INFO("validation of the request is successful");
+    } else {
+      this._logger.ERROR("Invalid format provided to the API");
+      res.status(422).send("Some required fields not provided in the correct format");
+    }
+    return isValid;
+
   }
 }

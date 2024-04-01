@@ -2,6 +2,10 @@ import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { Survey } from "@app/domain/Survey";
 import { SurveySQLRepository } from "../../../app/adapter/SQLRepositories/Survey/SurveySQLRespository";
 import { formatDateForSQL } from "@app/application/util";
+import { container } from "tsyringe";
+import { loggerToken } from "@app/adapter/DependencyInjections";
+import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
+import { ILogger } from "@app/domain/interfaces/ILogger";
 /* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
@@ -9,6 +13,7 @@ jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
 }));
 
 describe("SurveySQLRepository", () => {
+  container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
   let repo: SurveySQLRepository;
 
   beforeEach(() => {
@@ -26,7 +31,7 @@ describe("SurveySQLRepository", () => {
       (query as jest.Mock).mockResolvedValueOnce([mockSurveys]);
       const surveys = await repo.getAll();
       expect(surveys).toEqual(mockSurveys);
-      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey");
+      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey;");
     });
 
     it("should handle and throw database errors", async () => {
@@ -42,7 +47,7 @@ describe("SurveySQLRepository", () => {
       (query as jest.Mock).mockResolvedValueOnce([[mockSurvey], undefined]);
       const survey = await repo.getSurvey(1);
       expect(survey).toEqual(mockSurvey);
-      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey WHERE id = ?", ["1"]);
+      expect(query).toHaveBeenCalledWith("SELECT * FROM Survey WHERE id = ?;", ["1"]);
     });
 
     it("should return null when not found", async () => {
@@ -60,7 +65,7 @@ describe("SurveySQLRepository", () => {
       const result = await repo.createSurvey(newSurvey);
       const dueDate: string = formatDateForSQL(new Date());
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?)", ["New Survey", formatDateForSQL(newSurvey.dueDate)]);
+      expect(query).toHaveBeenCalledWith("INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, NOW(), ?);", ["New Survey", formatDateForSQL(newSurvey.dueDate)]);
     });
 
     it("should return false when creation fails", async () => {
@@ -75,7 +80,7 @@ describe("SurveySQLRepository", () => {
       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
       const result = await repo.deleteSurvey(1);
       expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("DELETE FROM Survey WHERE id = ?", ["1"]);
+      expect(query).toHaveBeenCalledWith("DELETE FROM Survey WHERE id = ?;", ["1"]);
     });
 
     it("should return false when no rows are affected", async () => {
