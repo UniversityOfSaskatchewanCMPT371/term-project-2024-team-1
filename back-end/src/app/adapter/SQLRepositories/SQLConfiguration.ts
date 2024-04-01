@@ -11,7 +11,7 @@ export const sqlPool: mysql.Pool = mysql.createPool({
   multipleStatements: true
 });
 
-export async function query(sql: string, fields?: string[] | string[][]): Promise<any> {
+export async function query(sql: string, fields?: any[] | any[][]): Promise<any> {
   const preparedSQL: string = fields != null && fields !== undefined ? mysql.format(sql, fields) : sql;
 
   const connection: mysql.PoolConnection = await sqlPool.getConnection();
@@ -32,7 +32,7 @@ export async function query(sql: string, fields?: string[] | string[][]): Promis
 
 }
 
-export function constructBulkQuery(query: string, fields: string[][]): string {
+export function constructBulkQuery(query: string, fields: any[][]): string {
   let sql: string = "";
   fields.forEach((data: any[]) => {
     sql += mysql.format(query, data);

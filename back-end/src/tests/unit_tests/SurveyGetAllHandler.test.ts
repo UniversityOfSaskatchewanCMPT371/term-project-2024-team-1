@@ -13,7 +13,7 @@ import { container } from "tsyringe";
 import { Request, Response } from "express";
 import { flushPromises } from "@tests/common_test_code/util_test";
 
-fdescribe("SurveyGetAllHander", () => {
+describe("SurveyGetAllHander", () => {
   const mockSurveyRepo: ISurveyRepository = new MockSurveyRepository();
   container.register(surveyRepoToken, { useValue: mockSurveyRepo });
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });

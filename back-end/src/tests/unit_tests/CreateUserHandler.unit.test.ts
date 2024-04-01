@@ -61,7 +61,7 @@ describe("CreateUser and Modify Request", () => {
       handler.handle(req, res);
       await flushPromises();
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(201);
       expect(res.send).toHaveBeenCalledWith("User successfully approved and created");
 
     });

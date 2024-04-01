@@ -7,10 +7,23 @@ import { ResultSetHeader } from "mysql2";
 export class AnswerSQLRepository implements ISurveyAnswerRepository {
   private readonly _logger: ILogger = LoggerFactory.getLogger(AnswerSQLRepository.name);
 
+  private readonly _getSurveyAnswersQuery: string = `SELECT A.id, A.answer, A.questionId, A.userId, A.note FROM Answer A
+                                                        JOIN SurveyQuestionMap SQM ON SQM.questionId = A.questionId
+                                                        JOIN Survey S ON S.id = SQM.surveyId
+                                                        WHERE A.userId = ? AND S.id = ?`;
+
   private readonly _updateQuery: string = `UPDATE Answer SET answer=?, note=? WHERE id=? AND userId=?;`;
 
-  public async getAnswers(userId: string): Promise<SurveyAnswer[]> {
-    throw new Error("unimplemented");
+  public async getSurveyAnswers(userId: string, surveyId: number): Promise<SurveyAnswer[]> {
+    return query(this._getSurveyAnswersQuery, [userId, surveyId.toString()])
+      .then((data: [SurveyAnswer[]]) => {
+        const surveyAnswers: SurveyAnswer[] = data[0];
+        return surveyAnswers;
+      })
+      .catch(err => {
+        this._logger.ERROR(`Failed to fetch survey ${surveyId} answers for user ${userId}.\n Database error: ${err}`);
+        throw Error(err as string);
+      });
   }
 
   public async get(answerId: number): Promise<SurveyAnswer> {

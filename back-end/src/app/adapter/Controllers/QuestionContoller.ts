@@ -16,7 +16,7 @@ export class QuestionController {
       this._questionGetAllHandler.handle(req, res);
     });
 
-    this._router.post("/question/:question", (req: Request, res: Response) => {
+    this._router.post("/question", (req: Request, res: Response) => {
       this._questionCreateHandler.handle(req, res);
     });
 
