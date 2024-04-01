@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import "reflect-metadata";
 import { SurveyGetAllHandler } from "@app/adapter/Controllers/Handlers/SurveyGetAllHandler";
+import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { loggerToken, surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { randomAlphanumString } from "@app/application/util";
 import { ILogger } from "@app/domain/interfaces/ILogger";
-import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { Survey } from "@app/domain/Survey";
 import { MockSurveyRepository } from "@tests/mocked_repository/MockSurveyRepository";
 import { container } from "tsyringe";

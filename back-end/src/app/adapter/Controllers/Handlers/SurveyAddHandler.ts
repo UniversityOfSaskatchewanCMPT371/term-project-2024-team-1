@@ -21,7 +21,7 @@ export class SurveyAddHandler {
     this.execute(req).then((success) => {
       if (success) {
         this._logger.INFO("Successfully created survey");
-        res.status(201).send("Successfully created survey");
+        res.status(200).send("Successfully created survey");
       } else {
         this._logger.INFO("Failed to create survey");
         res.status(400).send("Failed to create survey");
@@ -33,7 +33,7 @@ export class SurveyAddHandler {
 
   }
 
-  private async execute(req: Request): Promise<boolean> {
+  async execute(req: Request): Promise<boolean> {
     const surveyName: string = req.body.surveyName;
     const dueDate: Date = req.body.dueDate; 
     const surveyId: number = -1;

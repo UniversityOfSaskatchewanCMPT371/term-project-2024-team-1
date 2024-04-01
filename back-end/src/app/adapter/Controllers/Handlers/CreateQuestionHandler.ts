@@ -20,6 +20,7 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
     if (!this.validation(req, res)) {
       return; 
     }
+    
     this.execute(req).then((success) => {
       if (success) {
         this._logger.INFO("Successfully created survey questions");
@@ -44,11 +45,13 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
     const request: Request = args[0];
     const res: Response = args[1];
     const questions: SurveyQuestion[] = request.body;
+
     if (questions.length <= 0) {
       this._logger.ERROR("No questions were provided to the API");
       res.status(422).send("You must provide questions to create");
       return false;
     };
+
     const isValid: boolean = questions.every((question: SurveyQuestion) => {
       if (
         nullOrUndefined(question) ||
@@ -60,13 +63,14 @@ export class QuestionCreateHandler implements IRouteHandler<boolean> {
       ) { return false; } 
       return true;
     });
+
     if (isValid) {
       this._logger.INFO("Successfully validated all the survey questions");
     } else {
       this._logger.ERROR("Invalid question provided to the API");
       res.status(422).send("Invalid question provided to the API");
     }
-    return isValid;
 
+    return isValid;
   };
 }
