@@ -9,6 +9,7 @@ import path from "path";
 import * as fs from "fs";
 import { nullOrUndefined } from "@app/application/util";
 import { assert } from "console";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 
 @injectable()
 export class SurveyGetAllResponseHandler implements IRouteHandler<any[]> {
@@ -20,14 +21,12 @@ export class SurveyGetAllResponseHandler implements IRouteHandler<any[]> {
       this.execute(req)
         .then((responses) => {
           if (responses?.length > 0) {
-            // console.log("Responses length is greater than 0");
             this._logger.INFO("Successfully retrieved all surveys");
             const workbook: ExcelJs.Workbook = new ExcelJs.Workbook();
             const worksheet: ExcelJs.Worksheet = workbook.addWorksheet("Responses");
             worksheet.properties.defaultColWidth = 100;
             worksheet.addRow(["User ID", "Question", "Answer", "Note"]);
             responses?.forEach(response => {
-              // console.log(response);
               assert(!nullOrUndefined(response.userId));
               assert(!nullOrUndefined(response.question));
               assert(!nullOrUndefined(response.answer));
@@ -35,8 +34,6 @@ export class SurveyGetAllResponseHandler implements IRouteHandler<any[]> {
               const { userId, question, answer, note } = response;
               worksheet.addRow([userId, question, answer, note]);
             });
-            // console.log("assertion passed");
-            // this._logger.INFO("Runs until here successfully");
 
             const filePath: string = path.join(__dirname, "responses.xlsx");
             const fileStream: fs.WriteStream = fs.createWriteStream(filePath);
@@ -71,7 +68,7 @@ export class SurveyGetAllResponseHandler implements IRouteHandler<any[]> {
     }
   }
 
-  public async execute(req: Request): Promise<any[]> {
+  public async execute(req: Request): Promise<SurveyResponse[]> {
     return this._surveyService.getAllResponses(Number(req.params.surveyId));
   }
 

@@ -10,6 +10,7 @@ import { flushPromises } from "@tests/common_test_code/util_test";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { SurveyGetAllResponseHandler } from "@app/adapter/Controllers/Handlers/SurveyGetAllResponseHandler";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 // import * as fs from "fs";
 // import * as ExcelJs from "exceljs";
 
@@ -27,7 +28,8 @@ describe("Get Survey Responses", () => {
       const req: Request = { params: { surveyId: 1 } } as unknown as Request;
       const res: Response = { download: jest.fn(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(true);
-      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve([{ userId: "testUserId", question: "testQuestion", answer: "testAnswer", note: "testNote" }]));
+      const mockSurveyResponse: SurveyResponse = new SurveyResponse("testUserId", "testQuestion", "testAnswer", "testNote");
+      jest.spyOn(handler, "execute").mockReturnValue(Promise.resolve([mockSurveyResponse]));
 
 
       // Call the handle method
