@@ -7,20 +7,16 @@ import { ILogger } from "@app/domain/interfaces/ILogger";
 import { container, Lifecycle } from "tsyringe";
 import { Request, Response } from "express";
 import { AuthenticatedRequest, randomAlphanumString } from "@app/application/util";
-import { randomInt } from "crypto";
-import { ISurveyQuestionRepository } from "@app/domain/interfaces/repositories/ISurveyQuestionRepository";
-import { QuestionSQLRepository } from "@app/adapter/SQLRepositories/Survey/QuestionSQLRepository";
 import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
-import { SurveyQuestion } from "@app/domain/SurveyQuestion";
-import { QuestionTypeEnum } from "@app/domain/QuestionTypeEnum";
+import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
 import { AnswerSQLRepository } from "@app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
 
-describe("SurveyUpdateHandler", () => {
+describe("SurveyUpdateAnswerHandler", () => {
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
-  container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
-  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: surveyAnswerRepoToken }, { lifecycle: Lifecycle.Singleton });
-
+  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: AnswerSQLRepository }, { lifecycle: Lifecycle.Singleton });
+  container.register(SurveyAnswerService, { useClass: SurveyAnswerService });
+  
   const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
   let req: Request;
   let res: Response;
@@ -55,100 +51,49 @@ describe("SurveyUpdateHandler", () => {
   });
 
 
-  it("should respond with 404 if survey has no questions or a non-existent survey", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue([]);
+  it("should fail with 400 if surveyId isn't provided", async () => {
+    delete req.params.surveyId; // Simulate missing surveyId
+    const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
 
-    // Action
-    await handler.handle(req, res);
+    await handler.handle(req as Request, res);
 
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.send).toHaveBeenCalledWith(expect.any(String));
   });
 
+  it("should successfully update dirty answers", async () => {
+    req.body = { dirtyAnswers: [new SurveyAnswer(randomAlphanumString(5), 1, "Yes", 1)] };
+    const mockUpdate = jest.fn().mockResolvedValue(true);
+    container.register(SurveyAnswerService, { useValue: { update: mockUpdate } });
+    const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
 
-  it("should respond with 500 if getting questions database operation failed", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockRejectedValue("db operation get by survey failed");
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(8), 15, "Valid Answer", 15)]);
+    await handler.handle(req as Request, res);
 
-    // Action
-    await handler.handle(req, res);
+    expect(mockUpdate).toHaveBeenCalledWith(req.body.dirtyAnswers);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith(expect.stringContaining("dirty answers updated successfully"));
+  });
 
-    // Assert
+  it("should respond with 200 and a message when no dirty answers are provided", async () => {
+    req.body = { dirtyAnswers: [] };
+    const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
+
+    await handler.handle(req as Request, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith("No answers to update");
+  });
+
+  it("should respond with 500 if the update operation fails", async () => {
+    req.body = { dirtyAnswers: [new SurveyAnswer(randomAlphanumString(5), 1, "Yes", 1)] };
+    const mockUpdate = jest.fn().mockRejectedValue(new Error("Update failed due to server error"));
+    container.register(SurveyAnswerService, {  useValue: {update: mockUpdate  }});
+    const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
+
+    await handler.handle(req as Request, res);
+
+    expect(mockUpdate).toHaveBeenCalledWith(req.body.dirtyAnswers);
     expect(res.status).toHaveBeenCalledWith(500);
-  });
-
-  it("should respond with 500 if getting answers database operation failed", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue([new SurveyQuestion(randomInt(100), randomAlphanumString(15), true, QuestionTypeEnum.TEXT, randomInt(10))]);
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockRejectedValue("db operation get answers failed");
-
-    // Action
-    await handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(500);
-  });
-
-  it("should respond with 200 if successfully retrieved survey content", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue([new SurveyQuestion(randomInt(100), randomAlphanumString(15), true, QuestionTypeEnum.TEXT, randomInt(10))]);
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(10), randomInt(5), randomAlphanumString(10), randomInt(5))]);
-
-    // Action
-    await handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
-  it("should respond with 200 if successfully retrieved survey questions with no answers", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue([new SurveyQuestion(randomInt(100), randomAlphanumString(15), true, QuestionTypeEnum.TEXT, randomInt(10))]);
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([]);
-
-    // Action
-    await handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
-  it("should respond with 200 if successfully retrieved survey questions with answers", async () => {
-    // Setup
-    (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
-    req.params = { surveyId: randomInt(100).toString() };
-    const questions: SurveyQuestion[] = [
-      new SurveyQuestion(1, randomAlphanumString(10), true, QuestionTypeEnum.TEXT, 1),
-      new SurveyQuestion(2, randomAlphanumString(10), true, QuestionTypeEnum.TEXT, 1)
-    ];
-    const answers: SurveyAnswer[] = [
-      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 1),
-      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 2)
-    ];
-    jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue(questions);
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue(answers);
-
-    // Attaching answers to its questions
-    questions[0].answer = answers[0];
-    questions[1].answer = answers[1];
-
-    // Action
-    await handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith(questions);
+    expect(res.send).toHaveBeenCalledWith("An error occurred while updating answers.");
   });
 });

@@ -1,6 +1,5 @@
 import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
 import { AuthenticatedRequest, nullOrUndefined } from "@app/application/util";
-import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
@@ -23,31 +22,30 @@ export class SurveyUpdateAnswerHandler implements IRouteHandler<SurveyAnswer[]> 
         return;
       }
       try {
-        const updateResult = await this._surveyService.update(dirtyAnswers);
+        const updateResult: boolean = await this._surveyService.update(dirtyAnswers);
     
         if (updateResult) {
-          this._logger.INFO(`Succeeded to update survey answers ${dirtyAnswers}.`);
-          res.status(200).send(`Dirty answers ${dirtyAnswers} updated successfully`);
+          this._logger.INFO(`Succeeded to update survey answers ${JSON.stringify(dirtyAnswers)}.`);
+          res.status(200).send(`Dirty answers ${JSON.stringify(dirtyAnswers)} updated successfully`);
         } else {
-          this._logger.ERROR(`Failed to update survey answers ${dirtyAnswers}.`);
-          res.status(500).send(`Dirty answers ${dirtyAnswers} not found, update failed.`);
+          this._logger.ERROR(`Failed to update survey answers ${JSON.stringify(dirtyAnswers)}.`);
+          res.status(500).send(`Dirty answers ${JSON.stringify(dirtyAnswers)} not found, update failed.`);
         }
       } catch (error) {
-        this._logger.ERROR(`Failed to update survey answers: ${error}`);
+        this._logger.ERROR(`Failed to update survey answers: ${JSON.stringify(error)}`);
         res.status(500).send("An error occurred while updating answers.");
       }
-  }
-  else {
-    this._logger.ERROR("Failed to update answers.");
-    res.status(400).send("Invalid request");
-  }
+    } else {
+      this._logger.ERROR("Failed to update answers.");
+      res.status(400).send("Invalid request");
+    }
 
 
-}
+  }
 
   public async execute(req: Request): Promise<SurveyAnswer[]> {
-    const SurveyAnswers: SurveyAnswer[] = req.body.dirtyAnswers;
-    return SurveyAnswers;
+    const surveyAnswers: SurveyAnswer[] = req.body.dirtyAnswers;
+    return surveyAnswers;
   };
 
   public validation(...args: any[]): boolean {
