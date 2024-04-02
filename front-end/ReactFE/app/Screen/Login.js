@@ -69,7 +69,7 @@ const Login = () => {
       <TouchableOpacity 
         testID="signUp"
       onPress={handleSignUp}>
-        <Text style={loginStyles.input}> Already have an account? <Text  style={loginStyles.signUpLink}>Sign up</Text>
+        <Text style={loginStyles.input}> Don't have an account? <Text  style={loginStyles.signUpLink}>Sign up</Text>
         </Text>
         </TouchableOpacity>
         </View>
