@@ -8,6 +8,8 @@ export class MockAnswerRepository implements ISurveyAnswerRepository {
   public constructor() {
     this._fakeDb = new Map();
   }
+  
+  getSurveyAnswers: (userId: string, surveyId: number) => Promise<SurveyAnswer[]>;
 
   getAnswers!: (userId: string) => Promise<SurveyAnswer[]>;
   get!: (answerID: number) => Promise<SurveyAnswer | null>;
