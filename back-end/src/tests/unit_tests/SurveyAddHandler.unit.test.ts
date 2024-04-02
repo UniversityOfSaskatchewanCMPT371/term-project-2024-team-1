@@ -28,7 +28,7 @@ describe("SurveyAddHandler", () => {
   describe("handle", () => {
     it("should fail with status code 422 if validation fails", () => {
       // Setup
-      const req: Request = { } as Request;
+      const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
       const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
       jest.spyOn(handler, "validation").mockReturnValue(false);
 
@@ -37,7 +37,7 @@ describe("SurveyAddHandler", () => {
 
       // Assert
       expect(res.status).toHaveBeenCalledWith(422);
-      expect(res.send).toHaveBeenCalledWith("Incorect survey format, please try again!");
+      expect(res.send).toHaveBeenCalledWith("Incorrect survey format, please try again!");
     });
 
     it("should fail with status code 500 if there is a server error", () => {
@@ -54,36 +54,42 @@ describe("SurveyAddHandler", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith("Server failed to process request, please try again");
     });
+
+    it("should fail with status code 400 if execute failed", () => {
+      // Setup
+      const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
+      const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
+      jest.spyOn(handler, "validation").mockReturnValue(true);
+      jest.spyOn(handler, "execute").mockResolvedValue(false);
+  
+      // Action
+      handler.handle(req, res);
+  
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith("Failed to create survey");
+    });
+  
+    it("should pass with status code 200 if it successfully creates a survey", () => {
+      // Setup
+      const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
+      const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
+      jest.spyOn(handler, "validation").mockReturnValue(true);
+      jest.spyOn(handler, "execute").mockResolvedValue(true);
+  
+      // Action
+      handler.handle(req, res);
+  
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith("Successfully created survey");
+    });
   });
 
-  it("should fail with status code 400 if execute failed", () => {
-    // Setup
-    const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
-    const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
-    jest.spyOn(handler, "validation").mockReturnValue(true);
-    jest.spyOn(handler, "execute").mockResolvedValue(false);
-
-    // Action
-    handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith("Failed to create survey");
-  });
-
-  it("should pass with status code 200 if it successfully creates a survey", () => {
-    // Setup
-    const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
-    const res: Response = { status: jest.fn().mockReturnThis(), send: jest.fn() } as unknown as Response;
-    jest.spyOn(handler, "validation").mockReturnValue(true);
-    jest.spyOn(handler, "execute").mockResolvedValue(true);
-
-    // Action
-    handler.handle(req, res);
-
-    // Assert
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith("Successfully created survey");
+  describe("execute", () => {
+    it("should return false if survey name has not been provided", () => {
+      const req: Request = { body: { surveyId: mockPass.id, surveyName: mockPass.surveyName, dueDate: mockPass.dueDate } } as Request;
+    });
   });
 });
 
