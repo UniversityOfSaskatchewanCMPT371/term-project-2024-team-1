@@ -92,6 +92,7 @@ const AdminMainDrawer = () => {
       />
        <Drawer.Screen name="Download/Notify" testID={"Notifications"} component={ViewResultsAsAdmin} />
       <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
+      <Drawer.Screen name="Login" component={Login} options={{drawerItemStyle:{height:0}}} />
 
       
     </Drawer.Navigator>
@@ -201,11 +202,11 @@ const MainStack = () => {
             authState?.role === "ADMIN" ? (
               <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
             ) : (
-              <AppMainStack.Screen name="Home" component={MainDrawer} />
+              <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
             )
-          ) : (
-            <AppMainStack.Screen name="Login" component={Login} />
-          )
+          ) : (<AppMainStack.Screen name="Login" component={Login} />
+          ) 
+      
 
       }
     </AppMainStack.Navigator>
