@@ -9,12 +9,12 @@ import { Request, Response } from "express";
 import { AuthenticatedRequest, randomAlphanumString } from "@app/application/util";
 import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
-import { AnswerSQLRepository } from "@tests/unit_tests/mocked_repository/AnswerSQLRepository";
+import { MockAnswerRepository } from "../mocked_repository/MockAnswerRepository";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
 
 describe("SurveyUpdateAnswerHandler", () => {
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
-  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: AnswerSQLRepository }, { lifecycle: Lifecycle.Singleton });
+  container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: MockAnswerRepository }, { lifecycle: Lifecycle.Singleton });
   container.register(SurveyAnswerService, { useClass: SurveyAnswerService });
   
   const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
@@ -64,7 +64,7 @@ describe("SurveyUpdateAnswerHandler", () => {
   it("should successfully update dirty answers", async () => {
     req.body = { dirtyAnswers: [new SurveyAnswer(randomAlphanumString(5), 1, "Yes", 1)] };
     const mockUpdate = jest.fn().mockResolvedValue(true);
-    container.register(SurveyAnswerService, { useValue: { update: mockUpdate } });
+    // container.register(SurveyAnswerService, { useValue: { update: mockUpdate } });
     const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
 
     await handler.handle(req as Request, res);
@@ -87,7 +87,7 @@ describe("SurveyUpdateAnswerHandler", () => {
   it("should respond with 500 if the update operation fails", async () => {
     req.body = { dirtyAnswers: [new SurveyAnswer(randomAlphanumString(5), 1, "Yes", 1)] };
     const mockUpdate = jest.fn().mockRejectedValue(new Error("Update failed due to server error"));
-    container.register(SurveyAnswerService, {  useValue: {update: mockUpdate  }});
+    // container.register(SurveyAnswerService, {  useValue: {update: mockUpdate  }});
     const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
 
     await handler.handle(req as Request, res);
