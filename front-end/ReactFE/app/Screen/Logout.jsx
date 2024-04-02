@@ -3,56 +3,21 @@ import React from "react";
 import { ScreenStyles } from "./Screen";
 import DrawerButton from "../navigation/CustomDrawerButton";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 const Logout = () => {
+  const { onLogout } = useAuth();
   const navigation = useNavigation();
-
-  const handleReturn = () => {
-    
+  const handleLogout = async () => {
+    try {
+      await onLogout();
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
-  return (
-    <View style={[ScreenStyles.CasiBlue, ScreenStyles.container]}>
-      <DrawerButton />
-      <Text style={style.title}>Survey Completed</Text>
-      <Text style={style.paragraph}>
-        The Survey for this quarter has been submitted.
-        {"\n\n"}
-        Thank you for your cooperation.
-      </Text>
-      <TouchableOpacity
-        testID="returnButton"
-        style={style.returnButton}
-        onPress={handleReturn}
-      >
-        <Text style={style.returnButtonText}>Return</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  return <button onClick={handleLogout}>Logout</button>;
 };
-const style = StyleSheet.create({
-  title: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: "#ffffff", // white text color
-    marginBottom: 20,
-  },
-  paragraph: {
-    fontSize: 14,
-    color: "#ffffff",
-    textAlign: "center",
-  },
-  returnButton: {
-    backgroundColor: "blue", // CasiDarkBlue
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  returnButtonText: {
-    color: "#ffffff", // white text color
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
+
 export default Logout;
