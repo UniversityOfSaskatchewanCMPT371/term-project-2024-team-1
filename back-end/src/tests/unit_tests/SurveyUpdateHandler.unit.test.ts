@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { SurveyUpdateHandler } from "@app/adapter/Controllers/Handlers/SurveyUpdateHandler";
+import { SurveyUpdateAnswerHandler } from "@app/adapter/Controllers/Handlers/SurveyUpdateAnswerHandler";
 import { loggerToken, surveyAnswerRepoToken, surveyQuestionRepoToken } from "@app/adapter/DependencyInjections";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { ILogger } from "@app/domain/interfaces/ILogger";
@@ -21,7 +21,7 @@ describe("SurveyUpdateHandler", () => {
   container.register<ISurveyQuestionRepository>(surveyQuestionRepoToken, { useClass: QuestionSQLRepository }, { lifecycle: Lifecycle.Singleton });
   container.register<ISurveyAnswerRepository>(surveyAnswerRepoToken, { useClass: surveyAnswerRepoToken }, { lifecycle: Lifecycle.Singleton });
 
-  const handler: SurveyUpdateHandler = container.resolve(SurveyUpdateHandler);
+  const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
   let req: Request;
   let res: Response;
 
