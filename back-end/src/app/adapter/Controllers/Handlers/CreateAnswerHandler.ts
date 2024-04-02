@@ -21,7 +21,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
   public handle(req: Request, res: Response): void {
     req = req as AuthenticatedRequest;
     if (!this.validation(req, res)) {
-      res.status(404).send(`SurveyAnswer not provided to`);
+      res.status(422).send(`Invalid request`);
       return;
     }
     this.execute(req)
@@ -55,7 +55,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
       return false;
     } else if (nullOrUndefined(req.auth)) {
       return false;
-    } else if (nullOrUndefined(req.body.SurveyAnswer.answerId) || req.body.SurveyAnswer.answerId < 0 || nullOrUndefined(req.body.SurveyAnswer.questionId) || req.body.SurveyAnswer.questionId < 0 || nullOrUndefined(req.body.SurveyAnswer.userId) || nullOrUndefined(req.body.SurveyAnswer.answer)) {
+    } else if (nullOrUndefined(req.body.SurveyAnswer.answerId) || req.body.SurveyAnswer.answerId !== -1 || nullOrUndefined(req.body.SurveyAnswer.questionId) || req.body.SurveyAnswer.questionId < 0 || nullOrUndefined(req.body.SurveyAnswer.userId) || nullOrUndefined(req.body.SurveyAnswer.answer)) {
       return false;
     }
     const answer: SurveyAnswer = req.body.SurveyAnswer;
