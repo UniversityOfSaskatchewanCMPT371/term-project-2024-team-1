@@ -1,4 +1,4 @@
-﻿import { View, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
+﻿import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { ScreenStyles } from "./Screen";
 import DrawerButton from "../navigation/CustomDrawerButton";
@@ -17,7 +17,11 @@ const Logout = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <TouchableOpacity onPress={handleLogout}>
+      <Text>Logout</Text>
+    </TouchableOpacity>
+  );
 };
 
 export default Logout;

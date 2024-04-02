@@ -9,12 +9,16 @@ import CreateSurvey from "../Screen/CreateSurvey";
 import Admin from "../Screen/Admin";
 import LandingPage from "../Screen/LandingPage";
 import SurveyList from "../Screen/SurveyList";
-import TakeSurvey from "../Screen/TakeSurvey";
+import TakeSurvey from "../Screen/TakeSurvey"
+import SignUp from "../Screen/SignUp";
+import SurveyCompleted from "../Screen/SurveyCompleted";
 import About from "../Screen/ContactUs";
 import ContactUs from "../Screen/ContactUs";
 import Logout from "../Screen/Logout";
 
 import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin";
+import { NavigationContainer } from "@react-navigation/native";
+import { View } from "react-native";
 
 /*Test constants */
 const runSurveyCreationTest = true;
@@ -33,16 +37,17 @@ const SurveyStack = () => {
       }}
       initialRouteName="Survey"
     >
+
       <AppSurveyStack.Screen name="TakeSurvey" component={TakeSurvey} />
-      {/* <AppSurveyStack.Screen name="SurveyScreen" component={Survey} /> */}
       {/* <AppSurveyStack.Screen
         name="SurveyStartBoard"
         component={SurveyStartBoard}
-      />
-      <AppSurveyStack.Screen name="SurveyBoard" component={SurveyBoard} /> */}
+      /> */}
+      <AppMainStack.Screen name="Survey Complete" component={SurveyCompleted}/>
     </AppSurveyStack.Navigator>
   );
 };
+
 
 const AdminMainDrawer = () => {
   return (
@@ -76,18 +81,24 @@ const AdminMainDrawer = () => {
       initialRouteName="AdminHome"
     >
       <Drawer.Screen
-        name="AdminHome"
+        name="Home"
         testID={"adminHomeID"}
         component={Admin}
       />
       <Drawer.Screen
-        name="Create Survey"
+        name="CreateSurvey"
         testID={"createsurvey"}
         component={CreateSurvey}
       />
+       <Drawer.Screen name="Download/Notify" testID={"Notifications"} component={ViewResultsAsAdmin} />
+      <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
+
+      
     </Drawer.Navigator>
   );
 };
+
+
 
 const MainDrawer = () => {
   return (
@@ -128,22 +139,13 @@ const MainDrawer = () => {
         component={ContactUs}
       />
       <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
-      <Drawer.Screen
-        name="SurveyStack"
-        component={SurveyStack}
-        options={{
-          drawerItemStyle: { height: 0 },
-          drawerLabel: () => null,
-          title: null,
-          drawerIcon: null,
-        }}
-      />
+      <Drawer.Screen name="SurveyStack" component={SurveyStack} options={{drawerItemStyle:{height:0}}} />
     </Drawer.Navigator>
   );
 };
 
 const MainStack = () => {
-  //const { authState } = useAuth();
+  const { authState } = useAuth();
   return (
     <AppMainStack.Navigator
       screenOptions={{
@@ -187,17 +189,25 @@ const MainStack = () => {
       }}
       initialRouteName="Home"
     >
-      <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
 
-      {/* {authState?.token ? (
-        authState?.role === "ADMIN" ? (
-          <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
-        ) : (
-          <AppMainStack.Screen name="Home" component={MainDrawer} />
-        )
-      ) : (
-        <AppMainStack.Screen name="Login" component={Login} />
-      )} */}
+      {/* <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
+      <AppMainStack.Screen name="Login" component={Login} />
+        <AppMainStack.Screen name="SignUp" component={SignUp} /> */}
+      {
+
+        runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
+
+          authState?.token ? (
+            authState?.role === "ADMIN" ? (
+              <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
+            ) : (
+              <AppMainStack.Screen name="Home" component={MainDrawer} />
+            )
+          ) : (
+            <AppMainStack.Screen name="Login" component={Login} />
+          )
+
+      }
     </AppMainStack.Navigator>
   );
 };

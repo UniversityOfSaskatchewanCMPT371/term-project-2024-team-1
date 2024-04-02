@@ -13,7 +13,7 @@ import Users from "./Screen/Users";
 
 export default function Index() {
   return (
-    <NavigationContainer style={AppStyles.CasiBlue}>
+    <NavigationContainer style={AppStyles.CasiBlue} gestureEnabled = {false}>
       <Navigator />
     </NavigationContainer>
   );
