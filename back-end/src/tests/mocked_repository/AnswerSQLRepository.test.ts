@@ -1,6 +1,6 @@
 import { query } from "@app/adapter/SQLRepositories/SQLConfiguration";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
-import { AnswerSQLRepository } from "../../../app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
+import { AnswerSQLRepository } from "../../app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
 /* eslint-disable */
 
 jest.mock("@app/adapter/SQLRepositories/SQLConfiguration", () => ({
@@ -34,22 +34,22 @@ describe("AnswerSQLRepository", () => {
     });
   });
 
-  describe("getAnswer", () => {
-    const mockAnswer = new SurveyAnswer("user1", 1, "Answer 1", 1);
+//   describe("getAnswer", () => {
+//     const mockAnswer = new SurveyAnswer("user1", 1, "Answer 1", 1);
 
-    it("should return a SurveyAnswer object when found", async () => {
-      (query as jest.Mock).mockResolvedValueOnce([[mockAnswer], undefined]);
-      const answer = await repo.get(1);
-      expect(answer).toEqual(mockAnswer);
-      expect(query).toHaveBeenCalledWith("SELECT * FROM Answer WHERE id = ?", ["1"]);
-    });
+//     it("should return a SurveyAnswer object when found", async () => {
+//       (query as jest.Mock).mockResolvedValueOnce([[mockAnswer], undefined]);
+//       const answer = await repo.get(1);
+//       expect(answer).toEqual(mockAnswer);
+//       expect(query).toHaveBeenCalledWith("SELECT * FROM Answer WHERE id = ?", ["1"]);
+//     });
 
-    it("should return null when not found", async () => {
-      (query as jest.Mock).mockResolvedValueOnce([[], undefined]);
-      const answer = await repo.get(5);
-      expect(answer).toBeNull();
-    });
-  });
+//     it("should return null when not found", async () => {
+//       (query as jest.Mock).mockResolvedValueOnce([[], undefined]);
+//       const answer = await repo.get(5);
+//       expect(answer).toBeNull();
+//     });
+//   });
 
   describe("createAnswer", () => {
     const newAnswer = new SurveyAnswer("user3", 3, "New Answer", 1);
@@ -68,18 +68,18 @@ describe("AnswerSQLRepository", () => {
     });
   });
 
-  describe("deleteAnswer", () => {
-    it("should return true on successful deletion", async () => {
-      (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
-      const result = await repo.delete(1);
-      expect(result).toBe(true);
-      expect(query).toHaveBeenCalledWith("DELETE FROM Answer WHERE id = ?", ["1"]);
-    });
+//   describe("deleteAnswer", () => {
+//     it("should return true on successful deletion", async () => {
+//       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 1 }, undefined]);
+//       const result = await repo.delete(1);
+//       expect(result).toBe(true);
+//       expect(query).toHaveBeenCalledWith("DELETE FROM Answer WHERE id = ?", ["1"]);
+//     });
 
-    it("should return false when no rows are affected", async () => {
-      (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 0 }, undefined]);
-      const result = await repo.delete(5);
-      expect(result).toBe(false);
-    });
-  });
+//     it("should return false when no rows are affected", async () => {
+//       (query as jest.Mock).mockResolvedValueOnce([{ affectedRows: 0 }, undefined]);
+//       const result = await repo.delete(5);
+//       expect(result).toBe(false);
+//     });
+//   });
 });

@@ -9,7 +9,7 @@ import { Request, Response } from "express";
 import { AuthenticatedRequest, randomAlphanumString } from "@app/application/util";
 import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
-import { AnswerSQLRepository } from "@app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
+import { AnswerSQLRepository } from "@tests/unit_tests/mocked_repository/AnswerSQLRepository";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
 
 describe("SurveyUpdateAnswerHandler", () => {
