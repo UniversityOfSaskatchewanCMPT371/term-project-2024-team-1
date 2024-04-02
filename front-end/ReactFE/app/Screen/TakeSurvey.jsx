@@ -13,12 +13,14 @@ import { CheckBox } from "react-native-elements";
 import Paginator from "../navigation/Paginator";
 import { ScreenStyles } from "./Screen";
 import DrawerButton from "../navigation/CustomDrawerButton";
+import SurveyCompleted from "./SurveyCompleted";
 
 const TakeSurvey = ({ route }) => {
   //const [questions, setQuestions] = useState([]); --- this is needed for when api is done
   const [loading, setLoading] = useState(true);
   const { width } = Dimensions.get("window");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [surveyCompleted, setSurveyCompleted] = useState(false);
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   //--For api call for question in db
@@ -91,6 +93,8 @@ const TakeSurvey = ({ route }) => {
     if (currentQuestionIndex < questions.length - 1) {
       // Post-condition: currentQuestionIndex is incremented by 1.
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setSurveyCompleted(true);
     }
   };
 
@@ -191,6 +195,10 @@ const TakeSurvey = ({ route }) => {
         return null;
     }
   };
+
+  if (surveyCompleted) {
+    return <SurveyCompleted />;
+  }
 
   // if (loading) { loading screen when fetching questions
   //   return <Text>Loading...</Text>;

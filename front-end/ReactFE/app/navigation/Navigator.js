@@ -1,11 +1,8 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Survey from "../Screen/Survey";
 import Profile from "../Screen/Profile";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../Screen/Login";
-import SurveyBoard from "../Screen/SurveyBoard";
-import SurveyStartBoard from "../Screen/SurveyStartBoard";
 import CustomDrawer from "./CustomDrawer";
 import { useAuth } from "../context/AuthContext";
 import CreateSurvey from "../Screen/CreateSurvey";
@@ -13,7 +10,6 @@ import Admin from "../Screen/Admin";
 import LandingPage from "../Screen/LandingPage";
 import SurveyList from "../Screen/SurveyList";
 import TakeSurvey from "../Screen/TakeSurvey";
-import Notifications from "../Screen/Notifications";
 import About from "../Screen/ContactUs";
 import ContactUs from "../Screen/ContactUs";
 import Logout from "../Screen/Logout";
@@ -193,21 +189,15 @@ const MainStack = () => {
     >
       <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
 
-      {
-
-        // runSurveyCreationTest ? <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} /> :
-
-        //   authState?.token ? (
-        //     authState?.role === "ADMIN" ? (
-        //       <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
-        //     ) : (
-        //       <AppMainStack.Screen name="Home" component={MainDrawer} />
-        //     )
-        //   ) : (
-        //     <AppMainStack.Screen name="Login" component={Login} />
-        //   )
-
-      }
+      {/* {authState?.token ? (
+        authState?.role === "ADMIN" ? (
+          <AppMainStack.Screen name="AdminDrawer" component={AdminMainDrawer} />
+        ) : (
+          <AppMainStack.Screen name="Home" component={MainDrawer} />
+        )
+      ) : (
+        <AppMainStack.Screen name="Login" component={Login} />
+      )} */}
     </AppMainStack.Navigator>
   );
 };

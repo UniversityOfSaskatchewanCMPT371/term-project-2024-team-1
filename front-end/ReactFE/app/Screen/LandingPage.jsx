@@ -3,7 +3,6 @@ import React from "react";
 import { ScreenStyles } from "./Screen";
 import DrawerButton from "../navigation/CustomDrawerButton";
 import { useNavigation } from "@react-navigation/native";
-import Survey from "./Survey";
 import { ScrollView } from "react-native-gesture-handler";
 import SurveyList from "./SurveyList";
 
