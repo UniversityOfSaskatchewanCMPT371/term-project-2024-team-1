@@ -4,6 +4,7 @@ export class SurveyAnswer {
   private readonly _userId: string;
   private _answer: string;
   private _note: string;
+  private _isDirty: boolean;
     
   public constructor(userId: string, id: number, answer: string, questionId: number, note?: string)
   public constructor(userId: string, id: number, answer: string, questionId: number, note: string) {
@@ -12,6 +13,7 @@ export class SurveyAnswer {
     this._questionId = questionId;
     this._note = note ?? null;
     this._userId = userId;
+    this._isDirty = false;
   }
     
   public get id(): number {       
@@ -23,7 +25,10 @@ export class SurveyAnswer {
   }
       
   public set answer(newAnswer: string) {
-    this._answer = newAnswer;
+    if (this._answer !== newAnswer) {
+      this._answer = newAnswer;
+      this._isDirty = true;
+    }
   }
 
   public get questionId(): number {
@@ -31,7 +36,10 @@ export class SurveyAnswer {
   }
   
   public set note(newNote: string) {
-    this._note = newNote;
+    if (this._note !== newNote) {
+      this._note = newNote;
+      this._isDirty = true;
+    }
   }
 
   public get note(): string {
