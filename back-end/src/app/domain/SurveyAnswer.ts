@@ -49,4 +49,8 @@ export class SurveyAnswer {
   public get userId(): string {
     return this._userId;
   }
+
+  public get isDirty(): boolean {
+    return this._isDirty;
+  }
 }
