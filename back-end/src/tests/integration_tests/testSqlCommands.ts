@@ -108,8 +108,13 @@ const createTables: any = `
     ${createSurveyQuestionMapTable}
 `;
 
+const createSurvey = `
+    INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, ?, ?);
+`;
+
 
 module.exports = {
+  createSurvey,
   dropTables,
   createTables,
   createUserTable,
