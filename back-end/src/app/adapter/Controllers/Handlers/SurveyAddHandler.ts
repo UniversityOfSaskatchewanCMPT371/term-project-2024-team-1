@@ -14,7 +14,7 @@ export class SurveyAddHandler {
   constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
   }
   
-  public async handle(req: Request, res: Response): Promise<void> {
+  public handle(req: Request, res: Response): void {
     if (!this.validation(req, res)) {
       return;
     }
