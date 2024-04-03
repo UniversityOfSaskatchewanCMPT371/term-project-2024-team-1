@@ -9,6 +9,10 @@ const dropTables = `
     DROP TABLE IF EXISTS User;
 `;
 
+const dropUserTable = `
+    DROP TABLE IF EXISTS User;
+`;
+
 const createUserTable = `
     CREATE TABLE User (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -116,6 +120,7 @@ const createSurvey = `
 module.exports = {
   createSurvey,
   dropTables,
+  dropUserTable,
   createTables,
   createUserTable,
   createRequestTable,

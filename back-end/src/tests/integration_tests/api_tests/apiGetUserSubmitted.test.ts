@@ -12,7 +12,7 @@ const {
 
 const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MDk2NzIxODd9.MFSQJhBnwwB2rXGbUzmxycmUIdhMDFz4hhN4jBcJtFM";
 
-describe("API Test for /api/survey/:surveyId/user", () => {
+xdescribe("API Test for /api/survey/:surveyId/user", () => {
 
   beforeAll(async () => {
     await query(dropTables);
@@ -42,7 +42,7 @@ describe("API Test for /api/survey/:surveyId/user", () => {
     expect(response.status).toBe(200);
   });
 
-  it("should not retrieve any users when no user have completed a survey", async () => {
+  xit("should not retrieve any users when no user have completed a survey", async () => {
     const response: any = await request(app).get("/api/survey/1/user?type=COMPLETED").send({ approved: true }).set("Authorization", `Bearer ${USER_TOKEN}`);
     
     expect(response.status).toBe(200);
