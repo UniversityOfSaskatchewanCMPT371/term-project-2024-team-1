@@ -18,7 +18,7 @@ import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 
-describe("LoginAuthHandler", () => {
+describe("SignupHandler", () => {
     const mockUserRepo: IUserRequestRepository = new MockUserRequestRepository();
     container.register<IUserRequestRepository>(userReqRepoToken, { useValue: mockUserRepo });
     container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });

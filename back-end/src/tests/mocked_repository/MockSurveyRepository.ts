@@ -1,6 +1,7 @@
 import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { Survey } from "@app/domain/Survey";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 
 export class MockSurveyRepository implements ISurveyRepository {
   private readonly _fakeDb: Map<number, Survey>; 

@@ -1,5 +1,6 @@
 import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { Survey } from "@app/domain/Survey";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 // import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 
 export interface ISurveyRepository {
@@ -10,4 +11,5 @@ export interface ISurveyRepository {
   addQuestionToSurvey: (questionsToAdd: QuestionToAddDTO[]) => Promise<boolean>; 
   createSurvey: (survey: Survey) => Promise<boolean>;
   deleteSurvey: (surveyId: number) => Promise<boolean>;
+  getAllResponses: (surveyId: number) => Promise<SurveyResponse[]>;
 }
