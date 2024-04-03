@@ -10,7 +10,7 @@ import { AuthenticatedRequest, randomAlphanumString } from "@app/application/uti
 import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 import { SurveyAnswerService } from "@app/application/SurveyAnswerService";
 import { MockAnswerRepository } from "../mocked_repository/MockAnswerRepository";
-import { SurveyAnswer } from "@app/domain/SurveyAnswer";
+// import { SurveyAnswer } from "@app/domain/SurveyAnswer";
 
 describe("SurveyUpdateAnswerHandler", () => {
   const mockAnswerRepo: ISurveyAnswerRepository = new MockAnswerRepository();
@@ -19,7 +19,7 @@ describe("SurveyUpdateAnswerHandler", () => {
   container.register(SurveyAnswerService, { useClass: SurveyAnswerService });
   
   const handler: SurveyUpdateAnswerHandler = container.resolve(SurveyUpdateAnswerHandler);
-  const mockSurveyAnswerService = container.resolve(SurveyAnswerService);
+  // const mockSurveyAnswerService = container.resolve(SurveyAnswerService);
   let req: Request;
   let res: Response;
 
