@@ -13,7 +13,7 @@ export class MockAnswerRepository implements ISurveyAnswerRepository {
   }
 
   async get(answerId: number): Promise<SurveyAnswer | null> {
-    return this._fakeDb.get(answerId) || null;
+    return this._fakeDb.get(answerId) ?? null;
   }
 
   async create(userId: string, answer: SurveyAnswer): Promise<boolean> {
@@ -25,7 +25,7 @@ export class MockAnswerRepository implements ISurveyAnswerRepository {
   }
 
   async update(answers: SurveyAnswer[]): Promise<boolean> {
-    let allUpdated = true;
+    let allUpdated: boolean = true;
     answers.forEach(answer => {
       if (this._fakeDb.has(answer.id)) {
         this._fakeDb.set(answer.id, new SurveyAnswer(answer.userId, answer.id, answer.answer, answer.questionId, answer.note));
