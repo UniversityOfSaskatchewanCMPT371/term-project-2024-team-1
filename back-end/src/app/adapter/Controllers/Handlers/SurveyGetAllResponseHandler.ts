@@ -49,7 +49,7 @@ export class SurveyGetAllResponseHandler implements IRouteHandler<any[]> {
                   }
                 });
               })
-              .catch(err => {
+              .catch((err: any) => {
                 this._logger.ERROR(`Error creating Excel file: ${err}`);
                 res.status(500).send("Error creating Excel file");
               });

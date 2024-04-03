@@ -1,3 +1,4 @@
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { Survey } from "@app/domain/Survey";
 import { SurveyResponse } from "@app/domain/SurveyResponse";
@@ -15,6 +16,7 @@ export class MockSurveyRepository implements ISurveyRepository {
     return Promise.resolve([...this._fakeDb.values()]);
   }
 
+
   async getSurvey(surveyId: number): Promise<Survey | null> {
     const survey: Survey | undefined = this._fakeDb.get(surveyId);
     if (survey === undefined) {
@@ -29,7 +31,7 @@ export class MockSurveyRepository implements ISurveyRepository {
     this._fakeMapDb.set(userId, surveyId);
   }
 
-  async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
+  async getUsersCompletedSurvey(surveyId: number): Promise<string[] | null> {
     const userIds: string[] = [];
     this._fakeMapDb.forEach((value, key) => {
       if (value === surveyId) {
@@ -40,6 +42,10 @@ export class MockSurveyRepository implements ISurveyRepository {
       return userIds;
     }
     return userIds;
+  }
+
+  async getUsersNotCompletedSurvey(surveyId: number): Promise<string[] | null> { 
+    return ["4", "5", "6"];
   }
 
   async createSurvey(survey: Survey): Promise<boolean> {
@@ -55,4 +61,8 @@ export class MockSurveyRepository implements ISurveyRepository {
   async getAllResponses(surveyId: number): Promise<SurveyResponse[]> {
     return Promise.resolve([new SurveyResponse("fakeId", "fakeQuestion", "fakeAnswer")]);
   }
+
+  async addQuestionToSurvey (questionsToAdd: QuestionToAddDTO[]): Promise<boolean> {
+    return Promise.resolve(true);
+  }; 
 }
