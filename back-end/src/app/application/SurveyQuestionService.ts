@@ -21,7 +21,7 @@ export class SurveyQuestionService {
     }
   };
 
-  public async create(question: SurveyQuestion): Promise<boolean> {
+  public async create(question: SurveyQuestion[]): Promise<boolean> {
     return this._surveyQuestionRepository.create(question);
   };
 

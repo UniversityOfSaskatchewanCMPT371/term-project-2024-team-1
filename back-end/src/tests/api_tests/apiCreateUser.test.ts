@@ -55,7 +55,7 @@ describe("Create User API Test /api/user/request", () => {
     const requestId = userReq.id;
     const response = await request(app).patch(`/api/user/request/${requestId}`).send({ approved: true }).set("Authorization", `Bearer ${ADMIN_TOKEN}`);
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(201);
     expect(response.text).toContain("User successfully approved and created");
   });
 
