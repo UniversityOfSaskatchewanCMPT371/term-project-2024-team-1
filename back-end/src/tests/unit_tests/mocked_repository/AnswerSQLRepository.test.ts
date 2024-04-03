@@ -33,7 +33,9 @@ describe("AnswerSQLRepository", () => {
   });
 
   describe("create", () => {
-    const newAnswer: SurveyAnswer = new SurveyAnswer("testUserId", 0, "testAnswer", 1);
+    const surveyId: number = 1;
+    const newAnswer: SurveyAnswer = new SurveyAnswer("testUserId", 0, "testAnswer", 1, surveyId);
+    
 
     it("should return id on successful creation", async () => {
       const mockedResultSetHeader: CustomResultSetHeader = {
@@ -47,9 +49,8 @@ describe("AnswerSQLRepository", () => {
       };
       (query as jest.Mock).mockResolvedValueOnce([mockedResultSetHeader]);
       const result: number = await repo.create("testUserId", newAnswer);
-      console.log(result);
       expect(result).toBe(1);
-      expect(query).toHaveBeenCalledWith("INSERT INTO Answer (answer, questionId, note, userId) VALUES (?, ?, ?, ?);", ["testAnswer", "1", null, "testUserId"]);
+      expect(query).toHaveBeenCalledWith("INSERT INTO Answer (answer, questionId, note, userId, surveyId) VALUES (?, ?, ?, ?, ?);", ["testAnswer", "1", null, "testUserId", surveyId.toString()]);
     });
 
     it("should return NaN when creation fails", async () => {

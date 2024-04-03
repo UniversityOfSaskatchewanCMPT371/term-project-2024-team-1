@@ -6,9 +6,6 @@ import { HOST, NODE_ENV, PORT } from "@resources/config";
 import cors from "cors";
 import express, { Express, Request, Response } from "express";
 import { container } from "tsyringe";
-import { AnswerSQLRepository } from "@app/adapter/SQLRepositories/Survey/AnswerSQLRepository";
-import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
-import { SurveyAnswer } from "@app/domain/SurveyAnswer";
 import { AnswerController } from "@app/adapter/Controllers/AnswerController";
 
 registerAllDependencies();
@@ -30,21 +27,6 @@ app.use("/api", userController.getController());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Service Active");
-});
-
-app.get("/temp", (req: Request, res: Response) => {
-  const answerRepo: ISurveyAnswerRepository = container.resolve(AnswerSQLRepository);
-  const answers: SurveyAnswer[] = [
-    new SurveyAnswer("abc", 2, "aaa", 1),
-    new SurveyAnswer("abc", 3, "bbb", 1)
-  ];
-  answerRepo.update(answers).then(result => {
-    console.log(result);
-    res.status(200).send(result);
-  }).catch(e => {
-    console.log(e);
-    res.status(500).send(e);
-  });
 });
 
 if (NODE_ENV !== "test") {
