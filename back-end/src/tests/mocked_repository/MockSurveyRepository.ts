@@ -16,6 +16,10 @@ export class MockSurveyRepository implements ISurveyRepository {
     return Promise.resolve([...this._fakeDb.values()]);
   }
 
+  async getAllResponses(surveyId: number): Promise<SurveyResponse[]> {
+    return Promise.resolve([new SurveyResponse("fakeId", "fakeQuestion", "fakeAnswer")]);
+  }
+
 
   async getSurvey(surveyId: number): Promise<Survey | null> {
     const survey: Survey | undefined = this._fakeDb.get(surveyId);
@@ -30,6 +34,7 @@ export class MockSurveyRepository implements ISurveyRepository {
   public mapSurveyUser(userId: number, surveyId: number): void {
     this._fakeMapDb.set(userId, surveyId);
   }
+  
 
   async getUsersCompletedSurvey(surveyId: number): Promise<string[] | null> {
     const userIds: string[] = [];

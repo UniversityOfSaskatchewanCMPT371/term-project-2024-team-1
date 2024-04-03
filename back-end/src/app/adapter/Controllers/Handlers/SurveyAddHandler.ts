@@ -5,13 +5,11 @@ import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Request, Response } from "express";
 import { Survey } from "@app/domain/Survey";
 import { nullOrUndefined } from "@app/application/util";
-
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class SurveyAddHandler {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyAddHandler.name);
-
 
   public constructor(private readonly _surveyService: SurveyService) { }
   
@@ -33,7 +31,6 @@ export class SurveyAddHandler {
     });
 
   }
-
 
   public async execute(req: Request): Promise<boolean> {
     const surveyName: string = req.body.surveyName;

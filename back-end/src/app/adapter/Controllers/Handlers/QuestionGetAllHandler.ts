@@ -2,8 +2,7 @@ import { SurveyQuestionService } from "@app/application/SurveyQuestionService";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { SurveyQuestion } from "@app/domain/SurveyQuestion";
 import { Request, Response } from "express";
-import { injectable, delay, inject } from "tsyringe";
-
+import { injectable } from "tsyringe";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 
@@ -14,7 +13,6 @@ export class QuestionGetAllHandler implements IRouteHandler<SurveyQuestion[]> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(QuestionGetAllHandler.name);
 
   public constructor(private readonly _surveyQuestionService: SurveyQuestionService) { }
-
 
   public handle(req: Request, res: Response): void {
     this.execute(req).then((questions: SurveyQuestion[]) => {
