@@ -1,5 +1,6 @@
 import { QuestionCreateHandler } from "@app/adapter/Controllers/Handlers/CreateQuestionHandler";
 import { QuestionGetAllHandler } from "@app/adapter/Controllers/Handlers/QuestionGetAllHandler";
+import { ADMIN, authenticate } from "@app/application/util";
 import express, { Request, Response, Router } from "express";
 import { injectable } from "tsyringe";
 
@@ -12,11 +13,11 @@ export class QuestionController {
     private readonly _questionCreateHandler: QuestionCreateHandler) { }
 
   public getController(): Router {
-    this._router.get("/question", (req: Request, res: Response) => {
+    this._router.get("/question", authenticate(ADMIN), (req: Request, res: Response) => {
       this._questionGetAllHandler.handle(req, res);
     });
 
-    this._router.post("/question", (req: Request, res: Response) => {
+    this._router.post("/question", authenticate(ADMIN), (req: Request, res: Response) => {
       this._questionCreateHandler.handle(req, res);
     });
 

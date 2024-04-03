@@ -16,8 +16,8 @@ export class SurveyQuestionAddHandler {
 
   public handle(req: Request, res: Response): void {
     if (!this.validation(req, res)) {
-      return; 
-    }
+      return;
+    } 
     this.execute(req).then((success) => {
       if (success) { 
         this._logger.INFO(`Successfully added questions to survey ${req.body.surveyId}`);
@@ -33,14 +33,22 @@ export class SurveyQuestionAddHandler {
   }
 
   public async execute(req: Request): Promise<boolean> {
-    const questionsToAdd: QuestionToAddDTO[] = req.body;
+    const surveyId: string = req.params.surveyId;
+    const questionsToAdd: QuestionToAddDTO[] = req.body.map((question: any) => ({
+      ...question,
+      surveyId
+    }));
     return this._surveyService.addQuestionToSurvey(questionsToAdd);
   }
 
   public validation(...args: any[]): boolean { 
     const req: Request = args[0];
     const res: Response = args[1];
-    const questionsToAdd: any[] = req.body;
+    const surveyId: string = req.params.surveyId;
+    const questionsToAdd: any[] = req.body.map((question: any) => ({
+      ...question,
+      surveyId
+    }));
     if (questionsToAdd.length <= 0) {
       this._logger.ERROR("No questions provided to add to the survey.");
       res.status(422).send("No questions provided to add to the survey.");

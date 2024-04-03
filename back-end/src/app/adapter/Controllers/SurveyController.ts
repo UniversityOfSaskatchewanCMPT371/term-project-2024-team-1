@@ -37,7 +37,7 @@ export class SurveyController {
       void this._surveyGetUsersSubmittedHandler.handle(req, res);
     });
 
-    this._router.post("/survey/question", authenticate(ADMIN), (req: Request, res: Response) => {
+    this._router.post("/survey/:surveyId/question", authenticate(ADMIN), (req: Request, res: Response) => {
       this._surveyQuestionAddHandler.handle(req, res);
     });
 
