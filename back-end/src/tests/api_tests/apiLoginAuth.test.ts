@@ -61,7 +61,6 @@ describe("Login API Test /api/login", () => {
     await mockUserRepo.create(user1);
     // jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
     const response = await request(app).post("/api/login").send({ userIdEmail: user1.email, password });
-    console.log(response.text);
     
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("accessToken");
@@ -73,7 +72,6 @@ describe("Login API Test /api/login", () => {
     await mockUserRepo.create(user1);
     // jest.spyOn(UserSQLRepository.prototype, "get").mockImplementation(async (userIdEmail) => mockUserRepo.get(userIdEmail));
     const response = await request(app).post("/api/login").send({ userIdEmail: user1.userId, password });
-    console.log(response.text);
     
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("accessToken");

@@ -2,16 +2,19 @@ export class SurveyAnswer {
   private readonly _id: number;
   private readonly _questionId: number;
   private readonly _userId: string;
+  private readonly _surveyId: number;
   private _answer: string;
   private _note: string;
     
-  public constructor(userId: string, id: number, answer: string, questionId: number, note?: string)
-  public constructor(userId: string, id: number, answer: string, questionId: number, note: string) {
+  public constructor(userId: string, id: number, answer: string, questionId: number, surveyId: number, note?: string)
+  public constructor(userId: string, id: number, answer: string, questionId: number, surveyId: number, note: string) {
     this._id = id;
+    this._questionId = questionId;
     this._answer = answer;
     this._questionId = questionId;
     this._note = note ?? null;
     this._userId = userId;
+    this._surveyId = surveyId;
   }
     
   public get id(): number {       
@@ -40,5 +43,9 @@ export class SurveyAnswer {
 
   public get userId(): string {
     return this._userId;
+  }
+
+  public get surveyId(): number {
+    return this._surveyId;
   }
 }

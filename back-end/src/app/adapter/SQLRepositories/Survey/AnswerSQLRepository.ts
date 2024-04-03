@@ -9,13 +9,13 @@ import { constructBulkQuery, query } from "../SQLConfiguration";
 export class AnswerSQLRepository implements ISurveyAnswerRepository {
   private readonly _logger: ILogger = LoggerFactory.getLogger(AnswerSQLRepository.name);
 
-  private readonly _getSurveyAnswersQuery: string = `SELECT A.id, A.answer, A.questionId, A.userId, A.note FROM Answer A
+  private readonly _getSurveyAnswersQuery: string = `SELECT A.id, A.answer, A.questionId, A.userId, A.note, A.surveyId FROM Answer A
                                                         JOIN SurveyQuestionMap SQM ON SQM.questionId = A.questionId
-                                                        JOIN Survey S ON S.id = SQM.surveyId
+                                                        JOIN Survey S ON S.id = SQM.surveyId AND S.id = A.surveyId
                                                         WHERE A.userId = ? AND S.id = ?`;
 
   private readonly _updateQuery: string = `UPDATE Answer SET answer=?, note=? WHERE id=? AND userId=?;`;
-  private readonly _createQuery: string = "INSERT INTO Answer (answer, questionId, note, userId) VALUES (?, ?, ?, ?);";
+  private readonly _createQuery: string = "INSERT INTO Answer (answer, questionId, note, userId, surveyId) VALUES (?, ?, ?, ?, ?);";
 
   public async getSurveyAnswers(userId: string, surveyId: number): Promise<SurveyAnswer[]> {
     return query(this._getSurveyAnswersQuery, [userId, surveyId.toString()])
@@ -36,7 +36,7 @@ export class AnswerSQLRepository implements ISurveyAnswerRepository {
   async create(userId: string, answer: SurveyAnswer): Promise<number> {
     try {
       const result: ResultSetHeader[] = await query(this._createQuery,
-        [answer.answer, answer.questionId.toString(), answer.note, userId]);
+        [answer.answer, answer.questionId.toString(), answer.note, userId, answer.surveyId.toString()]);
       const resultSetHeaders: ResultSetHeader = result[0];
       return resultSetHeaders.insertId;
     } catch (error) {

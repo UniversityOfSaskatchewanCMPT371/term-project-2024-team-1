@@ -20,9 +20,8 @@ configure(log4jsConfig);
 export class LoginAuthHandler implements IRouteHandler<User | null> {
   
   private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
-
-  constructor(private readonly _userService: UserService) {
-  }
+  
+  public constructor(private readonly _userService: UserService) { }
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {
