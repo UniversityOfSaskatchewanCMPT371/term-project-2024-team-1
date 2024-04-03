@@ -2740,6 +2740,7 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     "possible-typed-array-names" "^1.0.0"
 
+<<<<<<< Updated upstream
 "axios@^1.6.7":
   "integrity" "sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-1.6.7.tgz"
@@ -2748,6 +2749,16 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
     "follow-redirects" "^1.15.4"
     "form-data" "^4.0.0"
     "proxy-from-env" "^1.1.0"
+=======
+axios@^1.5.1, axios@^1.6.8:
+  version "1.6.8"
+  resolved "https://registry.npmjs.org/axios/-/axios-1.6.8.tgz"
+  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+>>>>>>> Stashed changes
 
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
@@ -4129,6 +4140,7 @@ core-js-compat@^3.31.0, core-js-compat@^3.34.0, core-js-compat@^3.36.1:
     "ajv" "^8.11.0"
     "semver" "^7.5.3"
 
+<<<<<<< Updated upstream
 "expo-constants@~15.4.0":
   "integrity" "sha512-1pVVjwk733hbbIjtQcvUFCme540v4gFemdNlaxM2UXKbfRCOh2hzgKN5joHMOysoXQe736TTUrRj7UaZI5Yyhg=="
   "resolved" "https://registry.npmjs.org/expo-constants/-/expo-constants-15.4.5.tgz"
@@ -4140,6 +4152,19 @@ core-js-compat@^3.31.0, core-js-compat@^3.34.0, core-js-compat@^3.36.1:
   "integrity" "sha512-azH5rz8krDZUJb/arqkcA6oZGaX2T5s4aaXIMFsDDzvq8TW0CttZZy2HFp6itmFdiKGdRpFX3/Gj0n6ZmPoJ/w=="
   "resolved" "https://registry.npmjs.org/expo-device/-/expo-device-5.9.3.tgz"
   "version" "5.9.3"
+=======
+expo-constants@~15.4.0, expo-constants@~15.4.5:
+  version "15.4.5"
+  resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-15.4.5.tgz"
+  integrity sha512-1pVVjwk733hbbIjtQcvUFCme540v4gFemdNlaxM2UXKbfRCOh2hzgKN5joHMOysoXQe736TTUrRj7UaZI5Yyhg==
+  dependencies:
+    "@expo/config" "~8.5.0"
+
+expo-device@~5.9.3:
+  version "5.9.3"
+  resolved "https://registry.npmjs.org/expo-device/-/expo-device-5.9.3.tgz"
+  integrity sha512-azH5rz8krDZUJb/arqkcA6oZGaX2T5s4aaXIMFsDDzvq8TW0CttZZy2HFp6itmFdiKGdRpFX3/Gj0n6ZmPoJ/w==
+>>>>>>> Stashed changes
   dependencies:
     "ua-parser-js" "^0.7.33"
 
@@ -4179,10 +4204,17 @@ core-js-compat@^3.31.0, core-js-compat@^3.34.0, core-js-compat@^3.36.1:
   dependencies:
     "invariant" "^2.2.4"
 
+<<<<<<< Updated upstream
 "expo-notifications@^0.27.6":
   "integrity" "sha512-F2iu/lzsrvfMyHA5BfnbZfE8fVLV8aQmNLk3NPztZ0g7911QEriZzH7BK/NKOZ5UHhJYI+hhYvcZCq2nFm1NLA=="
   "resolved" "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.27.6.tgz"
   "version" "0.27.6"
+=======
+expo-notifications@~0.27.6:
+  version "0.27.6"
+  resolved "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.27.6.tgz"
+  integrity sha512-F2iu/lzsrvfMyHA5BfnbZfE8fVLV8aQmNLk3NPztZ0g7911QEriZzH7BK/NKOZ5UHhJYI+hhYvcZCq2nFm1NLA==
+>>>>>>> Stashed changes
   dependencies:
     "@expo/image-utils" "^0.4.0"
     "@ide/backoff" "^1.0.0"
@@ -4390,10 +4422,17 @@ core-js-compat@^3.31.0, core-js-compat@^3.34.0, core-js-compat@^3.36.1:
   "resolved" "https://registry.npmjs.org/flow-parser/-/flow-parser-0.206.0.tgz"
   "version" "0.206.0"
 
+<<<<<<< Updated upstream
 "follow-redirects@^1.15.4":
   "integrity" "sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.5.tgz"
   "version" "1.15.5"
+=======
+follow-redirects@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.6.tgz"
+  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
+>>>>>>> Stashed changes
 
 "fontfaceobserver@^2.1.0":
   "integrity" "sha512-6FPvD/IVyT4ZlNe7Wcn5Fb/4ChigpucKYSvD6a+0iMoLn2inpo711eyIcKjmDtE5XNcgAkSH9uN/nfAeZzHEfg=="
@@ -6384,10 +6423,24 @@ log-symbols@^2.2.0:
   "resolved" "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz"
   "version" "3.3.7"
 
+<<<<<<< Updated upstream
 "natural-compare@^1.4.0":
   "integrity" "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="
   "resolved" "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   "version" "1.4.0"
+=======
+native-notify@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/native-notify/-/native-notify-4.0.0.tgz"
+  integrity sha512-7ulMEmi22qqXJDv6o8nHgDw2Qjukj4rWhUqzbP7GjPYish35FJTL1vp8EINR9vgrvCeSNJdVi4dmj6X7xJIrZA==
+  dependencies:
+    axios "^1.5.1"
+
+natural-compare@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
+  integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+>>>>>>> Stashed changes
 
 "ncp@~2.0.0":
   "integrity" "sha512-zIdGUrPRFTUELUvr3Gmc7KZ2Sw/h1PiVM0Af/oHB6zgnV1ikqSfRk+TOufi79aHYCW3NiOXmr1BP5nWbzojLaA=="
