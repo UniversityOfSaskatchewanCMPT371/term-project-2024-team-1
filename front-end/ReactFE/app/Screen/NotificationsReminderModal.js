@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Modal, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, Modal, TextInput, TouchableOpacity, Text, Platform } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Notifications from 'expo-notifications';
 import { styles } from "../Styles/NotificationStyles";
+import * as Device from 'expo-device';
 import axios from 'axios';
 
 Notifications.setNotificationHandler({
@@ -12,6 +13,9 @@ Notifications.setNotificationHandler({
         shouldSetBadge: false,
     }),
 });
+
+const USER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MDk2NzIxODd9.MFSQJhBnwwB2rXGbUzmxycmUIdhMDFz4hhN4jBcJtFM";
+const IPV4_ADDRESS = "10.237.186.201";
 
 export default function NotificationsReminderModal({ id, isVisible, closeModal }) {
     const [notification, setNotification] = useState(false);
@@ -23,9 +27,14 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [remindTitle, setRemindTitle] = useState('');
-    const [remindMessage, setRemindMessage] = useState('')
-    const reminderMessagePlaceholder = 'Your Animal Surveillance Survey is due soon. Please remember to complete it by <date>. \n\n Survey Link: <link>'
+    const [remindMessage, setRemindMessage] = useState('');
+    const reminderMessagePlaceholder = 'Your Animal Surveillance Survey is due soon. Please remember to complete it by <date>. \n\n Survey Link: <link>';
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const params = {
+        type: 'COMPLETED'
+    };
+    const apiUrl = `http://${IPV4_ADDRESS}:3000/api/survey/${id}/user`;
 
     const triggerDate = new Date(
         parseInt(reminderDate.split('-')[0]),
@@ -38,6 +47,23 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
     const delayInSeconds = Math.floor((triggerDate.getTime() - Date.now()) / 1000);
 
     useEffect(() => {
+        axios.get(apiUrl, {
+            params: params,
+            headers: {
+              Authorization: `Bearer ${USER_TOKEN}`
+            }
+          })
+          .then(response => {
+            console.info('List of Users who completed the survey:', response.data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+
+        // Precondition: Ensure proper permissions are granted before retrieving push token.
+        // Precondition: Check if the device is physical for push notifications.
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
         });
@@ -53,8 +79,9 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         };
     }, [isVisible])
 
+    // Precondition: `reminderDate`, `reminderTime`, `remindTitle`, and `remindMessage` must be set.
     async function schedulePushNotification() {
-        // Send Notifications to users with UserID 1,2,3
+        
         try {
             if (!reminderDate) {
                 console.warn('Reminder date is not set. Cannot schedule push notification.');
@@ -81,8 +108,9 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
                     title: remindTitle,
                     body: remindMessage,
                 },
-                trigger: { seconds: 2 },
+                trigger: { seconds: delayInSeconds },
             });
+
             console.info('Reminder Notification Created Successfully for', { triggerDate });
         } catch (error) {
             console.warn('Failed to schedule push notification');
@@ -91,6 +119,42 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     }
 
+    // Precondition: Ensure proper permissions for scheduling push notifications.
+    // Precondition: `styleSheet` must contain required properties.
+    async function registerForPushNotificationsAsync() {
+        let token;
+
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+
+        if (Device.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+
+            token = (await Notifications.getExpoPushTokenAsync({ projectId: 'cb410781-1cdb-49e6-8a4c-adcfd0a1cd90' })).data;
+            console.info(token);
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        return token;
+    }
+
+    // Postcondition: Displays the date picker.
     const showDatePicker = () => {
         try {
             console.info('Showing date picker');
@@ -100,6 +164,7 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
+    // Postcondition: Hides the date picker.
     const hideDatePicker = () => {
         try {
             console.info('Hiding date picker');
@@ -109,6 +174,7 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
+    // Postcondition: Sets the reminder date and hides the date picker.
     const handleConfirm = (date) => {
         try {
             console.info('Confirming date:', date);
@@ -119,6 +185,7 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
+    // Postcondition: Displays the time picker.
     const showTimePicker = () => {
         try {
             console.info('Showing time picker');
@@ -128,6 +195,7 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
+    // Postcondition: Hides the time picker.
     const hideTimePicker = () => {
         try {
             console.info('Hiding time picker');
@@ -137,6 +205,7 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
+    // Postcondition: Sets the reminder time and hides the time picker.
     const handleTimeConfirm = (time) => {
         try {
             const formattedTime = time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -148,11 +217,9 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         }
     };
 
-    /*  
-    Preconditions: The confirmModalVisible, reminderDate, reminderTime, remindTitle, and remindMessage 
-    states must be provided and working correctly; styleSheet must contain required properties
-    PostConditions: The modal is opened with the confirmation message displaying the reminder details.
-    */
+    // Precondition: `confirmModalVisible`, `reminderDate`, `reminderTime`, `remindTitle`, and `remindMessage` states must be provided and working correctly.
+    // Precondition: `styleSheet` must contain required properties.
+    // Postcondition: Opens the modal with the confirmation message displaying the reminder details.
     const confirmRemindModal = () => {
         console.info('Opening ConfirmReminderModal for Survey');
 
@@ -188,13 +255,16 @@ export default function NotificationsReminderModal({ id, isVisible, closeModal }
         );
     }
 
+    // Precondition: `modalVisible` must be set correctly.
+    // Precondition: `styleSheet` must contain required properties.
+    // Postcondition: Opens the reminder modal with options to set reminder details.
     const reminderModal = ({ id }) => {
         return (
             <Modal
                 animationType="scale"
                 visible={modalVisible}
                 onRequestClose={() => {
-                    console.debug('Closing reminderModal');
+                    console.info('Closing reminderModal');
                     setModalVisible(!modalVisible);
                 }}
             >
