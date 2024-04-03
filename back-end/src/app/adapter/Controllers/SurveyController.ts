@@ -20,7 +20,7 @@ export class SurveyController {
     private readonly _surveyGetUsersSubmittedHandler: SurveyGetUsersSubmittedHandler,
     private readonly _surveyGetAllHandler: SurveyGetAllHandler,
     private readonly _surveyGetHandler: SurveyGetHandler,
-    private readonly _surveyUpdateAnswerHandler: SurveyUpdateAnswerHandler) { }
+    private readonly _surveyUpdateAnswerHandler: SurveyUpdateAnswerHandler,
     private readonly _surveyGetAllResponseHandler: SurveyGetAllResponseHandler) { }
 
   public getController(): Router {
