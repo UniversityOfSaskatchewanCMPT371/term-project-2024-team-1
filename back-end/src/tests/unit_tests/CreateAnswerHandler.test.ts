@@ -118,7 +118,7 @@ describe("CreateUser and Modify Request", () => {
     });
 
     it("should return false if request body's SurveyAnswer has undefined id field", () => {
-      const req: Request = { body: { questionId: 1, userId: "testUserId", answer: "testAnswer"  }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
+      const req: Request = { body: { questionId: 1, userId: "testUserId", answer: "testAnswer" }, auth: { userId: "testUserId" } } as unknown as AuthenticatedRequest;
       const result: boolean = handler.validation(req, response);
       expect(result).toBeFalsy();
     });
