@@ -10,9 +10,6 @@ import { flushPromises } from "@tests/common_test_code/util_test";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { SurveyGetAllResponseHandler } from "@app/adapter/Controllers/Handlers/SurveyGetAllResponseHandler";
-// import { SurveyResponse } from "@app/domain/SurveyResponse";
-// import * as fs from "fs";
-// import * as ExcelJs from "exceljs";
 
 describe("Get Survey Responses", () => {
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });

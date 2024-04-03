@@ -1,3 +1,4 @@
+import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { surveyAnswerRepoToken, surveyQuestionRepoToken, surveyRepoToken } from "@app/adapter/DependencyInjections";
 import { Survey } from "@app/domain/Survey";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
@@ -63,13 +64,26 @@ export class SurveyService {
     return this._surveyRepository.createSurvey(survey);
   };
 
-  public async getSurveySubmittedUsers(surveyId: number): Promise<string[] | null> {
+  public async getUsersCompletedSurvey(surveyId: number): Promise<string[] | null> {
     try {
-      return this._surveyRepository.getSurveySubmittedUsers(surveyId);
+      return this._surveyRepository.getUsersCompletedSurvey(surveyId);
     } catch (error) {
       this._logger.ERROR(`Failed to create survey. \nError: ${error as string}`);
       throw error;
     };
+  }
+
+  public async getUsersNotCompletedSurvey(surveyId: number): Promise<string[] | null> {
+    try {
+      return this._surveyRepository.getUsersNotCompletedSurvey(surveyId);
+    } catch (error: any) {
+      this._logger.ERROR(`Failed to retrieve users who have not completed the survey by surveyId, error occred: ${error}`);
+      return null;
+    };
+  }
+
+  public async addQuestionToSurvey(questionToAdd: QuestionToAddDTO[]): Promise<boolean> {
+    return this._surveyRepository.addQuestionToSurvey(questionToAdd);
   }
 
   public async deleteSurvey(surveyId: number): Promise<boolean> {

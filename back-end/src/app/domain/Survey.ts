@@ -36,7 +36,8 @@ export class Survey {
     return this._dueDate;
   }
 
-  public set dueDate(value: Date) {
-    this._dueDate = value;
+
+  public set dueDate(newDueDate: Date) {
+    this._dueDate = newDueDate;
   }
 }

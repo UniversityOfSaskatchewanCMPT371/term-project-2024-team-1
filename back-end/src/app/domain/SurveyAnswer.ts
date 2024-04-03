@@ -10,6 +10,7 @@ export class SurveyAnswer {
   public constructor(userId: string, id: number, answer: string, questionId: number, surveyId: number, note?: string)
   public constructor(userId: string, id: number, answer: string, questionId: number, surveyId: number, note: string) {
     this._id = id;
+    this._questionId = questionId;
     this._answer = answer;
     this._questionId = questionId;
     this._note = note ?? null;
