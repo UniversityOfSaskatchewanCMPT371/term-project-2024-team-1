@@ -20,10 +20,6 @@ configure(log4jsConfig);
 export class LoginAuthHandler implements IRouteHandler<User | null> {
   
   private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
   
   public constructor(private readonly _userService: UserService) { }
 
