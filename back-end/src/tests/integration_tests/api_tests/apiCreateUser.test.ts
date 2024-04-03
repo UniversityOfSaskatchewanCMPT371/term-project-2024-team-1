@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/typedef */
-import request from "supertest";
-import { app } from "../../../src/main";
-import "reflect-metadata";
-import { container } from "tsyringe";
-import { ILogger } from "@app/domain/interfaces/ILogger";
 import { loggerToken, userRepoToken, userReqRepoToken } from "@app/adapter/DependencyInjections";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
-import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
-import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
-import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
-import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequestRepository";
 import { UserSQLRepository } from "@app/adapter/SQLRepositories/User/UserSQLRepository";
-import { User } from "@app/domain/User";
-import { UserRequest } from "@app/domain/UserRequest";
+import { UserRequestSQLRepository } from "@app/adapter/SQLRepositories/UserRequest/UserRequestSQLRepository";
+import { UserRequestService } from "@app/application/UserRequestService";
+import { UserService } from "@app/application/UserService";
 import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
-import { UserRequestSQLRepository } from "@app/adapter/SQLRepositories/UserRequest/UserRequestSQLRepository";
-import { UserService } from "@app/application/UserService";
-import { UserRequestService } from "@app/application/UserRequestService";
+import { User } from "@app/domain/User";
+import { UserRequest } from "@app/domain/UserRequest";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
+import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
+import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
+import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequestRepository";
+import "reflect-metadata";
+import request from "supertest";
+import { container } from "tsyringe";
+import { app } from "../../../main";
 
 // register dependency
 const mockUserReqRepo: IUserRequestRepository = new MockUserRequestRepository();
