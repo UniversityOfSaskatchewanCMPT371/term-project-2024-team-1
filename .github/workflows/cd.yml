@@ -3,7 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - development
+      - master
 
 jobs:
   execute-workflow-script:

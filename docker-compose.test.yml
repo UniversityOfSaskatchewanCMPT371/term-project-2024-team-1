@@ -2,7 +2,7 @@ version: "3.9"
 services:
   mysql:
     container_name: db
-    image: mysql:5.7
+    image: mysql:latest
     ports:
       - 3307:3306
     environment: 
@@ -25,7 +25,6 @@ services:
       - mysql
     command: >
       sh -c "
-        npm run integration-tests &&
-        npm run system-tests
+        npm run test
       "
 

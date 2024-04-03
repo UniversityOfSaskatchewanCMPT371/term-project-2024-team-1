@@ -3,10 +3,11 @@ import { Survey } from "@app/domain/Survey";
 import "reflect-metadata";
 import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRepository";
 import { formatDateForSQL } from "@app/application/util";
+import { ILogger } from "@app/domain/interfaces/ILogger";
+import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 import { ResultSetHeader } from "mysql2";
-import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
-import { ILogger } from "@app/domain/interfaces/ILogger";
 
 export class SurveySQLRepository implements ISurveyRepository {
 
@@ -19,8 +20,26 @@ export class SurveySQLRepository implements ISurveyRepository {
   private readonly _addQuestionToSurveyQuery: string = "INSERT INTO SurveyQuestionMap (surveyId, questionId, rankOrder) VALUES (?, ?, ?);";
   private readonly _getUsersCompletedSurvey: string = "SELECT userId FROM SurveyCompletionMap WHERE surveyId = ?;";
   private readonly _getUsersNotCompletedSurvey: string = "SELECT User.userId FROM User WHERE NOT EXISTS ( SELECT * FROM SurveyCompletionMap WHERE SurveyCompletionMap.userId = User.userId AND SurveyCompletionMap.surveyId = ?);";
-
-
+  private readonly _getAllSurveyResponse: string = `  SELECT Q.question AS question, A.answer AS answer, A.userId AS userId , A.note AS note 
+                                                      FROM 
+                                                          Question AS Q
+                                                      INNER JOIN 
+                                                          Answer AS A ON Q.id = A.questionId
+                                                      INNER JOIN 
+                                                          SurveyQuestionMap AS SQM ON Q.id = SQM.questionId
+                                                      WHERE 
+                                                          SQM.surveyId = ?
+                                                      ORDER BY 
+                                                          userId,
+                                                          CASE
+                                                              WHEN Q.parentId IS NULL THEN SQM.rankOrder
+                                                              ELSE (SELECT rankOrder FROM SurveyQuestionMap WHERE questionId = Q.parentId)
+                                                          END,
+                                                          CASE
+                                                              WHEN Q.parentId IS NULL THEN 0
+                                                              ELSE 1
+                                                          END,
+                                                          SQM.rankOrder;`;
 
   async getAll(): Promise<Survey[]> {
     try {
@@ -119,9 +138,19 @@ export class SurveySQLRepository implements ISurveyRepository {
     try {
       const [result] = await query(this._deleteSurveyQuery, [surveyId.toString()]);
       return result.affectedRows > 0;
-    } catch (error: any) {
-      this._logger.ERROR(`error: ${error}`);
+    } catch (error) {
+      this._logger.ERROR(String(error));
       return Promise.reject(error);
     }
-  }  
+  }
+
+  async getAllResponses(surveyId: number): Promise<SurveyResponse[]> {
+    try {
+      const result: [SurveyResponse[]] = await query(this._getAllSurveyResponse, [surveyId.toString()]);
+      return result[0];
+    } catch (error) {
+      this._logger.ERROR(String(error));
+      return Promise.reject(error);
+    }
+  }
 }
