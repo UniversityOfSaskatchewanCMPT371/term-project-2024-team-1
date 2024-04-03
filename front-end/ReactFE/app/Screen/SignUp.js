@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet,Modal,ScrollView } from "react-native";
 import { CheckBox } from 'react-native-elements';
-import { signUp } from '../service/apiService';
 
 
 const SignUp = ({navigation}) => {
@@ -44,6 +43,9 @@ const SignUp = ({navigation}) => {
     }
   };
 
+  const handleLogin = () => {
+    navigation.navigate("Login");
+  }
 
   const handleSignUp = async () => {
     try {
@@ -147,7 +149,7 @@ const SignUp = ({navigation}) => {
 
         {/* Already have an account? Log in */}
         <Text style={styles.loginText}>
-          Already have an account? <Text style={styles.loginLink}>Log in</Text>
+            Already have an account? <Text onPress={handleLogin} style={styles.loginLink}>Log in</Text>
         </Text>
       </View>
       </View>

@@ -1,42 +1,24 @@
-import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 import { SurveyAnswer } from "@app/domain/SurveyAnswer";
+import { ISurveyAnswerRepository } from "@app/domain/interfaces/repositories/ISurveyAnswerRepository";
 
 export class MockAnswerRepository implements ISurveyAnswerRepository {
-  private readonly _fakeDb: Map<number, SurveyAnswer>;
+  private readonly _fakeDb: Map<string, SurveyAnswer>;
+  private _returnId: number = 0;
 
   public constructor() {
     this._fakeDb = new Map();
   }
 
-  async getSurveyAnswers(userId: string, surveyId: number): Promise<SurveyAnswer[]> {
-    return [...this._fakeDb.values()].filter(answer => answer.userId === userId && answer.id === surveyId);
-  }
+  getSurveyAnswers: (userId: string, surveyId: number) => Promise<SurveyAnswer[]>;
 
-  async get(answerId: number): Promise<SurveyAnswer | null> {
-    return this._fakeDb.get(answerId) ?? null;
-  }
+  getAnswers!: (userId: string) => Promise<SurveyAnswer[]>;
+  get!: (answerID: number) => Promise<SurveyAnswer | null>;
+  update!: (answers: SurveyAnswer[]) => Promise<boolean>;
+  delete!: (answerId: number) => Promise<boolean>;
 
-  async create(userId: string, answer: SurveyAnswer): Promise<boolean> {
-    if (userId && answer.id !== undefined) {
-      this._fakeDb.set(answer.id, new SurveyAnswer(answer.userId, answer.id, answer.answer, answer.questionId, answer.note));
-      return true;  
-    }
-    return false;
-  }
-
-  async update(answers: SurveyAnswer[]): Promise<boolean> {
-    let allUpdated: boolean = true;
-    answers.forEach(answer => {
-      if (this._fakeDb.has(answer.id)) {
-        this._fakeDb.set(answer.id, new SurveyAnswer(answer.userId, answer.id, answer.answer, answer.questionId, answer.note));
-      } else {
-        allUpdated = false;
-      }
-    });
-    return allUpdated;
-  }
-
-  async delete(answerId: number): Promise<boolean> {
-    return this._fakeDb.delete(answerId);
+  async create(userId: string, answer: SurveyAnswer): Promise<number> {
+    this._fakeDb.set(userId, answer);
+    this._returnId++;
+    return Promise.resolve(this._returnId);
   }
 }

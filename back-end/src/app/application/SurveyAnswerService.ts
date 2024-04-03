@@ -10,6 +10,10 @@ export class SurveyAnswerService {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyAnswerService.name);
 
   public constructor(@inject(delay(() => surveyAnswerRepoToken)) private readonly _surveyAnswerRepository: ISurveyAnswerRepository) { }
+
+  public async create(userId: string, answer: SurveyAnswer): Promise<number> {
+    return this._surveyAnswerRepository.create(userId, answer);
+  };
   
   public async update(answers: SurveyAnswer[]): Promise<boolean> {
     const dirtyAnswers: SurveyAnswer[] = answers.filter(answer => answer.isDirty);
