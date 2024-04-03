@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/typedef */
-const dropTables: any = `
+const dropTables = `
     DROP TABLE IF EXISTS SurveyQuestionMap;
     DROP TABLE IF EXISTS SurveyCompletionMap;
     DROP TABLE IF EXISTS ResponseOption;
@@ -9,7 +9,7 @@ const dropTables: any = `
     DROP TABLE IF EXISTS User;
 `;
 
-const createUserTable: any = `
+const createUserTable = `
     CREATE TABLE User (
         id INT AUTO_INCREMENT PRIMARY KEY,
         userId VARCHAR(255) NOT NULL UNIQUE,
