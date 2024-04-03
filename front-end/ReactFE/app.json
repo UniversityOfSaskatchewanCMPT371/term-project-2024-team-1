@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "CASI",
-    "slug": "CAIS",
+    "slug": "casi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,13 +15,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#7f92f0"
     },
-    "plugins": ["@config-plugins/detox"],
+    "plugins": [
+      "@config-plugins/detox"
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true, 
-      "config":{
+      "supportsTablet": true,
+      "config": {
         "usesNonExemptEncryption": false
       }
     },
@@ -37,6 +39,10 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-    }
+      "eas": {
+        "projectId": "cb410781-1cdb-49e6-8a4c-adcfd0a1cd90"
+      }
+    },
+    "owner": "mujax"
   }
 }
