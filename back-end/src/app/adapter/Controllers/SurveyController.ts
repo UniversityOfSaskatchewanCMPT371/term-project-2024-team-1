@@ -29,7 +29,7 @@ export class SurveyController {
       void this._surveyGetHandler.handle(req, res);
     });
 
-    this._router.post("/survey", (req: Request, res: Response) => {
+    this._router.post("/survey", authenticate(ADMIN), (req: Request, res: Response) => {
       void this._surveyAddHandler.handle(req, res);
     });
 
