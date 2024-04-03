@@ -19,7 +19,7 @@ describe("SurveyGetAllHander", () => {
   container.register<ILogger>(loggerToken, { useClass: Log4jsLogger });
  
 
-  const handler: SurveyGetAllHandler = container.resolve(SurveyGetAllHandler);
+  const handler: SurveyGetAllHandler = container.resolve<SurveyGetAllHandler>(SurveyGetAllHandler);
 
   let req: Request;
   let res: Response;
