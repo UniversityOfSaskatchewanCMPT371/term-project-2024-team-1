@@ -4,13 +4,12 @@ import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import { Survey } from "@app/domain/Survey";
 import { Request, Response } from "express";
-import { injectable, inject, delay } from "tsyringe";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class SurveyGetAllHandler implements IRouteHandler<Survey[]> {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyGetAllHandler.name);
-  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
-  }
+  public constructor(private readonly _surveyService: SurveyService) { }
 
   public handle(req: Request, res: Response): void {
     this.execute(req)

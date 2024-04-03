@@ -5,14 +5,13 @@ import { ILogger } from "@app/domain/interfaces/ILogger";
 import { Request, Response } from "express";
 import { Survey } from "@app/domain/Survey";
 import { nullOrUndefined } from "@app/application/util";
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class SurveyAddHandler {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyAddHandler.name);
 
-  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
-  }
+  public constructor(private readonly _surveyService: SurveyService) { }
   
   public handle(req: Request, res: Response): void {
     if (!this.validation(req, res)) {

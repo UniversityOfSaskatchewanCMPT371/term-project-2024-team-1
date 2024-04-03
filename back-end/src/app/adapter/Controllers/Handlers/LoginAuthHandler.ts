@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { configure } from "log4js";
-import { inject, delay, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 /* eslint-disable @typescript-eslint/naming-convention */
 configure(log4jsConfig);
 
@@ -20,9 +20,8 @@ configure(log4jsConfig);
 export class LoginAuthHandler implements IRouteHandler<User | null> {
   
   private readonly _logger: ILogger = LoggerFactory.getLogger(LoginAuthHandler.name);
-
-  constructor(@inject(delay(() => UserService)) private readonly _userService: UserService) {
-  }
+  
+  public constructor(private readonly _userService: UserService) { }
 
   public handle(req: Request, res: Response): void {
     if (this.validation(req)) {

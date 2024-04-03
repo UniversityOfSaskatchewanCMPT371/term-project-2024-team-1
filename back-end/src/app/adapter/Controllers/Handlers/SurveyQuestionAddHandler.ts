@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 import { SurveyService } from "@app/application/SurveyService";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
@@ -11,8 +11,7 @@ import { QuestionToAddDTO } from "@app/adapter/DTOs/QuestionToAddDTO";
 export class SurveyQuestionAddHandler {
   private readonly _logger: ILogger = LoggerFactory.getLogger(SurveyQuestionAddHandler.name);
 
-  constructor(@inject(delay(() => SurveyService)) private readonly _surveyService: SurveyService) {
-  }
+  public constructor(private readonly _surveyService: SurveyService) { }
 
   public handle(req: Request, res: Response): void {
     if (!this.validation(req, res)) {
