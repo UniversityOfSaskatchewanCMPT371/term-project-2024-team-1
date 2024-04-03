@@ -5,7 +5,7 @@ import { IRouteHandler } from "@app/domain/interfaces/IRouteHandler";
 import log4jsConfig from "@resources/log4js-config.json";
 import { Request, Response } from "express";
 import { configure, getLogger } from "log4js";
-import { delay, inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 configure(log4jsConfig);
 
@@ -14,10 +14,8 @@ export class UserGetAllHandler implements IRouteHandler<UserDTO[]> {
   
   private readonly _logger = getLogger(UserGetAllHandler.name);
   
-  constructor(@inject(delay(() => UserService)) private readonly _userService: UserService) {
-  // constructor(private readonly _userService: UserService) {
-    // this._userService = container.resolve(UserService);
-  }
+
+  public constructor(private readonly _userService: UserService) { }
 
   public handle(req: Request, res: Response): void {
     this.execute(req)

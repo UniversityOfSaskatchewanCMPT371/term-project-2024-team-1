@@ -11,6 +11,7 @@ import { ISurveyRepository } from "@app/domain/interfaces/repositories/ISurveyRe
 import { delay, inject, injectable } from "tsyringe";
 import { nullOrUndefined } from "./util";
 import assert from "assert";
+import { SurveyResponse } from "@app/domain/SurveyResponse";
 
 @injectable()
 export class SurveyService {
@@ -92,6 +93,10 @@ export class SurveyService {
   private setChildren(): void {
 
   };
+  
+  public async getAllResponses(surveyId: number): Promise<SurveyResponse[]> {
+    return this._surveyRepository.getAllResponses(surveyId);
+  }
 
 }
 

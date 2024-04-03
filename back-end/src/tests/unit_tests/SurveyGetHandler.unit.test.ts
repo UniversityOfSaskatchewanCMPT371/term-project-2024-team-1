@@ -74,7 +74,7 @@ describe("SurveyGetHandler", () => {
     (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
     req.params = { surveyId: randomInt(100).toString() };
     jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockRejectedValue("db operation get by survey failed");
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(8), 15, "Valid Answer", 15)]);
+    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(8), 15, "Valid Answer", 15, 1)]);
 
     // Action
     await handler.handle(req, res);
@@ -102,7 +102,7 @@ describe("SurveyGetHandler", () => {
     (req as AuthenticatedRequest).auth = { userId: randomAlphanumString(8) };
     req.params = { surveyId: randomInt(100).toString() };
     jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue([new SurveyQuestion(randomInt(100), randomAlphanumString(15), true, QuestionTypeEnum.TEXT, randomInt(10))]);
-    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(10), randomInt(5), randomAlphanumString(10), randomInt(5))]);
+    jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue([new SurveyAnswer(randomAlphanumString(10), randomInt(5), randomAlphanumString(10), randomInt(5), 1)]);
 
     // Action
     await handler.handle(req, res);
@@ -134,8 +134,8 @@ describe("SurveyGetHandler", () => {
       new SurveyQuestion(2, randomAlphanumString(10), true, QuestionTypeEnum.TEXT, 1)
     ];
     const answers: SurveyAnswer[] = [
-      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 1),
-      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 2)
+      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 1, 1),
+      new SurveyAnswer(randomAlphanumString(5), randomInt(5), randomAlphanumString(5), 2, 1)
     ];
     jest.spyOn(QuestionSQLRepository.prototype, "getBySurvey").mockResolvedValue(questions);
     jest.spyOn(AnswerSQLRepository.prototype, "getSurveyAnswers").mockResolvedValue(answers);
