@@ -21,7 +21,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
   public handle(req: Request, res: Response): void {
     req = req as AuthenticatedRequest;
     if (!this.validation(req, res)) {
-      res.status(404).send(`SurveyAnswer not provided to`);
+      res.status(422).send(`Invalid request`);
       return;
     }
     this.execute(req)
@@ -41,7 +41,7 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
 
   public async execute(...args: any[]): Promise<number> {
     const req: AuthenticatedRequest = args[0];
-    const answer: SurveyAnswer = req.body?.SurveyAnswer;
+    const answer: SurveyAnswer = req.body;
     const userId: string = req.auth.userId;
     return this._surveyAnswerService.create(userId, answer);
   }
@@ -51,14 +51,12 @@ export class CreateAnswerHandler implements IRouteHandler<number> {
     const req: AuthenticatedRequest = args[0];
     if (nullOrUndefined(req.body)) {
       return false;
-    } else if (nullOrUndefined(req.body.SurveyAnswer)) {
-      return false;
     } else if (nullOrUndefined(req.auth)) {
       return false;
-    } else if (nullOrUndefined(req.body.SurveyAnswer.answerId) || req.body.SurveyAnswer.answerId < 0 || nullOrUndefined(req.body.SurveyAnswer.questionId) || req.body.SurveyAnswer.questionId < 0 || nullOrUndefined(req.body.SurveyAnswer.userId) || nullOrUndefined(req.body.SurveyAnswer.answer)) {
+    } else if (nullOrUndefined(req.body.id) || req.body.id !== -1 || nullOrUndefined(req.body.questionId) || req.body.questionId < 0 || nullOrUndefined(req.body.userId) || nullOrUndefined(req.body.answer)) {
       return false;
     }
-    const answer: SurveyAnswer = req.body.SurveyAnswer;
+    const answer: SurveyAnswer = req.body;
     const userId: string = req.auth.userId;
     if (answer.userId !== userId) {
       this._logger.ERROR(`User ${userId} tried to change answers that belonged to another user`);

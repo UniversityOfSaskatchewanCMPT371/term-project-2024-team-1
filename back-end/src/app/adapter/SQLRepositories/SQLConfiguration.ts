@@ -37,6 +37,5 @@ export function constructBulkQuery(query: string, fields: string[][]): string {
   fields.forEach((data: any[]) => {
     sql += mysql.format(query, data);
   });
-  console.log(sql);
   return sql;
 }
