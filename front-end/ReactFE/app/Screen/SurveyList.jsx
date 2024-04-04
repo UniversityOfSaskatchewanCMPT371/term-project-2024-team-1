@@ -18,7 +18,7 @@ const SurveyList = () => {
   };
 
   return (
-    <ScrollView
+    <ScrollView testID={"SurveysID"}
       contentContainerStyle={[ScreenStyles.CasiBlue, styles.container]}
     >
       <DrawerButton />
