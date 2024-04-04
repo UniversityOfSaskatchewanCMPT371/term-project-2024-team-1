@@ -218,4 +218,5 @@ const MainStack = () => {
 
 /* Postconditions:
    1. Verify that the Navigator component is correctly exported and can be imported into other parts of the application.
-   2. Ensure that the navigation structure defined in the Navigator component functions as expected, directing users to the
+   2.Verify that any test-related constants, such as runSurveyCreationTest, are appropriately configured and do not interfere with the application's functionality in a production environment.
+   */
