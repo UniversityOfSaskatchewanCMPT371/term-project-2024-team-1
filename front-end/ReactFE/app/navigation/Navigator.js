@@ -226,4 +226,4 @@ const MainStack = () => {
   return <MainStack />;
 };
 
-export default Navigator
+export default Navigator;
