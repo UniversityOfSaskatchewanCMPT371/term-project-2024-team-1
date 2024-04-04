@@ -16,7 +16,24 @@ export class SurveyAnswerService {
   };
   
   public async update(answers: SurveyAnswer[]): Promise<boolean> {
-    return this._surveyAnswerRepository.update(answers);
+    const dirtyAnswers: SurveyAnswer[] = answers.filter(answer => answer.isDirty);
+
+    if (dirtyAnswers.length === 0) {
+      this._logger.INFO("No answers to update");
+      return true;
+    }
+    try {
+      const updatedAnswer: boolean = await this._surveyAnswerRepository.update(dirtyAnswers);
+      if (updatedAnswer) {
+        this._logger.INFO("Successfully updated answers");
+      } else {
+        this._logger.ERROR("Failed to update answers");
+      }
+      return updatedAnswer;
+    } catch (error) {
+      this._logger.ERROR(`Failed to update answers: ${error as string}`);
+      throw Error(`Failed to update answers: ${error as string}`);
+    }
   }
 
 }
