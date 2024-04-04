@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/typedef */
-import request from "supertest";
-import { app } from "../../../src/main";
-import "reflect-metadata";
-import { container } from "tsyringe";
-import { ILogger } from "@app/domain/interfaces/ILogger";
 import { loggerToken, userRepoToken, userReqRepoToken } from "@app/adapter/DependencyInjections";
 import { Log4jsLogger } from "@app/adapter/Loggers/Log4jsLogger";
-import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
+import { User } from "@app/domain/User";
+import { ILogger } from "@app/domain/interfaces/ILogger";
 import { IUserRepository } from "@app/domain/interfaces/repositories/IUserRepository";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
+import { MockUserRepository } from "@tests/mocked_repository/MockUserRepository";
 import { MockUserRequestRepository } from "@tests/mocked_repository/MockUserRequestRepository";
-import { User } from "@app/domain/User";
+import "reflect-metadata";
+import request from "supertest";
+import { container } from "tsyringe";
+import { app } from "../../../main";
 
 // register dependency
 const mockUserReqRepo: IUserRequestRepository = new MockUserRequestRepository();
