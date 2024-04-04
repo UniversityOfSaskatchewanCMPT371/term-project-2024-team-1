@@ -117,8 +117,45 @@ const createSurvey = `
 `;
 
 
+const createUser = `
+    INSERT INTO User (userId, password, email, clinicName, isAdmin) VALUES (?, ?, ?, ?, ?);
+`;
+
+const createRequest = `
+    INSERT INTO Request (clinicName, email, password, status, createdDate, decisionDate, requestType) VALUES (?, ?, ?, ?, ?, ?, ?);
+`;
+
+const createQuestion = `
+    INSERT INTO Question (parentId, question, standard, type) VALUES (?, ?, ?, ?);
+`;
+
+const createResponseOption = `
+    INSERT INTO ResponseOption (\`option\`, questionId) VALUES (?, ?);
+`;
+
+const createAnswer = `
+    INSERT INTO Answer (answer, questionId, userId, note) VALUES (?, ?, ?, ?);
+`;
+
+const createSurveyQuestionMap = `
+    INSERT INTO SurveyQuestionMap (surveyId, questionId, rankOrder) VALUES (?, ?, ?);
+`;
+
+const createSurveyCompletionMap = `
+    INSERT INTO SurveyCompletionMap (userId, surveyId) VALUES (?, ?);
+`;
+
+
+
 module.exports = {
   createSurvey,
+  createUser,
+  createRequest,
+  createQuestion,
+  createResponseOption,
+  createAnswer,
+  createSurveyQuestionMap,
+  createSurveyCompletionMap,
   dropTables,
   dropUserTable,
   createTables,
