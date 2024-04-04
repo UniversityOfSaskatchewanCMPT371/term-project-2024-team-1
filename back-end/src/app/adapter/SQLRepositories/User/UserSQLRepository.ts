@@ -9,11 +9,11 @@ export class UserSQLRepository implements IUserRepository {
 
   private readonly _logger = getLogger(UserSQLRepository.name);
 
-  private readonly _getAllQuery: string = "SELECT clinicName, userId, email, isAdmin, password FROM user";
+  private readonly _getAllQuery: string = "SELECT clinicName, userId, email, isAdmin, password FROM User";
   private readonly _getQuery: string = "SELECT clinicName, userId, email, isAdmin, password FROM User WHERE userId = ? OR email = ?";
-  private readonly _createQuery: string = "INSERT INTO user (clinicName, userId, password, email, isAdmin) VALUES (?, ?, ?, ?, ?)";
-  private readonly _updateQuery: string = "UPDATE user SET clinicName = ?, userId = ?, password = ?, email = ?, isAdmin = ?, WHERE userId = ?";
-  private readonly _deleteQuery: string = "DELETE FROM user WHERE userId = ?";
+  private readonly _createQuery: string = "INSERT INTO User (clinicName, userId, password, email, isAdmin) VALUES (?, ?, ?, ?, ?)";
+  private readonly _updateQuery: string = "UPDATE User SET clinicName = ?, userId = ?, password = ?, email = ?, isAdmin = ?, WHERE userId = ?";
+  private readonly _deleteQuery: string = "DELETE FROM User WHERE userId = ?";
 
   async getAll(): Promise<User[]> {
     try {
