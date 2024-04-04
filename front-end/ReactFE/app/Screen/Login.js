@@ -35,7 +35,6 @@ const Login = () => {
     <View style={loginStyles.container}>
       <View style={loginStyles.centeredContent}>
         <Text style={loginStyles.logo}>CASI</Text>
-        <Text style={loginStyles.subtitle}>Sign Up</Text>
       <View style={loginStyles.inputContainer}>
       <TextInput
         testID="userIdEmailInput"

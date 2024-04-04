@@ -20,7 +20,14 @@ import ViewResultsAsAdmin from "../Screen/ViewResultsAsAdmin";
 import { NavigationContainer } from "@react-navigation/native";
 import { View } from "react-native";
 
-/*Test constants */
+/* Preconditions:
+   1. Ensure all necessary screen components such as Profile, Login, CustomDrawer, CreateSurvey, Admin, LandingPage, SurveyList, TakeSurvey, SignUp, SurveyCompleted, About, ContactUs, Logout, ViewResultsAsAdmin are imported and available.
+   2. Verify that the required context, such as AuthContext, is properly set up and accessible.
+   3. Confirm that the necessary navigation libraries, like react-navigation and @react-navigation/native, are installed and configured correctly.
+   4. Ensure that the necessary dependencies are installed and imported for React and React Native.
+*/
+
+/* Test constants */
 const runSurveyCreationTest = true;
 
 const Drawer = createDrawerNavigator();
@@ -37,7 +44,6 @@ const SurveyStack = () => {
       }}
       initialRouteName="Survey"
     >
-
       <AppSurveyStack.Screen name="TakeSurvey" component={TakeSurvey} />
       {/* <AppSurveyStack.Screen
         name="SurveyStartBoard"
@@ -92,8 +98,7 @@ const AdminMainDrawer = () => {
       />
        <Drawer.Screen name="Download/Notify" testID={"Notifications"} component={ViewResultsAsAdmin} />
       <Drawer.Screen name="Logout" testID={"Logout"} component={Logout} />
-      <Drawer.Screen name="Login" component={Login} options={{drawerItemStyle:{height:0}}} />
-
+      <Drawer.Screen name="Login" component={Login} options={{ drawerItemStyle: { height: 0 } }} />
       
     </Drawer.Navigator>
   );
@@ -190,7 +195,6 @@ const MainStack = () => {
       }}
       initialRouteName="Home"
     >
-
       {/* <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
       <AppMainStack.Screen name="Login" component={Login} />
         <AppMainStack.Screen name="SignUp" component={SignUp} /> */}
@@ -205,15 +209,19 @@ const MainStack = () => {
               <AppMainStack.Screen name="MainDrawer" component={MainDrawer} />
             )
           ) : (<AppMainStack.Screen name="Login" component={Login} />
-          ) 
-      
-
-      }
+          )}
+            <AppMainStack.Screen  name ="SignUp" component={SignUp}/>
+    
     </AppMainStack.Navigator>
   );
 };
 
-const Navigator = () => {
+/* Postconditions:
+   1. Verify that the Navigator component is correctly exported and can be imported into other parts of the application.
+   2.Verify that any test-related constants, such as runSurveyCreationTest, are appropriately configured and do not interfere with the application's functionality in a production environment.
+   */
+
+   const Navigator = () => {
   const { authState } = useAuth();
   return <MainStack />;
 };
