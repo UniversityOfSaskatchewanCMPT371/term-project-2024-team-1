@@ -220,3 +220,10 @@ const MainStack = () => {
    1. Verify that the Navigator component is correctly exported and can be imported into other parts of the application.
    2.Verify that any test-related constants, such as runSurveyCreationTest, are appropriately configured and do not interfere with the application's functionality in a production environment.
    */
+
+   const Navigator = () => {
+  const { authState } = useAuth();
+  return <MainStack />;
+};
+
+export default Navigator
