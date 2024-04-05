@@ -8,12 +8,12 @@ export const sqlPool: mysql.Pool = mysql.createPool({
   password: DB_PASSWORD,
   port: DB_PORT,
   database: DB_DATABASE,
-  multipleStatements: true
+  multipleStatements: true,
+  namedPlaceholders: true
 });
 
 export async function query(sql: string, fields?: any[] | any[][]): Promise<any> {
   const preparedSQL: string = fields != null && fields !== undefined ? mysql.format(sql, fields) : sql;
-
   const connection: mysql.PoolConnection = await sqlPool.getConnection();
   try {
 
@@ -29,7 +29,24 @@ export async function query(sql: string, fields?: any[] | any[][]): Promise<any>
     sqlPool.releaseConnection(connection);
     return Promise.reject(err);
   }
+}
 
+export async function queryKV(sql: string, params?: any): Promise<any> {
+  const connection: mysql.PoolConnection = await sqlPool.getConnection();
+  try {
+
+    await connection.beginTransaction();
+
+    const result: any = await connection.execute(sql, params);
+
+    await connection.commit();
+    sqlPool.releaseConnection(connection);
+    return result;
+  } catch (err) {
+    await connection.rollback();
+    sqlPool.releaseConnection(connection);
+    return Promise.reject(err);
+  }
 }
 
 export function constructBulkQuery(query: string, fields: any[][]): string {

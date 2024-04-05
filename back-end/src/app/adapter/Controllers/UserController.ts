@@ -6,6 +6,7 @@ import { LoginAuthHandler } from "./Handlers/LoginAuthHandler";
 import { SignUpHandler } from "./Handlers/SignUpHandler";
 import { UserDeleteHandler } from "./Handlers/UserDeleteHandler";
 import { UserGetAllHandler } from "./Handlers/UserGetAllHandler";
+import { RequestGetAllHandler } from "./Handlers/RequestGetAllHandler";
 
 
 @injectable()
@@ -16,7 +17,8 @@ export class UserController {
     private readonly _userDeleteHandler: UserDeleteHandler,
     private readonly _loginAuthHandler: LoginAuthHandler,
     private readonly _signUpHandler: SignUpHandler,
-    private readonly _createUserHandler: CreateUserHandler) {
+    private readonly _createUserHandler: CreateUserHandler,
+    private readonly _requestGetAllHandler: RequestGetAllHandler) {
 
   }
 
@@ -32,6 +34,10 @@ export class UserController {
       
     this._router.patch("/user/request/:requestId", authenticate(ADMIN), (req: Request, res: Response) => {
       this._createUserHandler.handle(req, res);
+    });
+
+    this._router.get("/user/request", authenticate(ADMIN), (req: Request, res: Response) => {
+      this._requestGetAllHandler.handle(req, res);
     });
       
     this._router.post("/login", (req: Request, res: Response) => {

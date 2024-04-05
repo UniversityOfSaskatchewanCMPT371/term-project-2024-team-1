@@ -1,4 +1,6 @@
 import { userReqRepoToken } from "@app/adapter/DependencyInjections";
+import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
+import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { UserRequest } from "@app/domain/UserRequest";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
 import { delay, inject, injectable } from "tsyringe";
@@ -9,8 +11,8 @@ export class UserRequestService {
 
   }
 
-  public async getAll(): Promise<UserRequest[]> {
-    return this._userRequestRepository.getAll();
+  public async getAll(requestType: RequestTypeEnum, requestStatus: RequestStatusEnum): Promise<UserRequest[]> {
+    return this._userRequestRepository.getAll(requestType, requestStatus);
   }
 
   public async get(requestId: number): Promise<UserRequest | null> {

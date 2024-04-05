@@ -2,7 +2,7 @@ import { RequestStatusEnum } from "@app/domain/RequestStatusEnum";
 import { RequestTypeEnum } from "@app/domain/RequestTypeEnum";
 import { UserRequest } from "@app/domain/UserRequest";
 import { IUserRequestRepository } from "@app/domain/interfaces/repositories/IUserRequestRepository";
-import { query } from "../SQLConfiguration";
+import { query, queryKV } from "../SQLConfiguration";
 import { LoggerFactory } from "@app/domain/factory/LoggerFactory";
 import { ILogger } from "@app/domain/interfaces/ILogger";
 import { formatDateForSQL } from "@app/application/util";
@@ -10,9 +10,9 @@ import { ResultSetHeader } from "mysql2";
 
 export class UserRequestSQLRepository implements IUserRequestRepository {
   private readonly _logger: ILogger = LoggerFactory.getLogger(UserRequestSQLRepository.name);
-  private readonly _getAllQuery: string = `SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
-                                           FROM Request 
-                                           WHERE requestType = ? OR requestStatus = ?;`;
+  private readonly _getAllQuery: string = `SELECT * FROM Request 
+                                            WHERE (:requestType IS NULL OR requestType COLLATE utf8mb4_unicode_ci=:requestType) AND 
+                                                  (:requestStatus IS NULL OR status COLLATE utf8mb4_unicode_ci=:requestStatus);`;
 
   private readonly _getQuery: string = `SELECT id, email, password, clinicName, status, createdDate, decisionDate, requestType 
                                         FROM Request
@@ -25,9 +25,11 @@ export class UserRequestSQLRepository implements IUserRequestRepository {
 
   public async getAll(requestType?: RequestTypeEnum | undefined, requestStatus?: RequestStatusEnum | undefined): Promise<UserRequest[]> {
     try {
-      const requestTypeString: string | null = requestType?.toString() ?? "NULL";
-      const requestStatusString: string | null = requestStatus?.toString() ?? "NULL";
-      return query(this._getAllQuery, [requestTypeString, requestStatusString])
+      const params: any = {
+        requestType: requestType?.toString() ?? null,
+        requestStatus: requestStatus?.toString() ?? null
+      };
+      return queryKV(this._getAllQuery, params)
         .then((data: [UserRequest[]]) => {
           this._logger.INFO(`Fetching all ${requestType} user requests with status ${requestStatus}`);
           return data[0];
