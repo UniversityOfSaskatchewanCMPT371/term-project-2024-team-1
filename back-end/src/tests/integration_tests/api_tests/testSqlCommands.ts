@@ -75,9 +75,11 @@ const createAnswerTable = `
         answer VARCHAR(255) NOT NULL,
         questionId INT NOT NULL,
         userId INT NOT NULL,
+        surveyId INT NOT NULL,
+        note VARCHAR(1024),
         FOREIGN KEY (questionId) REFERENCES Question(id),
         FOREIGN KEY (userId) REFERENCES User(id),
-        note VARCHAR(1024) NULL
+        FOREIGN KEY (surveyId) REFERENCES Survey(id)
     );
 `;
 
@@ -134,7 +136,7 @@ const createResponseOption = `
 `;
 
 const createAnswer = `
-    INSERT INTO Answer (answer, questionId, userId, note) VALUES (?, ?, ?, ?);
+    INSERT INTO Answer (answer, questionId, note, userId, surveyId) VALUES (?, ?, ?, ?, ?);
 `;
 
 const createSurveyQuestionMap = `
