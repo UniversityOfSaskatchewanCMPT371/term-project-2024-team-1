@@ -13,6 +13,7 @@ const {
 
 const USER_TOKEN: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0MTIzNDUiLCJpYXQiOjE3MDk2NzIxODd9.MFSQJhBnwwB2rXGbUzmxycmUIdhMDFz4hhN4jBcJtFM";
 
+// This test suite runs directly on a database. Change "xdescribe" to "describe" then run it.
 xdescribe("API Test for /api/survey", () => {
 
   const surveyData1: any = {
