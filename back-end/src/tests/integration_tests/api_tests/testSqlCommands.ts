@@ -75,9 +75,11 @@ const createAnswerTable = `
         answer VARCHAR(255) NOT NULL,
         questionId INT NOT NULL,
         userId INT NOT NULL,
+        surveyId INT NOT NULL,
+        note VARCHAR(1024),
         FOREIGN KEY (questionId) REFERENCES Question(id),
         FOREIGN KEY (userId) REFERENCES User(id),
-        note VARCHAR(1024) NULL
+        FOREIGN KEY (surveyId) REFERENCES Survey(id)
     );
 `;
 
@@ -116,9 +118,47 @@ const createSurvey = `
     INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, ?, ?);
 `;
 
+module.exports = {
+  createSurvey,
+const createUser = `
+    INSERT INTO User (userId, password, email, clinicName, isAdmin) VALUES (?, ?, ?, ?, ?);
+`;
+
+const createRequest = `
+    INSERT INTO Request (clinicName, email, password, status, createdDate, decisionDate, requestType) VALUES (?, ?, ?, ?, ?, ?, ?);
+`;
+
+const createQuestion = `
+    INSERT INTO Question (parentId, question, standard, type) VALUES (?, ?, ?, ?);
+`;
+
+const createResponseOption = `
+    INSERT INTO ResponseOption (\`option\`, questionId) VALUES (?, ?);
+`;
+
+const createAnswer = `
+    INSERT INTO Answer (answer, questionId, note, userId, surveyId) VALUES (?, ?, ?, ?, ?);
+`;
+
+const createSurveyQuestionMap = `
+    INSERT INTO SurveyQuestionMap (surveyId, questionId, rankOrder) VALUES (?, ?, ?);
+`;
+
+const createSurveyCompletionMap = `
+    INSERT INTO SurveyCompletionMap (userId, surveyId) VALUES (?, ?);
+`;
+
+
 
 module.exports = {
   createSurvey,
+  createUser,
+  createRequest,
+  createQuestion,
+  createResponseOption,
+  createAnswer,
+  createSurveyQuestionMap,
+  createSurveyCompletionMap,
   dropTables,
   dropUserTable,
   createTables,
