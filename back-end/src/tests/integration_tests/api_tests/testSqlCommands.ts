@@ -118,6 +118,8 @@ const createSurvey = `
     INSERT INTO Survey (surveyName, dateCreated, dueDate) VALUES (?, ?, ?);
 `;
 
+module.exports = {
+  createSurvey,
 const createUser = `
     INSERT INTO User (userId, password, email, clinicName, isAdmin) VALUES (?, ?, ?, ?, ?);
 `;
